@@ -1,0 +1,116 @@
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Buyer Enquiry List</h3>
+<div class="panel panel-default modelform4">
+   <div class="panel-body" >
+      <div ng-controller="BuyerEnquirylistController as showCase">
+	
+        <table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+        </table>
+        
+        <script type="text/ng-template" id="updatebuyer">
+            <form role="form" ng-submit="UpdateBuyer()" name="showCase.updateBuyer" novalidate="" class="form-validate mb-lg modelform2">
+       
+            <legend>Buyer Enquiry Details</legend>
+                <div class="row">
+                    <div class="col-md-12">  
+                    <div class="form-group has-feedback">
+                        <label>Select Type</label>
+                          <select name="grouptype" chosen="" ng-model="buyer.group_type" ng-options="s.id as s.name for s in groupType" width="'100%'" class="chosen-select input-md form-control" required="">
+                             <option value="">Select Type</option>
+                          </select>
+                           <span ng-show="showCase.updateBuyer.grouptype.$dirty &amp;&amp; showCase.updateBuyer.grouptype.$error.required" class="text-danger">This field is required</span>
+                       </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">  
+                    <div class="form-group has-feedback">
+                        <label>Broker</label>
+                          <select name="broker_company" chosen="" ng-model="buyer.broker_company" ng-options="s.company_id as s.company_name for s in brokers" width="'100%'" class="chosen-select input-md form-control">
+                             <option value="">Broker</option>
+                          </select>
+                       </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12"> 
+                    <div class="form-group has-feedback">
+                       <label>Payment Duration</label>
+                       <input type="number" name="payment_duration" placeholder="Payment Duration" autocomplete="off" ng-model="buyer.payment_duration" required="" class="form-control" />
+                       <span class="fa fa-user form-control-feedback text-muted"></span>
+                       <span ng-show="showCase.updateBuyer.payment_duration.$dirty &amp;&amp; showCase.updateBuyer.payment_duration.$error.required" class="text-danger">This field is required</span>
+                    </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12"> 
+                    <div class="form-group has-feedback">
+                       <label>Discount</label>
+                       <input type="text" name="discount" placeholder="Discount" autocomplete="off" ng-model="buyer.discount" required="" class="form-control" />
+                       <span class="fa fa-user form-control-feedback text-muted"></span>
+                       <span ng-show="showCase.updateBuyer.discount.$dirty &amp;&amp; showCase.updateBuyer.discount.$error.required" class="text-danger">This field is required</span>
+                    </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-12">  
+                      
+                     <div class="form-group has-feedback">
+                        <label class="radio-inline c-radio" style="color: green;">
+                          <input id="inlineradio1" type="radio" name="status" ng-model="buyer.status" value="approved" required="required" class="form-control"  />
+                       <span class="fa fa-circle"></span>Approve</label>
+
+                      <label class="radio-inline c-radio" style="color: red;">
+                         <input id="inlineradio2" type="radio" name="status" ng-model="buyer.status" value="rejected" required="required" class="form-control" />
+                         <span class="fa fa-circle"></span>Reject</label>
+                        
+                     </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                    <div style="float:right;" class="col-md-2"> 
+                      <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                    </div>
+
+                    <div style="float:right;" class="col-md-2"> 
+                      <button type="submit" class="btn btn-block btn-primary mt-lg">Save</button>
+                    </div>
+                </div>
+            </form>
+        </script>
+        
+        <script type="text/ng-template" id="transferbuyer">
+            <form name="showCase.transferForm"  ng-submit="TransferBuyer()"  novalidate="" class="form-validate mb-lg modelform2">
+       
+            <legend>Transfer Buyer Enquiry</legend>
+                
+                <div class="row">
+                    <div class="col-md-12">  
+                    <div class="form-group has-feedback">
+                        <label>Buyer</label>
+                          <select name="broker_company" chosen="" ng-model="transfer.buyer" ng-options="s.company_id as s.company_name for s in buyers" width="'100%'" class="chosen-select input-md form-control" required="required">
+                             <option value="">Buyer</option>
+                          </select>
+                          <span ng-show="showCase.transferForm.buyer.$dirty &amp;&amp; showCase.transferForm.buyer.$error.required" class="text-danger">This field is required</span>
+                       </div>
+                    </div>
+                </div>
+                                
+                <div class="row">
+                    <div style="float:right;" class="col-md-2"> 
+                      <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                    </div>
+
+                    <div style="float:right;" class="col-md-2"> 
+                      <button type="submit" class="btn btn-block btn-primary mt-lg">Save</button>
+                    </div>
+                </div>
+            </form>
+        </script>
+        <div ng-include="'app/views/common/order_modal.html'"></div>
+		</div>
+   </div>
+</div>

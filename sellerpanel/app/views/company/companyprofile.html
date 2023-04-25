@@ -1,0 +1,815 @@
+<style>
+   .panel-body
+   {
+      margin-left: 20px !important;
+   }
+
+   .loading {
+   background: transparent url('/media/logo-single.png') center no-repeat;
+   background-size: 100px 100px;
+   }
+   .tab {
+   overflow: hidden;
+   /* border: 1px solid #ccc; */
+   
+   }
+
+   /* Style the buttons that are used to open the tab content */
+   .tab button {
+   background-color: white;
+   float: left;
+   border: none;
+   outline: none;
+   cursor: pointer;
+   padding: 15px;
+   min-height: 50px;
+   position: relative;
+   transition: 0.3s;
+   font-size: 14px !important;
+   }
+
+   /* Change background color of buttons on hover */
+   .tab button:hover
+   {
+   background-color: white;
+   }
+
+   /* Create an active/current tablink class */
+   .tab button.active {
+   background: transparent !important;
+   border-bottom: 3px solid #0D80C1;
+   color: #0D80C1 !important;
+   margin: auto!important;
+
+   }
+
+   /* Style the tab content */
+   .tabcontent {
+   display: none;
+   padding: 6px 12px;
+   border: 1px solid #ccc;
+   border-top: none;
+   }
+
+</style>
+
+<h3><!-- <span class="btn-label" style="margin-left: 2%; color: #51c6ea;background-color: white;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> --> 
+   Company Profile
+</h3>
+
+
+<!-- START panel-->
+<div ng-controller="CompanyprofileFormController as cmp"  class="panel panel-default">
+  
+
+      <div class="tab">
+         <button class="tablinks" id="defaultOpen" ng-click="openTab($event, 'Company_Profile')"><h4>Company Details</h4></button>
+         <button class="tablinks" ng-click="openTab($event, 'Bank_Details')"><h4>Bank Details</h4></button>
+         <button class="tablinks" ng-click="openTab($event, 'GST_PAN_Details')"><h4>PAN & GST Details</h4></button>
+      </div>
+      
+      <!-- Tab content -->
+      <div id="Company_Profile" class="tabcontent">
+         <form role="form" name="cmp.companyForm" form-wizard="" validate-steps="true" novalidate="" class="form-validate mb-lg modelform" steps="2" style="padding-bottom: 40px;">
+               <fieldset>
+                  <!--legend>Company Details</legend-->
+                  <!-- START row -->
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                           <label>Company Name</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="name" ng-model="company.name" placeholder="Enter company name"
+                                 required="required" class="form-control" />
+                              <span ng-show="cmp.companyForm.name.$dirty &amp;&amp; cmp.companyForm.name.$error.required" class="text-danger">This
+                                 field is required</span>
+                           </div>
+                        </div>
+                     </div>
+            
+                     <!--div class="col-md-4">
+                           <div class="form-group has-feedback">
+                                 <label>Country</label>
+                                 <div class="controls">
+                                    <input type="text" autocomplete="off" name="country" placeholder="Select Country" required="required" class="form-control" />
+                                 </div>
+                           </div>
+                        </div-->
+                  </div>
+                  <!-- END row -->
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                           <label>Company Logo</label>
+                           <div class="controls">
+                              <input type="file" ngf-select name="thumbnail" required="required" ng-model="company.thumbnail" class="form-control"
+                                 ngf-accept="'image/*'">
+                           </div>
+                        </div>
+                     </div>
+            
+                     <div class="col-md-2">
+                        <img ngf-src="company.thumbnail1" style="width: 100px;padding-top: 5%;" class="thumb">
+                     </div>
+                     <div class="col-md-2">
+                        <img ngf-src="company.thumbnail" style="width: 100px;padding-top: 5%;" class="thumb">
+                     </div>
+                  </div>
+            
+            
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                           <label>Email</label>
+                           <div class="controls">
+                              <input type="email" name="email" placeholder="Enter Email" autocomplete="off" ng-model="company.email"
+                                 required="" class="form-control" />
+            
+                              <span ng-show="cmp.companyForm.email.$dirty &amp;&amp; cmp.companyForm.email.$error.required" class="text-danger">This
+                                 field is required</span>
+                              <span ng-show="cmp.companyForm.email.$dirty &amp;&amp; cmp.companyForm.email.$error.email" class="text-danger">This
+                                 field must be a valid email address</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+            
+                  <div class="row">
+                     <div class="col-md-3">
+                        <div class="form-group has-feedback">
+                           <label>Phone Number</label>
+                           <div class="controls">
+                              <select name="country" chosen="" ng-model="company.country" ng-options="cd.id as cd.name for cd in countries"
+                                 width="'100%'" class="chosen-select input-md form-control" required="">
+                                 <option value=""></option>
+                              </select>
+                              <span ng-show="cmp.companyForm.country.$dirty &amp;&amp; cmp.companyForm.country.$error.required"
+                                 class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+            
+                     <div class="col-md-3">
+                        <div class="form-group has-feedback">
+                           <label>&nbsp;</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="phone_number" ng-model="company.phone_number" placeholder="Phone 1234567890"
+                                 required="required" class="form-control" ng-pattern="/^[0-9]{8,14}$/" />
+                              <span ng-show="cmp.companyForm.phone_number.$dirty &amp;&amp; cmp.companyForm.phone_number.$error.required"
+                                 class="text-danger">This field is required</span>
+                              <span ng-show="cmp.companyForm.phone_number.$dirty &amp;&amp; cmp.companyForm.phone_number.$error.pattern"
+                                 class="text-danger">Phone no. is not valid</span>
+                           </div>
+                        </div>
+                     </div>
+            
+                  </div>
+                  <div class="row">
+                     <div class="col-md-8">
+                        <div class="form-group has-feedback">
+            
+                           <label>Street Address</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="street_address" ng-model="company.street_address"
+                                 placeholder="Enter street address" required="required" class="form-control" />
+                              <span ng-show="cmp.companyForm.street_address.$dirty &amp;&amp; cmp.companyForm.street_address.$error.required"
+                                 class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+            
+                  <div class="row">
+                     <div class="col-md-3">
+                        <div class="form-group has-feedback">
+                           <label>State</label>
+                           <div class="controls">
+                              <select name="state" chosen="" ng-model="company.state" ng-options="st.id as st.state_name for st in cmp.states"
+                                 width="'100%'" ng-change="cmp.GetCity(company.state)" class="chosen-select input-md form-control"
+                                 required="">
+                                 <option value="">Select State</option>
+                              </select>
+                              <span ng-show="cmp.companyForm.state.$dirty &amp;&amp; cmp.companyForm.state.$error.required" class="text-danger">This
+                                 field is required</span>
+                           </div>
+            
+                        </div>
+                     </div>
+                     <div class="col-md-3">
+                        <div class="form-group has-feedback">
+                           <label>City</label>
+                           <div class="controls">
+                              <select name="city" chosen="" ng-model="company.city" ng-options="st.id as st.city_name for st in cmp.cities"
+                                 width="'100%'" class="chosen-select input-md form-control" required="required">
+                                 <option value="">Select City</option>
+                              </select>
+                              <span ng-show="cmp.companyForm.city.$dirty &amp;&amp; cmp.companyForm.city.$error.required" class="text-danger">This
+                                 field is required</span>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-2">
+                        <div class="form-group">
+                           <label>Pincode / Zipcode</label>
+                           <div class="controls">
+                              <input type="number" autocomplete="off" name="pincode" ng-model="company.pincode" placeholder="Pincode"
+                                 class="form-control" />
+                              <!--span ng-show="cmp.companyForm.pincode.$dirty &amp;&amp; cmp.companyForm.pincode.$error.required" class="text-danger">This field is required</span-->
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+            
+                  <div class="row">
+                     <div class="col-md-3">
+                        <div class="form-group has-feedback">
+                           <label>Default Catalog Lifetime (Days)</label>
+                           <div class="controls">
+                              <input type="number" autocomplete="off" name="default_catalog_lifetime" ng-model="company.default_catalog_lifetime"
+                                 placeholder="Enter Catalog Lifeline" required="required" class="form-control" />
+                              <span ng-show="cmp.companyForm.default_catalog_lifetime.$dirty &amp;&amp; cmp.companyForm.default_catalog_lifetime.$error.required"
+                                 class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+            
+                  <div class="row form-group">
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>Automatically share received catalogs</label>
+                           <div class="controls">
+                              <div class="col-sm-10">
+                                 <label class="radio-inline c-radio">
+                                    <input id="inlineradio1" type="radio" name="push_downstream" ng-model="company.push_downstream"
+                                       data-parsley-group="step1" value="no" required="required" class="form-control" checked="checked" />
+                                    <span class="fa fa-circle"></span>No</label>
+                                 <label class="radio-inline c-radio">
+                                    <input id="inlineradio2" type="radio" name="push_downstream" ng-model="company.push_downstream"
+                                       data-parsley-group="step1" value="yes" required="required" class="form-control" />
+                                    <span class="fa fa-circle"></span>Yes</label>
+                              </div>
+                           </div>
+                           <span ng-show="cmp.companyForm.push_downstream.name.$dirty &amp;&amp; cmp.companyForm.push_downstream.name.$error.required"
+                              class="text-danger">This field is required</span>
+                        </div>
+                     </div>
+            
+                  </div>
+                  <!--div class="row">
+                                 <div class="col-md-8">
+                                    <div class="form-group">
+                                          <label>Main Category</label>
+                                          <div class="controls">
+                                             <div id="tree_2" js-tree="cmp.treeConfig" should-apply="cmp.applyModelChanges()" ng-model="cmp.treeData" name="category" tree="treeInstance" tree-events=""></div> 
+                                             <span ng-show="cmp.brandForm.category.$dirty &amp;&amp; cmp.brandForm.category.$error.required" class="text-danger">This field is required</span> 
+                                          </div>
+                                    </div>
+                                 </div>
+                              </div-->
+            
+            
+                  <div class="row">
+                     <div class="col-md-8">
+                        <div class="form-group has-feedback">
+                           <div class="controls">
+                              <input type="checkbox" id="connections_preapproved" name="connections_preapproved" ng-value="company.connections_preapproved"
+                                 ng-model="company.connections_preapproved" />
+                              <label for='connections_preapproved'> Auto-approve my connection (including buyer & supplier
+                                 requests)</label>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+            
+                  <div class="row">
+                     <div class="col-md-8">
+                        <div class="form-group has-feedback">
+                           <div class="controls">
+                              <input type="checkbox" id="no_suppliers" name="no_suppliers" ng-value="company.no_suppliers" ng-model="company.no_suppliers" />
+                              <label for='no_suppliers'> I do not have any supplier - I'm purely a manufacturer.</label>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+            
+                  <div class="row">
+                     <div class="col-md-8">
+                        <div class="form-group has-feedback">
+                           <div class="controls">
+                              <input type="checkbox" id="have_salesmen" name="have_salesmen" ng-value="company.have_salesmen"
+                                 ng-model="company.have_salesmen" />
+                              <label for='have_salesmen'>I have field level salesman - enable my sales module.</label>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+            
+                  <div class="row">
+                     <div class="col-md-8">
+                        <div class="form-group has-feedback">
+                           <div class="controls">
+            
+                              <input type="checkbox" id="sell_all_received_catalogs" name="sell_all_received_catalogs" ng-value="company.sell_all_received_catalogs"
+                                 ng-model="company.sell_all_received_catalogs" />
+                              <label for='sell_all_received_catalogs'>All my catalogs & received catalogs are automatically enabled
+                                 for selling.</label>
+            
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+            
+                  <div class="row">
+                     <div class="col-md-8">
+                        <div class="form-group has-feedback">
+                           <div class="controls">
+            
+                              <input type="checkbox" id="sell_shared_catalogs" name="sell_shared_catalogs" ng-value="company.sell_shared_catalogs"
+                                 checked="true" ng-model="company.sell_shared_catalogs" />
+                              <label for='sell_shared_catalogs'>All my shared catalogs & selections are enable for selling.</label>
+            
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+            
+                  <div class="row">
+                     <div class="col-md-8">
+                        <div class="form-group has-feedback">
+                           <div class="controls">
+            
+                              <input type="checkbox" id="buyers_assigned_to_salesman" name="buyers_assigned_to_salesman" ng-value="company.buyers_assigned_to_salesman"
+                                 ng-model="company.buyers_assigned_to_salesman" />
+                              <label for='buyers_assigned_to_salesman'>My buyers will be split across my Salesman.</label>
+            
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+            
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group left">
+                           <button type="submit" ng-click="cmp.SubmitCompany()" class="buttonPrimary">Submit</button>
+            
+                        </div>
+                     </div>
+                  </div>
+            
+            
+               </fieldset>
+         </form>
+
+      </div>
+      <div id="Bank_Details" class="tabcontent">
+         <div ng-include="'app/views/company/bankdetails.html'"></div>
+      </div>
+      
+      <div id="GST_PAN_Details" class="tabcontent">
+            <div ng-include="'app/views/company/gst.html'"></div>
+            <fieldset>
+               <legend>PAN Details</legend>
+               <form role="form" name="cmp.panForm" ng-submit="SubmitPan()" class="form-validate mb-lg modelform3" style="padding-bottom: 40px;">
+                  <div class="row">
+                     <div class="col-md-2" style="width: 10% !important;">
+                        <div class="form-group">
+                           <label>PAN number</label>
+                        </div>
+            
+                     </div>
+                     <div class="col-md-3">
+                        <div class="form-group has-feedback">
+            
+                           <div class="controls">
+                              <input type="text" name="pan" ng-model="kyc.pan" placeholder="Enter PAN number" class="form-control"
+                                 ng-pattern="/^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/" autocomplete="off" required />
+                              <span ng-show="cmp.panForm.pan.$dirty &amp;&amp; cmp.panForm.pan.$error.required" class="text-danger">This
+                                 field is required</span>
+                              <span ng-show="cmp.panForm.pan.$error.pattern" class="text-danger">Invalid PAN number.</span>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-3">
+                        <div class="form-group">
+                           <input type="submit" class="buttonPrimary" value="Submit" />
+                        </div>
+                     </div>
+                  </div>
+               </form>
+            </fieldset>
+      </div>
+
+
+               <!-- WB-4578- Seller panel : Remove Buyer Groups, Main Category and Phone number alias options from Company profile page  Dhiren-->
+
+
+
+
+
+               
+               <!--fieldset>
+                  <legend>Phone Number Alias</legend>
+                  
+                  <form role="form" name="cmp.phoneNumberAliasForm" ng-submit="cmp.SubmitPhoneNumberAlias()" novalidate="" class="form-validate mb-lg modelform3">
+                  <div class="row">
+                     <div class="col-md-1">
+                        <label>Alias</label>
+                     </div>
+                     <div class="col-md-3">
+                        <div class="form-group has-feedback">
+                           
+                           <div class="controls">
+                              <select name="country" chosen="" ng-model="cmp.phonealias.country" ng-options="cd.id as cd.name for cd in countries"   width="'100%'" class="chosen-select input-md form-control" ng-value="cmp.phonealias.country" required="">
+                                  <option value=""></option>
+                               </select>
+                              <span ng-show="cmp.phoneNumberAliasForm.country.$dirty &amp;&amp; cmp.phoneNumberAliasForm.country.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+                     
+                     <div class="col-md-3">
+                        <div class="form-group has-feedback">
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="phone_number" ng-model="cmp.phonealias.phone_number" placeholder="Phone 1234567890" required="required" class="form-control" />
+                              <span ng-show="cmp.phoneNumberAliasForm.phone_number.$dirty &amp;&amp; cmp.phoneNumberAliasForm.phone_number.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="col-md-3">
+                           <div class="form-group">
+                              <button type="submit" class="btn btn-primary">Add Alias</button>
+                           </div>
+                     </div>
+                  </div>     
+                          
+                  </form>
+                  <table datatable="" dt-options="cmp.dtOptions" dt-column-defs="cmp.dtColumnDefs" dt-instance="cmp.dtInstance" class="row-border hover" width="100%">
+                  </table>
+                
+               </fieldset-->
+
+
+
+            
+               <!--fieldset>
+                  <legend>Brands</legend>
+                  <div class="row">
+                   <div class="col-md-6">
+                   <form role="form" name="cmp.brandForm" ng-submit="cmp.submitBrand()" novalidate="" class="form-validate mb-lg modelform2">
+                           
+                           <div class="form-group" ng-show="manufacturer">
+                              <label>Brand I Own</label>
+                              <div class="form-group" ng-repeat="brand in compBrands track by $index">
+                                 
+                                 <input type="text" class="form-control" name="compBrands[$index].name" ng-model="compBrands[$index].name" autocomplete="off" placeholder="Brand Name" ng-value="brand.name"/>
+                                 <div style="display:flex; align-items:center; justify-content:center" ng-if= "compBrands[$index].image.full_size != null"><img ng-src="{{compBrands[$index].image.thumbnail_small}}" style="width: 80px"/></div>
+                                 <div>
+                                    <label class="control-label" ng-if="compBrands[$index].image.full_size != null">Brand Logo</label>
+                                    <label class="control-label" ng-if="compBrands[$index].image.full_size == null">Brand Logo *</label>
+                                    <input type="file" ngf-select name="image" ng-model="compBrands[$index].image_temp"  class="form-control" ngf-accept="'image/*'" >
+                                 </div>
+                                 <hr style="border-top: 3px double #8c8b8b;">
+                              </div>
+                              <button  type="button" class="btn blue" ng-click="addBrands()">Add My New Brand</button>     
+                           </div>
+                          
+                           <div class="form-group" ng-show="nonmanufacturer">
+                           
+                              <div class="form-group" ng-repeat="brand in compBrands track by $index">
+                                 <label>Brand I Own Name</label>
+                                 <input type="text" class="form-control" name="compBrands[$index].name" ng-model="compBrands[$index].name" autocomplete="off" placeholder="Brand Name" ng-value="brand.name"/>
+                                 <div style="display:flex; align-items:center; justify-content:center" ng-if= "compBrands[$index].image.full_size != null"><img ng-src="{{compBrands[$index].image.thumbnail_small}}" style="width: 80px"/></div>
+                                 <div>
+                                    <label class="control-label" ng-if="compBrands[$index].image.full_size != null">Brand Logo</label>
+                                    <label class="control-label" ng-if="compBrands[$index].image.full_size == null">Brand Logo *</label>
+                                    <input type="file" ngf-select name="image" ng-model="compBrands[$index].image_temp"  class="form-control" ngf-accept="'image/*'" >
+                                 </div>
+                                 <hr style="border-top: 3px double #8c8b8b;">
+                              </div>
+                              <button  type="button" class="btn blue" ng-click="addBrands()">Add My New Brand</button>     
+                           </div>
+
+                           <div class="row" ng-if="compBrands.length > 0">
+                              <div class="col-md-4">
+                                 <div class="form-group">
+                                    <button type="submit" class="buttonPrimary">Submit Brand I Own</button>
+                                 </div>
+                              </div>
+                           </div>
+                  </form>
+                  </div>
+                  <div class="col-md-6" ng-show="nonmanufacturer" style="border-left: 1px solid;"> 
+                  <form role="form" name="cmp.brandForm2" ng-submit="cmp.submitBrandDistributor()" novalidate="" class="form-validate mb-lg modelform3">
+                           <div class="form-group" >
+                              <label>Brands I Sell</label>
+                              
+                              <ui-select multiple="" ng-model="company.brand" theme="bootstrap" >
+                                   <ui-select-match placeholder="Brands i Sell">{{$item.name}} </ui-select-match>
+                                   <ui-select-choices repeat="b.id as b in brands | propsFilter: {name: $select.search}">
+                                      <div ng-bind-html="b.name | highlight: $select.search"></div>
+                                   </ui-select-choices>
+                              </ui-select>
+                              
+                              <span ng-show="cmp.brandForm.brand.$dirty &amp;&amp; cmp.brandForm.brand.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                           <div class="row">
+                              <div class="col-md-4">
+                                 <div class="form-group">
+                                    <button type="submit" class="buttonPrimary">Submit Brand I Sell</button>
+                                 </div>
+                              </div>
+                           </div>     
+                  </form>               
+                  </div>
+
+               </div>
+               </fieldset-->
+               
+               
+                <!--fieldset>
+                  <legend>Advance Settings</legend>
+                  
+                   <form role="form" name="cmp.buyersplitForm" ng-submit="cmp.SubmitBuyerSplit()" novalidate="" class="form-validate mb-lg modelform4">
+                     <div class="row"> 
+                        <div class="col-md-8">
+                           <div class="form-group has-feedback">
+                              <div class="controls">                             
+                                  <div class="checkbox c-checkbox">
+                                  <label>
+                                     <input type="checkbox" id="buyers_assigned_to_salesman"  name="buyers_assigned_to_salesman" ng-value="company.buyers_assigned_to_salesman" ng-model="company.buyers_assigned_to_salesman" />
+                                     <span class="fa fa-check"></span>My buyers will be split across my Salesman</label>
+                                  </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     
+                     <div class="row" ng-show="company.buyers_assigned_to_salesman"> 
+                        <div class="col-md-8">
+                           <div class="form-group has-feedback">
+                              <div class="controls">                             
+                                 <label class="radio-inline c-radio">
+                                    <input id="inlineradio1" type="radio" name="salesman_mapping" ng-model="company.salesman_mapping" value="Location" class="form-control"  />
+                                    <span class="fa fa-circle"></span>Location Wise</label>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="row" ng-show="company.buyers_assigned_to_salesman"> 
+                        <div class="col-md-8">
+                           <div class="form-group has-feedback">
+                              <div class="controls">
+                                 <label class="radio-inline c-radio">
+                                    <input id="inlineradio1" type="radio" name="salesman_mapping" ng-model="company.salesman_mapping" value="Individual" class="form-control"/>
+                                    <span class="fa fa-circle"></span>Buyers individually mapped to Salesmen</label>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     
+                     <div class="row">
+                        <div class="col-md-2">
+                           <div class="form-group"> 
+                              <button type="submit" class="buttonPrimary">Submit</button>
+                           </div>
+                        </div>
+                     </div>
+                    
+                   </form>
+                </fieldset-->
+
+               
+
+
+               <!--fieldset>
+                  <legend>Buyer Groups</legend>
+                  
+                   <form role="form" name="cmp.pricelistForm" ng-submit="cmp.SubmitPricelist()" novalidate="" class="form-validate mb-lg modelform4">
+                     <label>Pricelists:</label>
+                     <div class="row"> 
+                        <div class="col-md-8">
+                           <div class="form-group has-feedback">
+                              <div class="controls">                             
+                                 <label class="radio-inline c-radio">
+                                    <input id="inlineradio1" type="radio" name="number_pricelists" ng-model="pricelist.number_pricelists" value="1" required="required" ng-change="ChangePricelist(pricelist.number_pricelists)" class="form-control"  />
+                                    <span class="fa fa-circle"></span>I use 1 pricelist across all my buyers OR</label>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="row"> 
+                        <div class="col-md-8">
+                           <div class="form-group has-feedback">
+                              <div class="controls">
+                                 <label class="radio-inline c-radio">
+                                    <input id="inlineradio1" type="radio" name="number_pricelists" ng-model="pricelist.number_pricelists" value="2" required="required" ng-change="ChangePricelist(pricelist.number_pricelists)" class="form-control" checked="checked" />
+                                    <span class="fa fa-circle"></span>I use 2 different pricelists for different buyer groups</label>
+                                    <span ng-show="cmp.pricelistForm.number_pricelists.$dirty &amp;&amp; cmp.pricelistForm.number_pricelists.$error.required" class="text-danger">This field is required</span>
+                              </div>
+                           </div>
+
+                           <div class="row" style="padding-left: 4%" ng-show="secondpricelist" > 
+                              <div class="col-md-5">
+                                 <div class="form-group has-feedback">
+                                    <div class="controls">
+                                       <div class="checkbox c-checkbox">
+                                       <label>
+                                          <input type="checkbox" id="second_pricelist"  name="second_pricelist" ng-value="pricelist.second_pricelist" checked="true" ng-model="cmp.pricelist.second_pricelist" />
+                                          <span class="fa fa-check"></span>My 2nd pricelist is calculated as
+                                           </label>
+                                           <span ng-show="cmp.pricelistForm.second_pricelist.$dirty &amp;&amp; cmp.pricelistForm.second_pricelist.$error.required" class="text-danger">This field is required</span>
+                                       </div>
+                                    </div>
+                                 </div>                    
+                              </div>
+ 
+                              <div class="col-md-2">
+                                 
+                                    <input type="text" autocomplete="off" name="pricelist2_multiplier" ng-model="pricelist.pricelist2_multiplier" required="required" ng-value="1.00" class="form-control" />
+
+                                    <span ng-show="cmp.pricelistForm.pricelist2_multiplier.$dirty &amp;&amp; cmp.pricelistForm.pricelist2_multiplier.$error.required" class="text-danger">This field is required</span>
+                              </div>
+                              <div class="col-md-2">
+                                    <div class="checkbox c-checkbox">
+                                     X pricelist1
+                                    </div>
+                              </div>
+                             
+                           </div>
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-md-2">
+                           <div class="form-group"> 
+                              <button type="submit" class="buttonPrimary">Submit</button>
+                           </div>
+                        </div>
+                     </div>
+                    
+                          
+                  </form>
+                  
+                  <label>Default Buyer Group wise rules :</label>
+                  <table datatable="" dt-options="cmp.dtOptions2" dt-column-defs="cmp.dtColumnDefs2" dt-instance="cmp.dtInstance2" class="table-striped table-bordered hover" width="100%">
+               </fieldset-->
+   
+
+    <script type="text/ng-template" id="otpformforcompany">
+         <form role="form" name="cmp.otpFormForCompany" novalidate="" ng-submit="cmp.UpdateCompanyWithPhone()" class="form-validate mb-lg modelformOtpForCompany">  
+            <div class="form-group has-feedback">
+               <label class="text-muted">One Time Password</label>
+
+               <input type="text" name="otp" placeholder="Enter otp" autocomplete="off" ng-model="company.otp" required="" class="form-control" />
+               
+               <span ng-show="cmp.otpFormForCompany.otp.$dirty &amp;&amp; cmp.otpFormForCompany.otp.$error.required" class="text-danger">This field is required</span>
+            </div>
+            <div class="row">
+               <div class="col-md-4">
+                  <div class="form-group"> 
+                     <button type="submit" class="buttonPrimary">Submit</button>
+                  </div>
+               </div>
+               <div class="col-md-4"> 
+                  <div class="form-group"> 
+                  <button type="button" ng-click="cmp.CloseDialog()" class="buttonPrimary">Cancel
+                  </button>
+                  </div>
+                </div>
+            </div>
+         </form> 
+   </script>
+
+   <script type="text/ng-template" id="otpform">
+         <form role="form" name="cmp.otpForm" novalidate="" ng-submit="cmp.ApproveAlias()" class="form-validate mb-lg modelformOtp">  
+            <div class="form-group has-feedback">
+               <label class="text-muted">One Time Password</label>
+
+               <input type="text" name="otp" placeholder="Enter otp" autocomplete="off" ng-model="otp.value" required="" class="form-control" />
+               
+               <span ng-show="cmp.otpForm.otp.$dirty &amp;&amp; cmp.otpForm.otp.$error.required" class="text-danger">This field is required</span>
+            </div>
+            <div class="row">
+               <div class="col-md-4">
+                  <div class="form-group"> 
+                     <button type="submit" class="buttonPrimary">Submit</button>
+                  </div>
+               </div>
+               <div class="col-md-4"> 
+                  <div class="form-group"> 
+                  <button type="button" ng-click="cmp.CloseDialog()" class="buttonPrimary">Cancel
+                  </button>
+                  </div>
+                </div>
+            </div>
+         </form>
+      
+   </script>
+
+   <script type="text/ng-template" id="removealias">
+        <form role="form" ng-submit="RemoveAlias()" name="showCase.removeAliasForm" novalidate="" class="form-validate mb-lg modelformremove">
+   
+        <legend>Remove Phone Alias</legend>
+             
+            <div class="row">
+              <div class="col-md-12"> 
+                <label>Do you want to remove phone alias ?</label>
+              </div>
+            </div>
+
+            <div class="row">
+                <div  class="col-md-4"> 
+                  <button type="submit" class="buttonPrimary">Yes</button>
+                </div>
+                <div class="col-md-4"> 
+                  <button type="button" ng-click="showCase.CloseDialog()" class="buttonPrimary">No</button>
+                </div>
+            </div>
+        </form>
+    </script>
+
+    <script type="text/ng-template" id="ruledialog">
+      <fieldset>
+         <legend>Buyer Group Rule</legend>
+         <form role="form" name="cmp.buyergroupRuleForm" novalidate="" ng-submit="cmp.SubmitRule(buyergrouprule.id)" class="form-validate mb-lg modelformrule">  
+            <div class="row">
+               <div class="col-md-8">
+                  <div class="form-group has-feedback">
+                     <label class="text-muted">Buyer Group</label>
+                     <div class="form-group has-feedback">
+                        <select name="buyer_type" chosen="" ng-model="buyergrouprule.buyer_type" ng-options="s.id as s.name for s in groupType" width="'100%'" class="chosen-select input-md form-control" required="">
+                           <option value="">Select Buyer Type</option>
+                        </select>
+                         <span ng-show="cmp.buyergroupRuleForm.buyer_type.$dirty &amp;&amp; cmp.buyergroupRuleForm.buyer_type.$error.required" class="text-danger">This field is required</span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-8">
+                  <div class="form-group has-feedback">
+                     <label class="text-muted">Pricelist</label>
+                     <div class="form-group has-feedback">
+                        <select name="price_list" chosen="" ng-model="buyergrouprule.price_list" ng-options="s.id as s.number_pricelists for s in pricelists" width="'100%'" class="chosen-select input-md form-control" required="">
+                           <option value="">Select Pricelist</option>
+                        </select>
+                         <span ng-show="cmp.buyergroupRuleForm.price_list.$dirty &amp;&amp; cmp.buyergroupRuleForm.price_list.$error.required" class="text-danger">This field is required</span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-8">
+                  <div class="form-group has-feedback">
+                     <label class="text-muted">Payment Duration</label>
+                     <div class="form-group has-feedback">
+                        <input type="text" name="payment_duration" placeholder="Enter Payment Duraion" autocomplete="off" ng-model="buyergrouprule.payment_duration" required="" class="form-control" />
+                         <span ng-show="cmp.buyergroupRuleForm.payment_duration.$dirty &amp;&amp; cmp.buyergroupRuleForm.payment_duration.$error.required" class="text-danger">This field is required</span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-8">
+                  <div class="form-group has-feedback">
+                     <label class="text-muted">Credit Discount</label>
+                     <div class="form-group has-feedback">
+                        <input type="text" name="discount" placeholder="Enter Credit Discount" autocomplete="off" ng-model="buyergrouprule.discount" required="" class="form-control" />
+                         <span ng-show="cmp.buyergroupRuleForm.discount.$dirty &amp;&amp; cmp.buyergroupRuleForm.discount.$error.required" class="text-danger">This field is required</span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-8">
+                  <div class="form-group has-feedback">
+                     <label class="text-muted">Cash Discount</label>
+                     <div class="form-group has-feedback">
+                        <input type="text" name="cash_discount" placeholder="Enter Cash Discount" autocomplete="off" ng-model="buyergrouprule.cash_discount" required="" class="form-control" />
+                         <span ng-show="cmp.buyergroupRuleForm.cash_discount.$dirty &amp;&amp; cmp.buyergroupRuleForm.cash_discount.$error.required" class="text-danger">This field is required</span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-4">
+                  <div class="form-group"> 
+                     <button type="submit" class="buttonPrimary">Submit</button>
+                  </div>
+               </div>
+               <div class="col-md-4"> 
+                  <div class="form-group"> 
+                  <button type="button" ng-click="cmp.CloseDialog()" class="buttonPrimary">Cancel
+                  </button>
+                  </div>
+                </div>
+            </div>
+            </fieldset>
+         </form>
+   </script>
+
+</div>
+
+
+<!-- END panel -->

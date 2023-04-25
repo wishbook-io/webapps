@@ -1,0 +1,121 @@
+<style>
+  
+   .panel
+   {
+      border-color: #cfdbe2;
+      /*box-shadow: 5px 5px 7px rgba(0,0,0,.05)  !important;*/
+      height: 18%;
+      border-radius: 20px;
+   }
+   
+   .row
+   {
+      margin-left: -8px;
+      margin-right: -8px;
+      width: 100%;
+      line-height: 15px;
+   }
+   .panel-default
+   {
+      border-top-width: 1px !important;
+      margin: 1px 10px 10px 10px!important;
+      padding:10px;
+
+   }
+   
+
+</style>
+
+
+
+<div ng-controller="brandwisediscountController">
+
+   <h4>
+      <label style="margin-left: 20px;">Brandwise Discount Settings</label>
+      <button type="button" class="buttonPrimary" style="margin:-2px 50px 0 ;line-height: 14px; " ng-click="openAddEditDiscountRule()">
+         Add Discount rule
+      </button>
+   </h4>
+
+   <div class="row modelform3">
+
+      <div class="col-md-6" ng-repeat="rule in discountRuleList">
+         <div class="panel panel-default" >
+          
+            <div class="row">
+               <div class="col-md-9 left" >
+                 <div class="form-group" style="text-align:left"> 
+                    <label style="color: gray;font-size: 16px;">{{rule.name}} </label>
+                 </div>
+              </div>
+               <div class="col-md-3 right">
+                  <div class="form-group">
+                     <span ng-click="openAddEditDiscountRule(rule.id)"  class="linkButton" >Edit</span>
+                     <!--span ng-click="openDeleteDiscountRule(rule.id)" class="linkButton" >Delete</span-->
+                  </div>
+               </div>
+            </div>
+
+            <div class="row">
+               <div class="col-md-5">
+                  <div class="right"> 
+                     <label>Brands :</label>
+                  </div>
+               </div>
+               <div class="col-md-7">
+                  <div class="left"> 
+                        <span ng-repeat="brnd in rule.brands | limitTo: 3">
+                           <span >{{discountRule[brnd]}}</span>
+                        </span>
+                        <span  ng-if="rule.brands.length > 3">
+                           <span>...</span>
+                        </span>
+                     </div>
+               </div>
+            </div>
+
+            <div class="row">
+               <div class="col-md-5">
+                  <div class="right">
+                     <label>Full Catalog Discount :</label>
+                  </div>
+               </div>
+               <div class="col-md-7">
+                  <div class="left">
+                     <span >{{rule.cash_discount}}%</span>
+                  </div>
+               </div>
+            </div>
+            
+            <div class="row">
+               <div class="col-md-5">
+                  <div class="right">
+                     <label>Single Piece Discount :</label>
+                  </div>
+               </div>
+               <div class="col-md-7">
+                  <div class="left">
+                     <span >{{rule.single_pcs_discount}}%</span>
+                  </div>
+               </div>
+            </div>
+            
+      </div>
+   </div>
+
+   </div>
+
+
+   <div ng-if="discountRuleListempty" class="col-md-10" style="padding:10px;margin-left: 20px;">
+      <label> You have not added any rule in List</label>
+   </div>
+
+
+
+   <div ng-include="'wishbook_libs/views/discountruleactions/discountruleaction.html'"></div>
+
+
+</div>
+
+
+<!-- END panel -->

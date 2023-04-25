@@ -1,0 +1,179 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span>Reseller Payouts</h3>
+<div class="panel panel-default modelform6 datatable-loader">
+   <div class="panel-body" >
+      <div ng-controller="ResellerPayoutsController as showCase">
+
+	<!--table datatable="" dt-options="cat.dtOptions" dt-columns="cat.dtColumns" class="row-border hover"></table-->
+         <!--toaster-container toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}"></toaster-container-->
+        <table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover " width="100%">
+        </table>
+
+        <script type="text/ng-template" id="paybalance-dialog">
+        <form role="form" name="showCase.bankForm" ng-submit="" class="form-validate mb-lg bank-dialog">
+        <legend ng-if="bulk_pay_flag == false">Update Bank Details and Pay</legend>
+        <legend ng-if="bulk_pay_flag == true">Update Bank Details and Bulk Pay</legend>
+                  <div ng-if="bulk_pay_flag == false" class="row">
+                       <div class="col-md-6">
+                           <div class="form-group">
+                              <label>Pay Amount </label>
+                              <input type="number" step="0.01" name="pay_amount" ng-model="showCase.pay_amount" class="form-control" autocomplete="off" placeholder="Enter pay amount" ng-max="showCase.max_pay_amount"  required="required"  />
+                              <span ng-show="showCase.bankForm.pay_amount.$dirty &amp;&amp; showCase.bankForm.pay_amount.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="showCase.bankForm.pay_amount.$error.max" class="text-danger">You can not pay more than {{showCase.max_pay_amount}} </span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group">
+                              <label>Bank Name </label>
+                              <input type="text" name="bank_name" ng-model="bank_details.bank_name" class="form-control" autocomplete="off" placeholder="Enter bank name"  />
+                              <!-- <span ng-show="showCase.bankForm.bank_name.$dirty &amp;&amp; showCase.bankForm.bank_name.$error.required" class="text-danger">This field is required</span> -->
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group">
+                              <label>Account Number </label>
+                              <input type="text" name="account_number" ng-model="bank_details.account_number" class="form-control" autocomplete="off" placeholder="Enter A/C number" ng-pattern="/^([0-9]*)?$/" required />
+                              <span ng-show="showCase.bankForm.account_number.$dirty &amp;&amp; showCase.bankForm.account_number.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="showCase.bankForm.account_number.$error.pattern" class="text-danger">Invalid bank account number.</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group">
+                              <label>Account Holder Name </label>
+                              <input type="text" name="account_name" ng-model="bank_details.account_name" class="form-control" autocomplete="off" placeholder="Enter Account Holder Name" required />
+                              <span ng-show="showCase.bankForm.account_name.$dirty &amp;&amp; showCase.bankForm.account_name.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group">
+                              <label>IFSC code</label>
+                              <input type="text" name="ifsc_code" ng-model="bank_details.ifsc_code" class="form-control" autocomplete="off" placeholder="Enter IFSC code" ng-pattern="/^[\A-Za-z0-9]*$/" required />
+                              <span ng-show="showCase.bankForm.ifsc_code.$dirty &amp;&amp; showCase.bankForm.ifsc_code.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="showCase.bankForm.ifsc_code.$error.pattern" class="text-danger">Invalid IFSC code. It should contain only alphanumeric characters.</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group">
+                              <label>Account Type </label>
+                              <select name="account_type" ng-model="bank_details.account_type" class="form-control" >
+                                 <option value="Savings" >Savings</option>
+                                 <option value="Current" >Current</option>
+                             </select>
+                              <!-- <span ng-show="showCase.bankForm.account_type.$dirty &amp;&amp; showCase.bankForm.account_type.$error.required" class="text-danger">This field is required</span> -->
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group">
+                              <label>Phone Number</label>
+                                 <input type="text" name="phone_no" ng-model="bank_details.phone_no" placeholder="Enter Phone number" ng-pattern="/^([0-9]){10}?$/" class="form-control"  autocomplete="off" required />
+                                  <span ng-show="showCase.bankForm.phone_no.$dirty &amp;&amp; showCase.bankForm.phone_no.$error.required" class="text-danger">This field is required</span>
+                                  <span ng-show="showCase.bankForm.phone_no.$error.pattern" class="text-danger">Invalid phone number.</span>
+                            </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                           <label>Email</label>
+                           <div class="controls">
+                              <input type="email" name="email" placeholder="Enter Email" autocomplete="off" ng-model="bank_details.email" required="" class="form-control" />
+
+                              <span ng-show="showCase.bankForm.email.$dirty &amp;&amp; showCase.bankForm.email.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="showCase.bankForm.email.$dirty &amp;&amp; showCase.bankForm.email.$error.email" class="text-danger">This field must be a valid email address</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-8">
+                        <div class="form-group has-feedback">
+
+                           <label>Street Address</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="street_address" ng-model="bank_details.street_address" placeholder="Enter street address" required="required" class="form-control" />
+                              <span ng-show="showCase.bankForm.street_address.$dirty &amp;&amp; showCase.bankForm.street_address.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
+
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group">
+                           <button ng-if="bulk_pay_flag == false" type="submit" ng-click="submitResellerPay()" class="btn btn-primary mt-lg">Submit</button>
+                           <button ng-if="bulk_pay_flag == true" type="submit" ng-click="submitBulkResellerPay()" class="btn btn-primary mt-lg">Submit Bulk Pay</button>
+                        </div>
+                     </div>
+                  </div>
+          </form>
+      </script>
+      <script type="text/ng-template" id="bulk_pay_response_dialog">
+        <legend>Response</legend>
+        <table border="1" style="text-align: center; width: 100%;">
+          <tr>
+            <td style="padding: 2%;">Settlement</td>
+            <td style="padding: 2%;">Success</td>
+            <td style="padding: 2%;">Message</td>
+          </tr>
+          <tr ng-repeat="response in responses">
+            <td style="padding: 1%;">{{response.settlement}}</td>
+            <td style="padding: 1%;">{{response.success}}</td>
+            <td style="padding: 1%;">{{response.message}}</td>
+          </tr>
+        </table>
+      </script>
+
+      <script type="text/ng-template" id="confirmation-dialog-wbmoney">
+        <div class="ngdialog-message reject-dialog">
+          <div class="panel-heading"></div>
+            <div class="panel-body">
+                  <legend>Confirm Action</legend>
+                <div class="row" align="center">
+                   <div class="col-md-12">
+                      <div class="form-group">
+                          <label> for {{reseller_pay_id}} amount {{showCase.pay_amount}} will go to WBMoney</label>
+                      </div>
+                   </div>
+                  </div>
+
+                  <div class="row" align="center">
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-primary mt-lg">No, Cancel It</button>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <button type="button" ng-click="submitResellerWBMoney()" style="background: green;" class="btn btn-primary mt-lg">Yes, Do it!</button>
+                        </div>
+                     </div>
+                  </div>
+            </div>
+        </div>
+      </script>
+
+    </div>
+   </div>
+</div>

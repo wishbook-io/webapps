@@ -1,0 +1,15 @@
+<h3>Seller Statistics</h3>
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+      <div ng-controller="SellerStatisticController as showCase">
+        
+        <toaster-container toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}"></toaster-container>  
+        
+        <table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+        </table>
+        <div ng-include="'app/views/common/company_detail.html'"></div>
+        <div ng-include="'app/views/common/company_detail_edit.html'"></div>
+        
+      </div>
+   </div>
+</div>

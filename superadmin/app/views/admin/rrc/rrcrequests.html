@@ -1,0 +1,110 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span>RRC Requests</h3>
+<div class="panel panel-default modelform6 datatable-loader">
+   <div class="panel-body" >
+      <div ng-controller="RrcRequestsController as showCase">
+
+	<!--table datatable="" dt-options="cat.dtOptions" dt-columns="cat.dtColumns" class="row-border hover"></table-->
+         <!--toaster-container toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}"></toaster-container-->
+        <table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+        </table>
+        
+        <script type="text/ng-template" id="rrcimages">
+            <legend>Images of RRC request {{rrc_id}}</legend>
+                <div class="row" style="padding-top:10px;">
+                      <div class="col-md-12">
+                         <div class="form-group"> 
+                            <div ng-if="rrc_images.length <= 0">No images uploaded for this RRC request.</div>
+                            <div class="col-md-3" ng-repeat="rimage in rrc_images track by $index" style="text-align:center;">
+                               <img ng-src="{{rimage.image.thumbnail_small || rimage.image.thumbnail_medium}}" style="max-width: 100%; max-height: 100%;"/>
+                            </div>
+                         </div>
+                      </div>
+                </div>
+                <div class="row">
+                    <div style="float:right;" class="col-md-2"> 
+                      <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                    </div>
+                </div>
+        </script>
+        <script type="text/ng-template" id="change-request-type">
+          <form role="form" ng-submit="showCase.submitChangeRequestType()" name="showCase.changeRequestTypeForm" novalidate="" class="form-validate mb-lg modelform-rrc">
+            <legend>Change request type for {{rrc.id}}</legend>
+                <div class="row">
+                    <div class="col-md-4">
+                       <div class="form-group"> 
+                         <label>Select Request Type</label>
+                         <div class="controls">
+                           <select chosen="" ng-model="rrc.request_type" name="rrc.request_type" class="chosen-select input-md form-control" required >
+                                <option value=""></option>
+                                <option value="replacement">Replacement Request</option>
+                                <option value="return">Return Request</option>
+                           </select>
+                         </div>
+                       </div>
+                    </div>
+                    <div class="col-md-4" ng-if="rrc.request_type == 'return'">
+                       <div class="form-group"> 
+                         <label>Select Return Type</label>
+                         <div class="controls">
+                           <select chosen="" ng-model="rrc.return_type" name="rrc.return_type" class="chosen-select input-md form-control" required >
+                                <option value=""></option>
+                                <option value="rto">rto</option>
+                                <option value="customer return">customer return</option>
+                           </select>
+                         </div>
+                       </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="float:right;" class="col-md-2"> 
+                      <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                    </div>
+                    <div style="float:right;" class="col-md-2"> 
+                      <button type="submit" class="btn btn-block btn-primary mt-lg">Submit</button>
+                    </div>
+                </div>
+          </form>
+        </script>
+        
+        <script type="text/ng-template" id="confirmation-dialog-rrc-reject-approve">
+  	      <div class="ngdialog-message reject-dialog">
+  	        <div class="panel-heading"></div>
+  	          <div class="panel-body">
+  	                <legend>Confirm {{user_action}}</legend>
+  	             	<div class="row" align="center">
+  	                 <div class="col-md-12">
+  	                    <div class="form-group">
+  	                      	<label>Are you sure to {{user_action}} Rrc ?</label>
+  	                    </div>
+  	                 </div>
+  	                </div>
+
+  	                <div class="row" align="center">
+  	               		 <div class="col-md-6">
+  		                    <div class="form-group">
+  		                       <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-primary mt-lg">No, Cancel It</button>
+  		                    </div>
+  		                 </div>
+  		                 <div class="col-md-6">
+  		                    <div class="form-group">
+  		                       <button type="button" ng-click="SubmitRrcAction()" style="background: green;" class="btn btn-primary mt-lg">Yes, Do it!</button>
+  		                    </div>
+  		                 </div>
+  	                </div>
+  	          </div>
+  	      </div>
+  	    </script>
+
+    </div>
+   </div>
+</div>

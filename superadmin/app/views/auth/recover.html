@@ -1,0 +1,115 @@
+
+<div ng-controller="RecoverFormController as rec" class="block-center mt-xl wd-xxl">
+
+   <!-- START panel-->
+   <div class="panel panel-dark panel-flat">
+      <div class="panel-heading text-center">
+         <a href="#">
+            <a href="#" style="color: white; font-size: 24px;">Wishbook</a>
+         </a>
+      </div>
+      <div class="panel-body">
+         <p class="text-center pv">PASSWORD RESET</p>
+         <form ng-submit="rec.recover()" role="form" name="rec.forgotpassForm" novalidate="" class="form-validate modelform">
+            <p class="text-center">Enter your mobile number to receive otp.</p>
+            <!--div class="form-group has-feedback">
+               <label class="text-muted">Email address</label>
+               <input type="email" name="account_email" placeholder="Enter email" autocomplete="off" ng-model="rec.account.email" required="" class="form-control" />
+               <span class="fa fa-envelope form-control-feedback text-muted"></span>
+               <span ng-show="rec.recoverForm.account_email.$dirty &amp;&amp; rec.recoverForm.account_email.$error.required" class="text-danger">This field is required</span>
+               <span ng-show="rec.recoverForm.account_email.$dirty &amp;&amp; rec.recoverForm.account_email.$error.email" class="text-danger">This field must be a valid email address</span>
+            </div-->  
+                  <div class="row">
+                  
+                     <div class="col-md-5">
+                        <div class="form-group has-feedback">
+                           
+                           <div class="controls">
+                              <select name="country" chosen="" ng-model="rec.forgotpass.country" ng-options="cd.id as cd.name for cd in countries"  class="chosen-select  form-control" required="">
+                                  <option value=""></option>
+                               </select>
+                              <span ng-show="rec.forgotpassForm.country.$dirty &amp;&amp; rec.forgotpassForm.country.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+                    
+                     <div class="col-md-7">
+                        <div class="form-group has-feedback">
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="phone_number" ng-model="rec.forgotpass.phone_number" placeholder="Phone 1234567890" required="required" class="form-control" ng-pattern="/^([0-9]){10}?$/" />
+                              <span ng-show="rec.forgotpassForm.phone_number.$dirty &amp;&amp; rec.forgotpassForm.phone_number.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="rec.forgotpassForm.phone_number.$error.pattern" class="text-danger">Invalid phone number.</span>
+                           </div>
+                        </div>
+                     </div>
+               </div>  
+            <button type="submit" class="btn btn-danger btn-block">Reset</button>
+            <a ui-sref="page.login" class="btn btn-block btn-default">Login</a>
+         </form>
+      </div>
+   </div>
+   <!-- END panel-->
+   <div class="p-lg text-center">
+      <span>&copy;</span>
+      <span ng-bind="app.year"></span>
+      <span>-</span>
+      <span ng-bind="app.name"></span>
+      <br/>
+      <span ng-bind="app.description"></span>
+   </div>
+
+   <script type="text/ng-template" id="changepass">
+         <form role="form" name="rec.changepasswordForm" novalidate="" ng-submit="rec.ChnagePassword()" class="form-validate mb-lg modelformOtp" autocomplete="off">  
+         <div class="row">
+         <div class="col-md-12">
+            <div class="form-group has-feedback">
+               <label class="text-muted">One Time Password</label>
+               <input type="text" name="otp" placeholder="Enter otp" autocomplete="off" ng-model="rec.changepassword.otp" required="" class="form-control" />
+      
+               <span ng-show="rec.changepasswordForm.otp.$dirty &amp;&amp; rec.changepasswordForm.otp.$error.required" class="text-danger">This field is required</span>
+            </div>
+         </div>
+         </div>
+
+         <div class="row">
+         <div class="col-md-12">
+            <div class="form-group has-feedback">
+               <label class="text-muted">Password</label>
+               <input id="id-password" type="password" name="account_password" ng-model="rec.changepassword.new_password1"  required="" class="form-control" ng-minlength = "6" ng-maxlength = "30"/ autocomplete = "off"/>
+               <span class="fa fa-lock form-control-feedback text-muted"></span>
+               <span ng-show="rec.changepasswordForm.account_password.$dirty &amp;&amp; rec.changepasswordForm.account_password.$error.required" class="text-danger">This field is required</span>
+               <span ng-show="rec.changepasswordForm.account_password.$error.minlength" class="text-danger">Minimum 6 character required</span>
+               <span ng-show="rec.changepasswordForm.account_password.$error.maxlength" class="text-danger">Maximum 30 character required</span>
+               <!--span ng-show="rec.changepasswordForm.account_password.$dirty &amp;&amp; rec.changepasswordForm.account_password.$error.pattern" class="text-danger">Input should match 'a-zA-Z0-9' and 6-10 length</span    ng-pattern="/^[a-zA-Z0-9]{6,10}$/"-->
+            </div>
+         </div>
+         </div>
+
+         <!--div class="row">
+         <div class="col-md-12">
+            <div class="form-group has-feedback">
+               <label class="text-muted">Retype Password</label>
+               <input type="password" name="account_password_confirm" ng-model="rec.changepassword.new_password2" ui-validate="'$value==rec.changepassword.new_password1'" ui-validate-watch="'new_password1'" class="form-control" />
+               <span class="fa fa-lock form-control-feedback text-muted"></span>
+               <span ng-show="rec.changepasswordForm.account_password_confirm.$dirty &amp;&amp; rec.changepasswordForm.account_password_confirm.$error.required" class="text-danger">This field is required</span>
+               <span ng-show="rec.changepasswordForm.account_password_confirm.$dirty &amp;&amp; rec.changepasswordForm.account_password_confirm.$error.validator" class="text-danger">Password does Not match</span>
+            </div>
+         </div>
+         </div-->
+            <div class="row">
+               <div class="col-md-4">
+                  <div class="form-group"> 
+                     <button type="submit" class="btn btn-block btn-primary mt-lg">Submit</button>
+                  </div>
+               </div>
+            
+               <div class="col-md-4">
+                  <div class="form-group">
+                     <button type="button" ng-click="rec.recover()" class="btn btn-block btn-secondary mt-lg">Resend</button>
+                     </div>
+               </div>
+            </div>
+         </form>
+      
+   </script>
+</div>

@@ -1,0 +1,242 @@
+
+
+<script type="text/ng-template" id="createbulkbrokerageorder">
+<div ng-controller="CreateBrokerageOrderController as showCase1">
+      <div class="ngdialog-message">
+            
+        <div class="panel-heading"></div>
+        <div class="panel-body">
+          <form name="showCase1.purchaseOrderForm" ng-submit="" form-wizard="" validate-steps="true" novalidate="" steps="2" class="form-validate modelform-order">
+             <div class="form-wizard wizard-horizontal">
+                <!-- START wizard steps indicator-->
+                <ol class="row">
+                   <li ng-class="{'active':wizard.active(1)}" ng-click="wizard.go(1)" class="col-md-6">
+                      <h4>Order Details</h4>
+                   </li>
+
+                   <li ng-class="{'active':wizard.active(2)}" ng-click="wizard.go(2)" class="col-md-6 prepareproducts">
+                      <h4>Product Details</h4>
+                   </li>
+
+                   <!--li ng-class="{'active':wizard.active(3)}" ng-click="wizard.go(3)" class="col-md-4">
+                      <h4>Shipping Details</h4>
+                   </li-->
+                </ol>
+                <!-- END wizard steps indicator-->
+                <!-- START Wizard Step inputs -->
+                  <div id="step1" ng-show="wizard.active(1)">
+                   <fieldset>
+                      <legend>Order Details</legend>
+                   <div class="row">
+                  
+                     
+                  
+                      <div class="col-md-4" >
+                        <div class="form-group has-feedback">
+                           <label>Supplier *</label>
+                           <div class="controls">
+                            <select chosen="" name="supplier" ng-model="showCase1.order.supplier" ng-options="c.company_id as c.company_name for c in showCase1.suppliers" data-placeholder="Select Supplier" class="chosen-select form-control" required="required" data-parsley-group="step1" ng-change="supplierChange(showCase1.order.supplier)" ng-disabled="catalogstobeorder.length > 0" >
+                             <option value=""></option>
+                            </select>
+                          <span ng-show="showCase1.purchaseOrderForm.supplier.$dirty &amp;&amp; showCase1.purchaseOrderForm.supplier.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                           <label>Buyer *</label>
+                           <div class="controls">
+                            <select chosen="" name="buyer" ng-model="showCase1.order.buyer" ng-options="c.company_id as c.company_name for c in showCase1.buyers" data-placeholder="Select Buyer" class="chosen-select form-control" required="required" data-parsley-group="step1" ng-disabled="catalogstobeorder.length > 0" >
+                             <option value=""></option>
+                            </select>
+                             <span ng-show="showCase1.purchaseOrderForm.buyer.$dirty &amp;&amp; showCase1.purchaseOrderForm.buyer.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+
+                      <div class="col-md-4"> 
+                          <div class="form-group has-feedback">
+                             <label>Catalog *</label>
+                             <div class="controls">
+                              <!--lable class="form-control">{{showCase1.order_title}}</lable-->
+                              <select chosen="" name="catalog" ng-model="cdata.catalog" ng-options="c.id as c.title for c in showCase1.catalogs" data-placeholder="" class="chosen-select form-control"  >
+                               <option value=""></option>
+                              </select>
+                             </div>                          
+                          </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-4"> 
+                          <div class="form-group">
+                             <label>No. of Sets *</label>
+                             <div class="controls">
+                             <input type="number" name="sets" ng-model="cdata.sets" class="form-control" min="1" />
+                             </div>
+                          </div>
+                      </div>
+                    
+                      <div class="col-md-4"> 
+                          <div class="form-group">
+                             <label>Packing Type *</label>
+                             <div class="controls">
+                             <select name="packingtype" ng-model="cdata.packingtype" class="form-control" >
+                               <option value="Box" >Box</option>
+                               <option value="Naked" >Naked</option>
+                             </select>
+                             </div>
+                          </div>
+                      </div>
+                      <div class="col-md-4"> 
+                          <div class="form-group">
+                             <label>Catalog Remark</label>
+                             <div class="controls">
+                             <input type="text" name="note" ng-model="cdata.note" autocomplete="off"  class="form-control" />
+                             </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row" style="text-align: right;">
+                      <div class="col-md-12"> 
+                         <button type="submit" ng-click="CatalogArray()" class="btn btn-primary mt-lg" style="    background-color: green;">Add</button>
+                      </div>
+                  </div>
+                  <hr>
+                  <table class="table table-hover" ng-if="catalogstobeorder.length > 0">
+                      <thead>
+                      
+                            <th style="text-align: center;" >Thumbnail</th>
+                            <th style="text-align: center;" >Catalog</th>
+                            <th style="text-align: center;" ># Sets</th>
+                            <th style="text-align: center;" >Total Qty</th>
+                            <th style="text-align: center;" >Packing</th>
+                            <th style="text-align: center;" >Remark</th>
+                            <th style="text-align: center;" ></th>
+                      </thead>
+                      
+                      <tbody ng-repeat="catalog in catalogstobeorder">
+                        <tr>
+                            <td style="text-align: center;" ><img class="loading" ng-src="{{catalog.thumbimage}}" style="width: 100px; height: 100px"></td>
+                            <td style="text-align: center;" >{{catalog.title}}</td>
+                            <td style="text-align: center;" >{{catalog.sets}}</td>
+                            <td style="text-align: center;" >{{catalog.qty}}</td>
+                            <td style="text-align: center;" >{{catalog.packingtype}}</td>
+                            <td style="text-align: center;" >{{catalog.note}}</td>
+                            <td style="text-align: center;" ><a ng-click="remove(catalog)">Remove</a></td>
+                            
+                           
+                        </tr>
+                         
+                      </tbody>
+                   </table>
+                  <hr>
+                  <div class="row">
+                    <div class="col-md-4"> 
+                        <div class="form-group has-feedback">
+                           <label>Brokerage</label>
+                           <div class="controls">
+                           <input type="text" name="brokerage" placeholder="Brokerage" autocomplete="off" ng-model="showCase1.order.brokerage" class="form-control" readonly data-parsley-group="step1"/>
+                           </div>
+                        </div>
+                    </div>
+                    <!--div class="col-md-4"> 
+                        <div class="form-group has-feedback">
+                           <label>Order Number *</label>
+                           <div class="controls">
+                           <input type="text" name="order_number" placeholder="Order Number" autocomplete="off" ng-model="showCase1.order.order_number" class="form-control" required="required" data-parsley-group="step1"/>
+                           <span ng-show="showCase1.purchaseOrderForm.order_number.$dirty &amp;&amp; showCase1.purchaseOrderForm.order_number.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                    </div-->
+             
+                     <div class="col-md-4"> 
+                          <div class="form-group">
+                             <label>Order Remark</label>
+                             <div class="controls">
+                             <input type="text" name="note" placeholder="Order Remark" ng-model="showCase1.order.note" autocomplete="off"  class="form-control" data-parsley-group="step1" />
+                             </div>
+                          </div>
+                      </div>
+                  </div>
+
+                   </fieldset>
+                   <ul class="pager" ng-if="catalogstobeorder.length > 0">
+                      <li class="next"><a class="prepareproducts" ng-click="wizard.go(2)">Next <span>&rarr;</span></a>
+                      </li>
+                   </ul>
+                </div>
+                <!-- END Wizard Step inputs -->
+                <!-- START Wizard Step inputs -->
+               
+                <div id="step2" ng-show="wizard.active(2)">
+                   <fieldset>
+                      <legend>Product Details</legend>
+                          
+                          <div class="col-md-12" style="font-weight: bold;">
+                              <div class="col-md-3">Catalog</div>
+                              <div class="col-md-3">Designs</div>
+                              <div class="col-md-2">Sets</div>
+                              <div class="col-md-2">Total Qty</div>
+                              <div class="col-md-2"></div>
+                          </div>
+
+                          <div class="col-md-12" ng-repeat="cat in catalogstobeorder">
+                              <div class="col-md-12" style="border: 1px solid gray; padding: 0.5%; margin-bottom: 2px;">
+                                <div class="col-md-3">{{cat.title}}</div>
+                                <div class="col-md-3">{{cat.total_products}}</div>
+                                <div class="col-md-2">{{cat.sets}}</div>
+                                <div class="col-md-2">{{cat.qty}}</div>
+                                <div class="col-md-2"><input id="expbtn-{{cat.id}}" ng-click="showhide(cat.id)" type="button" name="Expand" value="Expand" /></div>
+                              </div>
+                              <div style="display: none;" id="catalog-{{cat.id}}" >
+                                <div class="col-md-12" style="font-weight: bold;">
+                                    <div class="col-md-3">Image</div>
+                                    <div class="col-md-3">SKU</div>
+                                    <div class="col-md-2">Price</div>
+                                    <div class="col-md-2">Qty</div>
+                                    <div class="col-md-2">Select</div>
+                                </div>
+                                <div class="col-md-12"  ng-repeat="product in cat.catalogsproducts">
+                                    
+                                    <div class="col-md-3"><img class="loading" ng-src="{{product.image}}" style="width: 100px; height: 100px"></div>
+                                    <div class="col-md-3">{{product.sku}}</div>
+                                    <div class="col-md-2">
+                                        <input type="number" name="product.selling_price" ng-model="product.selling_price" data-parsley-group="step2" placeholder="Enter price" autocomplete="off"  class="form-control"  required/>
+                                    </div>
+                                    
+                                    <div class="col-md-2"><input type="number" name="{{product.quantity}}" ng-model="product.quantity" ng-blur="showCase1.changeQty(product.quantity)" data-parsley-group="step2" placeholder="Enter quantity"  class="form-control"  value="1" required/></div>
+
+                                    <div class="col-md-2"><input class="needsclick" type="checkbox" value="" ng-model="product.is_select"/></div>
+                                </div>
+                              </div>
+                          </div>
+                    
+                      
+                      <div class="row" align="center">
+                         <div class="col-md-12">
+                          <div class="form-group">
+                            <button type="submit" ng-click="CreateOrder();" class="btn btn-primary mt-lg">Create Order and Continue</button>
+                          </div>
+                         </div>
+                      </div>
+                   
+                      <!-- END row -->
+                   </fieldset>
+                   <ul class="pager">
+                      <li class="previous">
+                         <a ng-click="wizard.go(1)">
+                            <span>&larr; Previous</span>
+                         </a>
+                      </li>
+                   </ul>
+                </div>
+                <!-- END Wizard Step inputs -->
+              
+             </div>
+           </form>
+         </div><!-- END panel -->
+    </div> <!-- End ng dialog -->
+    </div> <!-- End ng-controller -->
+   </script>

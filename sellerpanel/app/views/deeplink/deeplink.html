@@ -1,0 +1,255 @@
+<h3>Sample Deeplinks</h3>
+<div class="panel panel-default">
+   <div class="panel-body" >
+    <div ng-controller="DeeplinkController as showCase">
+    
+      <div class="row">
+             <div class="col-md-10">
+                <div class="form-group">
+                   <label>Buyer Link :</label> 
+                   <input type="text" value="https://app.wishbook.io/?type=buyer&id=15436" name="link" id="copytoclip1" class="form-control" autocomplete="off" readonly>
+                 </div>
+             </div>
+             <div class="col-md-2">
+                <div class="form-group">
+                   <button type="button" class="btn btn-primary mt-lg" onclick="copyToClipboard1()" style="margin-top: 18% !important;" >Copy Link</button>
+                 </div>
+             </div>
+      </div>
+      <div class="row">
+             <div class="col-md-10">
+                <div class="form-group">
+                   <label>Supplier Link :</label> 
+                   <input type="text" value="https://app.wishbook.io/?type=supplier&id=21530" name="link" id="copytoclip2" class="form-control" autocomplete="off" readonly>
+                 </div>
+             </div>
+             <div class="col-md-2">
+                <div class="form-group">
+                   <button type="button" class="btn btn-primary mt-lg" onclick="copyToClipboard2()" style="margin-top: 18% !important;" >Copy Link</button>
+                 </div>
+             </div>
+      </div>    
+        <div class="row">
+             <div class="col-md-10">
+                <div class="form-group">
+                   <label>Public Supplier Link :</label> 
+                   <input type="text" value="https://app.wishbook.io?type=supplier&companyid=190" name="link" id="copytoclip3" class="form-control" autocomplete="off" readonly>
+                 </div>
+             </div>
+             <div class="col-md-2">
+                <div class="form-group">
+                   <button type="button" class="btn btn-primary mt-lg" onclick="copyToClipboard3()" style="margin-top: 18% !important;" >Copy Link</button>
+                 </div>
+             </div>
+      </div> 
+      <div class="row">
+             <div class="col-md-10">
+                <div class="form-group">
+                   <label>Public Catalog Link :</label> 
+                   <input type="text" value="https://app.wishbook.io/?type=catalog&id=7967" name="link" id="copytoclip4" class="form-control" autocomplete="off" readonly>
+                 </div>
+             </div>
+             <div class="col-md-2">
+                <div class="form-group">
+                   <button type="button" class="btn btn-primary mt-lg" onclick="copyToClipboard4()" style="margin-top: 18% !important;" >Copy Link</button>
+                 </div>
+             </div>
+      </div> 
+    </div>
+  </div>
+</div>  
+<h3>Create Deeplink</h3>
+<div class="panel panel-default">
+   <div class="panel-body" >
+		<div ng-controller="DeeplinkController as showCase">
+		
+		  <div class="row">
+             <div class="col-md-10">
+                <div class="form-group">
+                   <label>Link :</label> 
+                   <input type="text" ng-model="finallink" name="link" id="copytoclip" class="form-control" autocomplete="off" readonly>
+                 </div>
+             </div>
+             <div class="col-md-2">
+                <div class="form-group">
+                   <button type="button" class="btn btn-primary mt-lg" onclick="copyToClipboard()" style="margin-top: 18% !important;" >Copy Link</button>
+                 </div>
+             </div>
+      </div>  	
+      <div class="row" ng-if="catalog_count > -1">
+             <div class="col-md-10">
+               <span style="color: green; font-size: 20px; "> {{catalog_count}} Catalog found with above link.</span>
+             </div>
+      </div> 
+      <div class="deeplink-modal">
+  		  <div class="row">
+               <div class="col-md-4">
+                  <div class="form-group">
+                     <label>Category </label>
+                     <div class="controls">
+                        <select name="category" chosen="" ng-model="showCase.category" ng-options="b.id as b.category_name for b in categories" width="'100%'" class="chosen-select input-md form-control" required="required" ng-change="showCase.updateLink(showCase.category,'category')">
+                           <option value="">Select Category</option>
+                        </select>
+                     </div>
+                  </div>
+               </div>
+            
+  		        <div class="col-md-4">  
+            	   <div class="form-group">
+    			          <label>Brand</label>
+    			          <div class="controls">
+                      <ui-select multiple="" ng-model="showCase.brand" theme="bootstrap" ng-change="showCase.updateLink(showCase.brand,'brand')" tagging="tagHandler">
+                       <ui-select-match placeholder="Select Brand">{{$item.name}} </ui-select-match>
+                       <ui-select-choices repeat="b.id as b in brands | propsFilter: {name: $select.search}" >
+                          <div ng-bind-html="b.name | highlight: $select.search"></div>
+                       </ui-select-choices>
+                      </ui-select>
+                   </div>
+    		      	</div>
+  		       </div>
+             <div class="col-md-4">
+               <div class="form-group">
+                     <label>Style </label>
+                     <div class="controls">
+                        <select name="style" chosen="styles" ng-model="showCase.style" ng-options="s.id as s.value for s in styles" width="'100%'" class="chosen-select input-md form-control"  ng-change="showCase.updateLink(showCase.style,'style')">
+                           <option value="">Select Style</option>
+                        </select>
+                     </div>
+                </div>
+             </div>
+  		  </div>
+  		  
+  		   <div class="row">
+  		   	    <div class="col-md-6">
+                  <div class="form-group">
+                     <label>Work</label>
+                     <div class="controls">
+                        <ui-select multiple="" ng-model="showCase.work" theme="bootstrap" ng-change="showCase.updateLink(showCase.work,'work')">
+                         <ui-select-match placeholder="Select Work">{{$item.value}} </ui-select-match>
+                         <ui-select-choices repeat="b.id as b in works | propsFilter: {value: $select.search}">
+                            <div ng-bind-html="b.value | highlight: $select.search"></div>
+                         </ui-select-choices>
+                        </ui-select>
+                     </div>
+                  </div>
+               </div>	
+               <div class="col-md-6">
+                  <div class="form-group">
+                     <label>Fabric</label>
+                     <div class="controls">
+                        <ui-select multiple="" ng-model="showCase.fabric" theme="bootstrap" ng-change="showCase.updateLink(showCase.fabric,'fabric')">
+                         <ui-select-match placeholder="Select Fabric">{{$item.value}} </ui-select-match>
+                         <ui-select-choices repeat="b.id as b in fabrics | propsFilter: {value: $select.search}">
+                            <div ng-bind-html="b.value | highlight: $select.search"></div>
+                         </ui-select-choices>
+                        </ui-select>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+  	        <div class="row">
+  	        	<div class="col-md-6">
+  	         		<div class="form-group"> 
+  	        			<label>From Price</label>
+  		                   <div class="controls">
+  		                      <input type="number" autocomplete="off" name="min_price" ng-model="showCase.min_price" placeholder="From Price"  class="form-control" min=101 ng-change="showCase.updateLink(showCase.min_price,'min_price')"/>         
+  		                   </div>
+  		             
+  		        	</div>
+  		    	</div>
+
+  		        <div class="col-md-6">
+  	         		<div class="form-group"> 
+  	        			<label>To Price</label>
+  		                   <div class="controls">
+  		                      <input type="number" autocomplete="off" name="max_price" ng-model="showCase.max_price" placeholder="To Price"  class="form-control" min=102 ng-change="showCase.updateLink(showCase.max_price,'max_price')" />
+  		                   </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group"> 
+                  <label>Catalog Type</label>
+                      <div class="controls">
+                             <label class="radio-inline c-radio">
+                               <input id="inlineradio1" type="radio" name="catalog_type" ng-model="showCase.catalog_type" value="catalog" required="required" class="form-control"  ng-change="showCase.updateLink(showCase.catalog_type,'catalog_type')" />
+                               <span class="fa fa-circle"></span>Catalog</label>
+                            <label class="radio-inline c-radio">
+                               <input id="inlineradio2" type="radio" name="catalog_type" ng-model="showCase.catalog_type" value="noncatalog" required="required" class="form-control"  ng-change="showCase.updateLink(showCase.catalog_type,'catalog_type')"/>
+                                 <span class="fa fa-circle"></span>Non-Catalog</label>
+                      </div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="form-group"> 
+                  <label>State</label>
+                       <div class="controls">
+                          <select name="state" chosen="" ng-model="showCase.state" ng-options="st.id as st.state_name for st in showCase.states" width="'100%'" class="chosen-select input-md form-control" ng-change="showCase.updateLink(showCase.state,'state')" >
+                                   <option value="">Select State</option>
+                         </select>
+                       </div>
+                </div>
+              </div>
+
+  	        	<div class="col-md-6">
+  	         		<div class="form-group"> 
+  	        			<label>Sellers IDs</label>
+  		                   <div class="controls">
+  		                      <input type="text" autocomplete="off" name="sellers" ng-model="showCase.sellers" placeholder="Ex- 4,11,23"  class="form-control" min=101 ng-change="showCase.updateLink(showCase.sellers,'sellers')"/>         
+  		                   </div>
+  		             
+  		        	</div>
+  		    	  </div>
+            </div>
+            
+  	        <div class="row"> 
+               <div class="col-md-12">
+                  <div class="form-group">
+                  <label>Catalog</label>
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="is_supplier_approved" ng-model="showCase.is_supplier_approved" ng-change="showCase.updateLink(showCase.is_supplier_approved,'is_supplier_approved')"  />
+                           <span class="fa fa-check"></span>From my network </label>
+                        </div>
+                     </div>
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="trusted_seller" ng-model="showCase.trusted_seller" ng-change="showCase.updateLink(showCase.trusted_seller,'trusted_seller')"  />
+                           <span class="fa fa-check"></span>Trusted Sellers Only</label>
+                        </div>
+                     </div>
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="full_catalog" ng-model="showCase.full_catalog" ng-change="showCase.updateLink(showCase.full_catalog,'full_catalog')"  />
+                           <span class="fa fa-check"></span>Full Catalog for Sale</label>
+                        </div>
+                     </div>
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="single_piece" ng-model="showCase.single_piece" ng-change="showCase.updateLink(showCase.single_piece,'single_piece')"  />
+                           <span class="fa fa-check"></span>Single Piece available</label>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <div class="row">
+            	<div class="col-md-2">
+            	   <div class="form-group">
+            	      <button type="button" class="btn btn-primary mt-lg" ng-click="showCase.resetLink()" >Reset</button>
+            	    </div>
+            	</div>
+            </div>
+        </div>  <!-- End: deeplink-modal -->
+		</div>
+   </div>
+</div>

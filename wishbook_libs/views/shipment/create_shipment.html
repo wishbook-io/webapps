@@ -1,0 +1,135 @@
+  <script type="text/ng-template" id="CreateShipmentdialog">
+    <div ng-controller="CreateShipmentController as showCase" >
+      <form editable-form name="CreateShipmentdialog" validate-form="" class="form-validate modelform2">
+          
+          <legend>
+              <span ng-if="actiontype == 'create_shipment'" style="font-size: 22px;line-height: 30px;color: #11a0d1;font-weight: bold;">Create Shipment for {{orderid}}</span>
+              <span ng-if="actiontype != 'create_shipment'" style="font-size: 20px;line-height: 30px;color: #11a0d1;font-weight: bold;">Manage "Ready for pickup" and "Unavailable" quantities of {{orderid}}</span>
+          </legend>
+
+          <div class="row">
+              <div class="col-md-12">
+                      <div class="form-group has-feedback">
+                              <label>Please confirm the quantity in this shipment</label>
+                      </div>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-md-12 col-sm-6 col-xs-12 ">
+                      <table class="table table-hover table-responsive table-striped">
+                      <tr>
+                          <th>Image</th>
+                          <th style="text-align: center">Catalog</th>
+                          <th style="text-align: center">Design</th>
+                          <th style="text-align: center">Ordered Qty</th>
+                          <th style="text-align: center">Size</th>
+                          <th style="text-align: center">Ready to Ship Qty</th>
+                          <th style="text-align: center">No of Pcs</th>
+                          <th style="text-align: center">Shipment Qty</th>
+                      </tr>
+                      <tr ng-repeat="x in pendingOrderItems" ng-if="x.quantity != x.unavailable_qty">
+                          
+                              <td style="text-align: center"><div style="text-align: center;"><a ><img class="loading" img-cache src="{{x.product_image || img/default.png }}" style="height: 100px; width: 100px;"/></a></div></td>
+                              <td style="text-align: center">{{ x.product_catalog }}</td>
+                              <td style="text-align: center">{{ x.product_sku }}</td>
+                              <td style="text-align: center">{{ x.quantity }} <span ng-if="x.is_full_catalog == true">(Full catalog)</span> </td>
+                              <td style="text-align: center">{{ x.viewable_size }}</td>
+                              <!-- <td style="text-align: center">{{ pendingOrderItems222[$index].ready_to_ship_qty }}</td> -->
+                              <td style="text-align: center">{{ x.ready_to_ship_text }}</td>
+                              
+                              <td style="text-align: center">{{ x.no_of_pcs }}</td>
+                              <td style="text-align: center"><input type="number" ng-model="x.ready_to_ship_qty" ng-max="pendingOrderItems222[$index].ready_to_ship_qty" min="0" ng-change="showmessage(pendingOrderItems)" class="form-control" ></td>
+                        <!--      
+                          <td style="text-align: center"><input type="number" ng-model="x.ready_to_ship_qty" ng-max="pendingOrderItems222[$index].ready_to_ship_qty" min="0" ng-change="showmessage(x,$index)" class="form-control" ng-disabled="actiontype == 'show_shipment' || x.disable == true || x.disable == 'true' || true"></td> 
+                        -->
+                          <!-- pendingOrderItems222[$index].quantity == (pendingOrderItems222[$index].ready_to_ship_qty + pendingOrderItems222[$index].canceled_qty) -->
+                         
+                      </tr>
+                      </table>
+                      <div ng-if="bool" class="alert alert-danger" role="alert">Shipping Quantity cannot be more than ready to ship quantity</div>
+                  
+              </div>
+          </div>
+          <div class="row" ng-show="isNotInPeicesMultiple">
+              <div class="col-md-12">
+                  <div class="alert alert-danger" role="alert">
+                      For full catalog Shimpment qty must be a multiple of no of pcs.
+                  </div>
+              </div>
+          </div>
+          <div ng-if="dropship_markedUnavailable" class="alert alert-danger" role="alert">At least 1 Shipment qty required to create shipment.</div>    
+          <div ng-if="!dropship_markedUnavailable">
+              <div class="row"> 
+                      <div class="col-md-12" style="padding-top:15px;font-size:18px">
+                              <div class="form-group">
+                                      <label>Please confirm your shipment dimensions *</label>
+                              </div>
+                      </div>
+              </div>
+              <div class="row">
+                      <div class="col-md-12">
+                          <div class="form-group has-feedback">
+                              <label>Weight(Kg)</label>
+                              <div class="controls">
+                                  <input type="number" step="0.1" pattern="^\d*(\.\d{0,1})?$" autocomplete="off" name="Weight" ng-model="dimensions.weight" placeholder="Enter Weight in kg" required="required" class="form-control" min="0"/>
+                                  <span ng-show="CreateShipmentdialog.Weight.$dirty &amp;&amp; CreateShipmentdialog.Weight.$error.required" class="text-danger">This field is required</span>
+                                  <span ng-show="CreateShipmentdialog.Weight.$error.min" class="text-danger">Minimum Weight should be 1 kg</span>   
+                                  <span ng-show="CreateShipmentdialog.Weight.$error.pattern" class="text-danger">Only number with 1 decimal allowed</span>
+                              </div>
+                          </div>
+                      </div>
+              </div>
+                              
+              <div class="row">
+                      <div class="col-md-4">
+                      <div class="form-group has-feedback">
+                          <label>Length(cm)</label>
+                          <div class="controls">
+                                  <input type="number" step="0.1" pattern="^\d*(\.\d{0,1})?$" autocomplete="off" name="Length" ng-model="dimensions.length" placeholder="Enter Length in cm" required="required" class="form-control"  min="1" />
+                                  <span ng-show="CreateShipmentdialog.Length.$dirty &amp;&amp; CreateShipmentdialog.Length.$error.required" class="text-danger">This field is required</span>
+                                  <span ng-show="CreateShipmentdialog.Length.$error.min" class="text-danger">Minimum length should be 1 cm</span>
+                                  <span ng-show="CreateShipmentdialog.Length.$error.pattern" class="text-danger">Only number with 1 decimal allowed</span>
+                          </div>
+                      </div>
+                      </div>
+                      <div class="col-md-4">
+                              <div class="form-group has-feedback">
+                              <label>Breadth(cm)</label>
+                              <div class="controls">
+                                      <input type="number" step="0.1" pattern="^\d*(\.\d{0,1})?$" autocomplete="off" name="Breadth" ng-model="dimensions.width" placeholder="Enter Breadth in cm" required="required" class="form-control"  min="1" />
+                                      <span ng-show="CreateShipmentdialog.Breadth.$dirty &amp;&amp; CreateShipmentdialog.Breadth.$error.required" class="text-danger">This field is required</span>
+                                      <span ng-show="CreateShipmentdialog.Breadth.$error.min" class="text-danger">Minimum Breadth should be 1 cm</span>
+                                      <span ng-show="CreateShipmentdialog.Breadth.$error.pattern" class="text-danger">Only number with 1 decimal allowed</span>
+                              </div>
+                              </div>
+                      </div>
+                      <div class="col-md-4">
+                              <div class="form-group has-feedback">
+                              <label>Height(cm)</label>
+                              <div class="controls">
+                                      <input type="number" step="0.1" pattern="^\d*(\.\d{0,1})?$" autocomplete="off" name="Height" ng-model="dimensions.height" placeholder="Enter Height in cm" required="required" class="form-control"  min="1" />
+                                      <span ng-show="CreateShipmentdialog.Height.$dirty &amp;&amp; CreateShipmentdialog.Height.$error.required" class="text-danger">This field is required</span>
+                                      <span ng-show="CreateShipmentdialog.Height.$error.min" class="text-danger">Minimum Height should be 1 cm</span>
+                                      <span ng-show="CreateShipmentdialog.Height.$error.pattern" class="text-danger">Only number with 1 decimal allowed</span>
+                              </div>
+                              </div>
+                      </div>
+              </div>
+          </div>
+          
+          <div class="row" align="center">
+              <div class="col-md-6">
+                      <div class="form-group">
+                              <button type="submit" ng-disabled="dropship_markedUnavailable || bool || isNotInPeicesMultiple || CreateShipmentdialog.$invalid" ng-click="CreateShipment()" class="styledButtonblue buttonPrimary" style="width: 40%;line-height: 20px; color: #fff !important;">Create Shipment</button>
+                      </div>
+              </div>
+              <div class="col-md-6">
+                      <div class="form-group">
+                              <button type="button" ng-click="showCase.CloseDialog()" class="styledButtonblue linkButton" style="width: 40%;line-height: 20px;">Go Back</button>
+                      </div>
+              </div>
+          </div>
+      </form>
+    </div> <!-- End ng-controller -->
+   </script>

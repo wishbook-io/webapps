@@ -1,0 +1,79 @@
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Opening Stock</h3>
+<div class="panel panel-default">
+   <div class="panel-body" >
+      <div ng-controller="openingController as showCase">
+		<table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover " width="100%">
+		</table>
+		
+		
+		<script type="text/ng-template" id="uploadcsv">
+			<form role="form" ng-submit="showCase.UploadInventoryCsv()" name="showCase.uploadcsv" novalidate="" class="form-validate mb-lg modelform3">
+	   
+			<legend ng-show="upload_for=='opening'">Upload Opening Inventory CSV</legend>
+			<legend ng-show="upload_for=='adjustment'">Upload Adjustment Inventory CSV</legend>
+				
+				<!--div class="row">
+					<div class="col-md-12">  
+					<div class="form-group has-feedback">
+						  <select name="warehouse" chosen="" ng-model="inventory.warehouse" ng-options="s.id as s.name for s in warehouseList" width="'100%'" class="chosen-select input-md form-control" required="">
+							 <option value="">Select Warehouse</option>
+						  </select>
+						   <span ng-show="showCase.uploadcsv.warehouse.$dirty &amp;&amp; showCase.uploadcsv.warehouse.$error.required" class="text-danger">This field is required</span>
+					   </div>
+					</div>
+				</div-->
+				
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Select CSV from your computer</label>
+							<input type="file" ngf-select="uploadFiles($files)" ng-model="inventory.inventory_csv" name="inventory_csv" required accept=".csv">
+						</div>
+					</div>
+				</div>
+				<div ng-show="upload_for=='opening'" class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>OR</label>
+						</div>
+					</div>
+				</div>
+				<div ng-show="upload_for=='opening'" class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Enter server csv path</label>
+							<input type="text" ng-model="inventory.inventory_path" name="inventory_path">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div style="float:right;" class="col-md-2"> 
+					  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+					</div>
+					<div ng-show="upload_for=='opening'" style="float:right;" class="col-md-4"> 
+					  <a style="text-decoration: none;" href="app/csv/opening_stock.csv"><button type="button" class="btn btn-block btn-primary mt-lg">Download Sample</button></a>
+					</div>
+					<div ng-show="upload_for=='adjustment'" style="float:right;" class="col-md-4"> 
+					  <a style="text-decoration: none;" href="app/csv/adjustment_stock.csv"><button type="button" class="btn btn-block btn-primary mt-lg">Download Sample</button></a>
+					</div>
+					<div style="float:right;" class="col-md-2"> 
+					  <button type="submit" class="btn btn-block btn-primary mt-lg">Upload</button>
+					</div>
+				</div>
+			</form>
+		</script>
+		
+	  </div>
+   </div>
+</div>

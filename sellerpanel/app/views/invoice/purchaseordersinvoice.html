@@ -1,0 +1,213 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Incoming Shipments</h3>
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+      <div ng-controller="purchaseOrdersInvoiceController as showCase">
+		
+		<table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover " width="100%">
+		</table>
+		
+		<script type="text/ng-template" id="trackingdetails">
+			<form role="form" ng-submit="showCase.SaveDispatch()" name="showCase.saveDispatchForm" novalidate="" class="form-validate mb-lg modelform3">
+	   
+			<legend>Tracking Details</legend>
+			      <!--label class="col-md-3 control-label">Dispatch Date</label>
+			      <div class="col-md-6">
+				     <p class="input-group">
+					    <input type="text" name="dispatch_date" required="" uib-datepicker-popup="{{showCase.format}}" ng-model="order.dispatch_date" is-open="showCase.opened" uib-datepicker-options="showCase.dateOptions" 
+					    close-text="Close" class="form-control" />
+					    <span class="input-group-btn">
+					       <button type="button" ng-click="showCase.open($event)" class="btn btn-default">
+						      <em class="fa fa-calendar"></em>
+					       </button>
+					    </span>
+				     </p>
+				     <span ng-show="showCase.saveDispatchForm.dispatch_date.$dirty &amp;&amp; showCase.saveDispatchForm.dispatch_date.$error.required" class="text-danger">This field is required</span>
+			      </div-->
+			    
+			    <div class="row">
+			      <div class="col-md-12"> 
+				    <div class="form-group has-feedback">
+				       <label>Dispatch Date *</label>
+					<div class="controls">
+					       <p class="input-group">
+					       <input type="text" name="dispatch_date" required="" uib-datepicker-popup="{{showCase.format}}" ng-model="order.dispatch_date" is-open="showCase.opened" uib-datepicker-options="showCase.dateOptions" 
+						    close-text="Close" class="form-control" />
+						    <span class="input-group-btn">
+						       <button type="button" ng-click="showCase.open($event)" class="btn btn-default">
+							      <em class="fa fa-calendar"></em>
+						       </button>
+						    </span>
+					       </p>
+					       <span ng-show="showCase.saveDispatchForm.dispatch_date.$dirty &amp;&amp; showCase.saveDispatchForm.dispatch_date.$error.required" class="text-danger">This field is required</span>
+				       </div>
+				    </div>
+			      </div>
+			    </div>
+
+			    <div class="row">
+			      <div class="col-md-12"> 
+				    <div class="form-group has-feedback">
+				       <label>Enter Tracking Details</label>
+					<div class="controls">
+					       <textarea name="tracking_details" placeholder="Enter Tracking Details" autocomplete="off" ng-model="order.tracking_details" class="form-control" ></textarea>
+					       <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+					       <span ng-show="showCase.saveDispatchForm.tracking_details.$dirty &amp;&amp; showCase.saveDispatchForm.tracking_details.$error.required" class="text-danger">This field is required</span>
+					</div>
+				    </div>
+			      </div>
+			    </div>
+			    
+			    <div class="row">
+				<div class="col-md-12"> 
+				    <div class="form-group has-feedback">
+				       <label>Mode</label>
+				       <div class="controls">
+				       <input type="text" name="mode" placeholder="Mode" autocomplete="off" ng-model="order.mode" class="form-control" data-parsley-group="step1"/>
+				       <!--span class="fa fa-user form-control-feedback text-muted"></span-->
+				       <span ng-show="showCase.saveDispatchForm.mode.$dirty &amp;&amp; showCase.saveDispatchForm.mode.$error.required" class="text-danger">This field is required</span>
+				       </div>
+				    </div>
+				</div>
+			    </div>
+			    
+			    <div class="row">
+				<div class="col-md-12"> 
+				    <div class="form-group has-feedback">
+				       <label>Tracking Number</label>
+				       <div class="controls">
+				       <input type="text" name="tracking_number" placeholder="Tracking Number" autocomplete="off" ng-model="order.tracking_number" class="form-control" data-parsley-group="step1"/>
+				       <!--span class="fa fa-user form-control-feedback text-muted"></span-->
+				       <span ng-show="showCase.saveDispatchForm.tracking_number.$dirty &amp;&amp; showCase.saveDispatchForm.tracking_number.$error.required" class="text-danger">This field is required</span>
+				       </div>
+				    </div>
+				</div>
+			    </div>
+			    
+			    <div class="row">
+				<div class="col-md-12"> 
+				    <div class="form-group has-feedback">
+				       <label>Transporter Courier</label>
+				       <div class="controls">
+				       <input type="text" name="transporter_courier" placeholder="Transporter Courier" autocomplete="off" ng-model="order.transporter_courier" class="form-control" data-parsley-group="step1"/>
+				       <!--span class="fa fa-user form-control-feedback text-muted"></span-->
+				       <span ng-show="showCase.saveDispatchForm.transporter_courier.$dirty &amp;&amp; showCase.saveDispatchForm.transporter_courier.$error.required" class="text-danger">This field is required</span>
+				       </div>
+				    </div>
+				</div>
+			    </div>
+
+			    <div class="row">
+				    <div style="float:right;" class="col-md-2"> 
+				      <button type="submit" class="btn btn-block btn-primary mt-lg">Save</button>
+				    </div>
+				    <div style="float:right;" class="col-md-2"> 
+				      <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+				    </div>
+			    </div>
+			</form>
+		</script>
+		
+		<script type="text/ng-template" id="shipmentdetails">
+		    <legend>Shipment Details</legend>
+		    <div class="row">
+		      <div class="col-md-12"> 
+			  <div class="panel panel-default">
+			     <div class="panel-body">
+				<div class="table-responsive">
+				   <table class="table table-hover">
+				      <tbody>
+					 <tr>
+					    <td>Date:</td>
+					    <td>{{shipment.datetime}}</td>
+					 </tr>
+					 <tr>
+					    <td>Mode:</td>
+					    <td>{{shipment.mode}}</td>
+					 </tr>
+					 <tr>
+					    <td>Tracking Number:</td>
+					    <td>{{shipment.tracking_number}}</td>
+					 </tr>
+					 <tr>
+					    <td>Tracking Details:</td>
+					    <td>{{shipment.details}}</td>
+					 </tr>
+					 <tr>
+					    <td>Transporter Courier:</td>
+					    <td>{{shipment.transporter_courier}}</td>
+					 </tr>
+				      </tbody>
+				   </table>
+				</div>
+			     </div>
+			  </div>
+		      </div>
+		    </div>
+		</script>
+		
+		<script type="text/ng-template" id="uploadcsv">
+		    <form role="form" ng-submit="showCase.UploadShipmentCsv()" name="showCase.uploadcsv" novalidate="" class="form-validate mb-lg modelform3">
+	       
+		    <legend>Upload Shipment CSV</legend>
+			<div class="row">
+				      <div class="col-md-6">
+					<div class="form-group">
+					   <label>Select CSV from your computer</label>
+					    <input type="file" ngf-select="uploadFiles($files)" ng-model="showCase.file.buyer_csv" name="buyer_csv" required accept=".csv">
+					    <span ng-show="showCase.uploadcsv.buyer_csv.$dirty &amp;&amp; showCase.uploadcsv.buyer_csv.$error.required" class="text-danger">This field is required</span>   
+					    
+					</div>
+				     </div>
+			</div>
+			<div class="row">
+			    <div style="float:right;" class="col-md-2"> 
+			      <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+			    </div>
+			    <div style="float:right;" class="col-md-4"> 
+			      <a style="text-decoration: none;" href="app/csv/shipment.csv"><button type="button" class="btn btn-block btn-primary mt-lg">Download Sample</button></a>
+			    </div>
+			    <div style="float:right;" class="col-md-2"> 
+			      <button type="submit" class="btn btn-block btn-primary mt-lg">Upload</button>
+			    </div>
+			</div>
+		    </form>
+		</script>
+		<script type="text/ng-template" id="recieveddetails">
+			<form role="form" ng-submit="showCase.SaveRecievedDetails()" name="showCase.saveRecievedForm" novalidate="" class="form-validate mb-lg modelform-recieveddetails">
+				<legend>Select Warehouse</legend>
+				<div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Warehouse *</label>
+                               <div class="controls">
+                                  <!--input type="text" autocomplete="off" name="brand" ng-model="entry.brand" data-parsley-group="step1" placeholder="Brand"  class="form-control" /-->
+                                  <select name="warehouse" chosen="" ng-model="showCase.warehouse" ng-options="w.id as w.name for w in warehouses" width="'100%'" data-parsley-group="step1" class="chosen-select input-md form-control" required="required">
+                                     <option value="">Select Warehouse</option>
+                                  </select>
+                                  <span ng-show="showCase.saveRecievedForm.warehouse.$dirty &amp;&amp; showCase.saveRecievedForm.warehouse.$error.required" class="text-danger">This field is required</span>   
+                               </div>
+                            </div>
+                         </div>
+                </div>
+                <div class="row">
+                	<div style="float:right;" class="col-md-2"> 
+                	  <button type="submit" class="btn btn-block btn-primary mt-lg">Recieved</button>
+                	</div>
+                </div>
+			</form>
+		</script>
+		
+		
+	  </div>
+   </div>
+</div>

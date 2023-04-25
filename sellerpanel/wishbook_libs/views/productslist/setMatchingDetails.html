@@ -1,0 +1,205 @@
+<script type="text/javascript">
+    fbq('track', 'ViewContent');
+</script>
+
+<style>
+    .loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+
+form .progress {
+    line-height: 15px;
+}
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+}
+</style>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;background-color: white" onclick="goBack()" title="Go Back"><i
+            class="fa fa-arrow-left"></i></span> My Products <span class="ptitle"> : {{$stateParams.name}}</span></h3>
+<div class="panel panel-default modelform3">
+    <div class="panel-body">
+        <div ng-controller="setMatchingDetailsController as showCase">
+           
+         <table id="products-datatables" datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs"
+               dt-instance="showCase.dtInstance" class="row-border hover" width="100%">
+         </table>
+
+   <script type="text/ng-template" id="addproduct">
+      <div class="ngdialog-message">
+            
+        <div class="panel-heading"></div>
+        <div class="panel-body modelform">
+          <form name="showCase.addproductform" ng-submit="SubmitProduct()" form-wizard="" validate-steps="true" validate-form="" steps="2" enctype="multipart/form-data" class="form-validate">
+             <div class="form-wizard wizard-horizontal">
+                <!-- START wizard steps indicator-->
+                <ol class="row">
+                   <li ng-class="{'active':wizard.active(1)}" ng-click="wizard.go(1)" class="col-md-6">
+                      <h4>Product Details</h4>
+                    
+                   </li>
+                   <li ng-class="{'active':wizard.active(2)}" ng-click="wizard.go(2)" class="col-md-6">
+                      <h4>Upload Image</h4>
+                   </li>
+                </ol>
+                <!-- END wizard steps indicator-->
+                <!-- START Wizard Step inputs -->
+                <div id="step1" ng-show="wizard.active(1)">
+                   <fieldset>
+                     
+
+                      <div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group"> 
+                               <label>SKU *</label>
+                               <div class="controls">
+                                  <input type="text" autocomplete="off" name="sku" ng-model="product.sku" data-parsley-group="step1" placeholder="Enter SKU" class="form-control" pattern=".{0,30}" required />
+                                  <span ng-show="showCase.addproductform.sku.$error.pattern" class="text-danger">This field has character limit of 30</span>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                      
+                     
+
+                      <div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group"> 
+                              <label>Price *</label>
+                              <div class="controls" ng-if="product_type == 'catalog'">
+                                 <input type="number" autocomplete="off" name="price" ng-model="product.price" data-parsley-group="step1" placeholder="Enter price"  class="form-control" min="101" ng-disabled="action != 'addproduct'" required/>
+                                 <span ng-show="showCase.addproductform.price.$error.min" class="text-danger">Price should be minimum 101</span>
+                              </div>
+                              <div class="controls" ng-if="product_type != 'catalog'">
+                                 <input type="number" autocomplete="off"  name="price" ng-model="product.price" data-parsley-group="step1" placeholder="Enter price"  class="form-control" min="71" ng-disabled="action != 'addproduct'" required/>
+                                 <span ng-show="showCase.addproductform.price.$error.min" class="text-danger">Price should be minimum 71</span>
+                              </div>
+                            </div>
+                         </div>
+                      </div>
+
+
+                   </fieldset>
+                   <ul class="pager">
+                      <li class="next"><a ng-click="wizard.go(2)">Next <span>&rarr;</span></a>
+                      </li>
+                   </ul>
+                </div>
+                <!-- END Wizard Step inputs -->
+                <!-- START Wizard Step inputs -->
+                <div id="step2" ng-show="wizard.active(2)">
+                   <fieldset>
+                      
+                      <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Select Photo from your computer *</label>
+                            </div>
+                         </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group" style="text-align: center;">
+                               <!--label>Select Photo from you computer *</label-->
+                               <div ng-if="!update_flag">
+                                    <input type="file" ngf-select="uploadProductImage($file)" ng-model="product.image" name="image" ngf-accept="'image/*'" id="image" required>
+                                    <div ngf-drop style="height: 300px;" ng-model="product.image" ngf-pattern="image/*" class="cropArea">
+                                        <!--img-crop ng-show="product.cropallow" image="product.image  | ngfDataUrl" result-image="product.croppedImage" ng-init="product.croppedImage=''" area-type="rectangle" aspect-ratio="0.714" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                        </img-crop-->
+                                        <ui-cropper ng-show="product.cropallow" image="product.image  | ngfDataUrl" result-image="product.croppedImage" ng-init="product.croppedImage=''" area-type="rectangle" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                        </ui-cropper>
+                                        
+                                        <img ng-hide= "product.cropallow"  ng-src ="{{product.uncropped}}" style="max-width: 100%; max-height: 100%;"/> 
+                                    </div>
+                               </div>
+                               <div ng-if="update_flag">
+                                    <input type="file" ngf-select="uploadProductImage($file)" ng-model="product.image" name="image" ngf-accept="'image/*'" id="image">
+                                    <div class="col-md-12" ng-if="!product.image" class="text-align: center;">
+                                      <img ng-src="{{productImage}}" style="width: 213px;" />
+                                    </div>
+                                    <div class="col-md-12" ng-if="product.image" class="text-align: center;">
+                                      <div ngf-drop style="height: 300px;" ng-model="product.image" ngf-pattern="image/*" class="cropArea">
+                                          <!--img-crop ng-show="product.cropallow" image="product.image  | ngfDataUrl" result-image="product.croppedImage" ng-init="product.croppedImage=''" area-type="rectangle" aspect-ratio="0.714" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                          </img-crop-->
+                                          <ui-cropper ng-show="product.cropallow" image="product.image  | ngfDataUrl" result-image="product.croppedImage" ng-init="product.croppedImage=''" area-type="rectangle" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                          </ui-cropper>
+                                          
+                                          <img ng-hide= "product.cropallow"  ng-src ="{{product.uncropped}}" style="max-width: 100%; max-height: 100%;"/> 
+                                      </div>
+                                     </div>
+                               </div>
+                            </div>
+                         </div>
+                        
+                      </div>
+                      <div class="row">
+                         <div class="col-md-12" align="center">
+                            <div class="form-group">
+                               <button type="submit" ng-show="update_flag" class="btn btn-primary mt-lg">Update</button>
+                               <button type="submit" ng-show="!update_flag" class="btn btn-primary mt-lg">Add</button>
+                            </div>
+                         </div>
+                      </div>
+                  
+                      <!-- END row -->
+                   </fieldset>
+                   <ul class="pager">
+                      <li class="previous">
+                         <a ng-click="wizard.go(1)">
+                            <span>&larr; Previous</span>
+                         </a>
+                      </li>
+                    </ul>
+                </div>
+                <!-- END Wizard Step inputs -->
+              
+             </div> <!-- END form-wizard wizard-horizontal -->
+
+          </form>
+         </div><!-- END panel -->
+    </div> <!-- End ng dialog -->
+   </script>
+
+    <script type="text/ng-template" id="uploadcsv">
+        <form role="form" ng-submit="showCase.UploadProductCsv()" name="showCase.uploadcsv" novalidate="" class="form-validate mb-lg modelform3">
+   
+        <legend>Upload Products CSV</legend>
+            <div class="row">
+               <div class="col-md-6">
+                  <div class="form-group">
+                     <label>Select CSV from your computer</label>
+                     <input type="file" ngf-select="uploadCSVFiles($files)" ng-model="showCase.file.product_csv" name="product_csv" required accept=".csv">
+                     <span ng-show="showCase.uploadcsv.product_csv.$dirty &amp;&amp; showCase.uploadcsv.product_csv.$error.required" class="text-danger">This field is required</span>   
+                     
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+                <div style="float:right;" class="col-md-4"> 
+                  <a style="text-decoration: none;" href="app/csv/products.csv"><button type="button" class="btn btn-block btn-primary mt-lg">Download Sample</button></a>
+                </div>
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Upload</button>
+                </div>
+            </div>
+        </form>
+    </script>
+
+   <div ng-include="'wishbook_libs/views/catalogaction/add_update.html'"></div>
+
+
+
+        </div>
+    </div>
+</div>

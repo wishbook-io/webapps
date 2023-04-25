@@ -1,0 +1,219 @@
+<script type="text/ng-template" id="notifydailog">
+ <form role="form" ng-submit="showCase.sendNotify()" name="showCase.NotifyForm" class="form-validate mb-lg modelform4">
+   <legend>Send Notification</legend>
+    <div class="row">
+     <!-- <div ng-if='catalog_tab' class="col-md-12">
+       <div class="form-group">
+          <label>Seller/Buyer</label>
+          <div class="controls">
+            <label class="radio-inline c-radio">
+            <input id="inlineradio1" type="radio" name="notify_to" ng-model="showCase.notify_to" data-parsley-group="step1" value="Buyer" required="required" class="form-control" />
+            <span class="fa fa-circle"></span>Buyer</label>
+            <label class="radio-inline c-radio">
+            <input id="inlineradio2" type="radio" name="notify_to" ng-model="showCase.notify_to" ng-checked='catalog_tab' data-parsley-group="step1" value="Seller" required="required" class="form-control"  />
+            <span class="fa fa-circle"></span>Seller</label>
+          </div>
+       </div>
+     </div> -->
+     <div ng-if='catalog_tab' class="col-md-12">
+       <div class="form-group">
+          <label>Select Catalog Sellers</label>
+          <div class="controls">
+            <ui-select multiple="" ng-model="showCase.seller_data" theme="bootstrap" >
+             <ui-select-match placeholder="Select/All Seller">{{$item.name}} : {{$item.phone_number}} </ui-select-match>
+             <ui-select-choices repeat="{'company_id' : b.id,'phone_number' : b.phone_number} as b in seller_data | propsFilter: {name: $select.search}">
+                <div ng-bind-html="b.name +' ('+b.phone_number+')'  | highlight: $select.search"></div>
+             </ui-select-choices>
+            </ui-select>
+          </div>
+       </div>
+     </div>
+     <div ng-if='!catalog_tab' class="col-md-12">
+       <div class="col-md-6 form-group">
+          <label>Buyer</label>
+          <div class="controls">
+           <div class="checkbox c-checkbox">
+             <label>
+                <input type="checkbox" name="buyer" ng-model='showCase.buyer_no' />
+                <span class="fa fa-check"></span>{{buyer_company.buyer_company_name}} : {{buyer_company.buyer_company_no}} </label>
+           </div>
+          </div>
+        </div>
+        <div class="col-md-6 form-group">
+           <label>Seller</label>
+          <div class="controls">
+             <div class="checkbox c-checkbox">
+             <label>
+                <input type="checkbox" name="seller" ng-model='showCase.seller_no' />
+                <span class="fa fa-check"></span>{{seller_company.seller_company_name}} : {{seller_company.seller_company_no}}</label>
+             </div>
+          </div>
+       </div>
+     </div>
+     <div class="col-md-12">
+       <label>Select Entity</label>
+       <div class="form-group has-feedback">
+         <select name="notification_entity" placeholder="Select Entity" class="form-control input-sm error-append ng-pristine ng-valid ng-not-empty ng-touched" ng-model="showCase.notification_entity" ng-options="option as (option.entity_name) for option in showCase.notification_entities" ng-change="GetLables(showCase.notification_entity)" style="">
+           <option value="">Select Entity</option>
+         </select>
+         <span ng-show="showCase.NotifyForm.notification_entity.$dirty &amp;&amp; showCase.NotifyForm.notification_entity.$error.required" class="text-danger">This field is required</span>
+       </div>
+     </div>
+     <div class="col-md-12">
+       <label>Seller Label</label>
+       <div class="form-group has-feedback">
+         <select name="notification_label" placeholder="Select Label"  class="form-control input-sm error-append ng-pristine ng-valid ng-not-empty ng-touched" ng-model="showCase.notification_label" ng-options="option as (option.label) for option in notification_labels" ng-change="SetMessage(showCase.notification_label)" style="">
+           <option value="">Select Label</option>
+         </select>
+       </div>
+     </div>
+   </div>
+   <div ng-if="showCase.way.by_noti" class="row">
+     <div class="col-md-12">
+       <div class="form-group has-feedback">
+          <label>Title</label>
+          <div class="controls">
+            <input type="text"  name="notification_title" placeholder="Add Notification Title" class="form-control" ng-model="showCase.notification_title" required="" />
+          </div>
+          <span>In case of notification</span>
+       </div>
+   </div>
+  </div>
+   <div class="row">
+     <div class="col-md-12">
+       <div class="form-group has-feedback">
+         <label>Message</label>
+          <textarea name="notification_message" placeholder="Enter Notification Message here..." autocomplete="off" ng-model="showCase.notification_message" required="" class="form-control" ></textarea>
+          <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+          <span ng-show="NotifyForm.notification_message.$dirty &amp;&amp; NotifyForm.notification_message.$error.required" class="text-danger">This field is required</span>
+       </div>
+     </div>
+   </div>
+   <div class="row">
+     <div class="col-md-12">
+       <div class="form-group has-feedback">
+         <label>Reason</label>
+          <textarea name="notification_note" placeholder="Enter reason for Notification here..." autocomplete="off" ng-model="showCase.notification_note" class="form-control" ></textarea>
+       </div>
+     </div>
+   </div>
+   <div class="row">
+     <div ng-if="showCase.way.by_sms" class="col-md-12">
+       <div class="form-group">
+          <label>Additional Seller/Buyer</label>
+          <div class="controls">
+            <input type="text"  name="extra_sellers" placeholder="Add Extra Notifiers" class="form-control" ng-model="showCase.extra_sellers" ng-change="splitExtra(showCase.extra_sellers)">
+          </div>
+          <span>Only phone numbers allowed and should be seprated by commma</span>
+     </div>
+   </div>
+   </div>
+   <div class="row">
+     <div class="col-md-12">
+       <div class="form-group">
+          <label>By *</label>
+            <div class="controls">
+             <div class="checkbox c-checkbox">
+               <label>
+                  <input type="checkbox" name="all" ng-model="showCase.way.by_sms"/>
+                  <span class="fa fa-check"></span>SMS </label>
+             </div>
+            </div>
+            <div class="controls">
+               <div class="checkbox c-checkbox">
+               <label>
+                  <input type="checkbox" name="all" ng-model="showCase.way.by_noti"/>
+                  <span class="fa fa-check"></span>In App Notifications </label>
+               </div>
+            </div>
+         </div>
+     </div>
+ </div>
+   <!-- <span ng-if="catalog_tab">
+     <span ng-if="showCase.way.by_noti">
+       Notification Recievers : {{ showCase.seller_data.length}}
+     </span><br>
+     <span ng-if="showCase.way.by_sms">
+       Sms Recievers : {{ showCase.seller_data.length + extra_count }}
+     </span>
+   </span>
+   <span ng-if="!catalog_tab">
+     <span ng-if="showCase.way.by_noti">
+       Notification Recievers : {{ showCase.seller_no + showCase.buyer_no}}
+     </span><br>
+     <span ng-if="showCase.way.by_sms">
+       Sms Recievers : {{ (showCase.seller_no + showCase.buyer_no) + extra_count }}
+     </span>
+   </span> -->
+ <!-- <div class="row">
+     <div  class="col-md-6">
+       <button type="submit" class="btn btn-block btn-primary mt-lg">Send</button>
+     </div>
+     <div class="col-md-6">
+       <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+     </div>
+ </div> -->
+ <div class="row">
+   <div style="float:right;" class="col-md-2">
+     <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+   </div>
+   <div style="float:right;" class="col-md-2">
+     <button type="submit" class="btn btn-block btn-primary mt-lg">Send</button>
+   </div>
+   <!-- <div style="float:right;" class="col-md-2">
+     <button type="button" ng-click="showCase.SubmitMarketing('count')" class="btn btn-block btn-primary mt-lg">Total Receiver</button>
+   </div> -->
+</div>
+ </form>
+</script>
+
+<script type="text/ng-template" id="notifypreviousdailog">
+	<legend>Notification Details ({{noti_data.length}})</legend>
+	<div class="row" ng-repeat="noti in noti_data">
+	  <div class="col-md-12">
+      <legend>Notification {{ $index + 1 }}</legend>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+	            <tbody>
+                <tr>
+          				<td>Send By:</td>
+          				<td>{{noti.created_by__username}}</td>
+			          </tr>
+			          <tr>
+          				<td>Time:</td>
+          				<td>{{noti.created}}</td>
+			          </tr>
+                <tr>
+                  <td>label:</td>
+				            <td>{{noti.notice_template__label}}</td>
+	              </tr>
+                <tr>
+          				<td>title:</td>
+          				<td>{{noti.title}}</td>
+			          </tr>
+			          <tr>
+            			<td>Message:</td>
+            			<td>{{noti.message}}</td>
+			          </tr>
+			          <tr>
+          				<td>note:</td>
+          				<td>{{noti.note}}</td>
+			          </tr>
+			          <tr>
+          				<td>By SMS:</td>
+          				<td >{{noti.by_sms ? "Yes" : "No"}}</td>
+			          </tr>
+			          <tr>
+          				<td>By Notification:</td>
+          				<td>{{noti.by_noti ? "Yes" : "No"}}</td>
+			          </tr>
+			        </tbody>
+		        </table>
+		      </div>
+		    </div>
+	    </div>
+	  </div>
+	</div>
+</script>

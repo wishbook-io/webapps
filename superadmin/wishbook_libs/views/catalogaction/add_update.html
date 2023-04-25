@@ -1,0 +1,1411 @@
+<style type="text/css">
+  .ui-select-multiple.ui-select-bootstrap input.ui-select-search
+  {
+    min-width: 300px !important;
+  }
+  .c-checkbox
+  {
+     border: 0px solid #ccc !important;
+  }
+  .nextbutton
+  {
+     width: 110px;
+     float: right;
+     background:#5d9cec;
+     color: white;
+     padding: 5px 14px;
+     border: 1px solid #eee;
+     border-radius: 15px;
+  }
+  .nextbutton:disabled
+  {
+     background:#5d9cec96;
+  }
+
+  .row-hover
+  {
+    border-bottom: 1px solid #c1bbbb;
+  }
+  .row-hover:hover
+  {
+    background-color: #dcdcdc; 
+  }
+  div .loading
+  {
+     float: none !important;
+     /* For Admin panel */
+     
+  }
+
+  .BlackWhiteImage
+   {
+   -webkit-filter: grayscale(100%);
+   filter: grayscale(100%);
+   }
+
+  /* for inventory size buttons */
+  .ck-button
+  {
+      margin: 1px;
+      background-color: white;
+      border-radius: 1px;
+      border: 1px solid #FF7000/* #ff7000;  */;
+      overflow: auto;
+      float: left;
+      color: #FF7000;
+   }
+
+   .ck-button input[type=checkbox]
+   {
+      position: absolute;
+      left: -9999px;
+   }
+      
+   .ck-button:hover {
+      background: #FF7000;
+      color: white;
+   }
+
+   .ck-button label {
+      float:left;
+      margin-bottom: 0px !important;
+   }
+
+   .ck-button label span {
+      text-align:center;
+      padding: 4px;
+      display:block;
+   }
+
+   .ck-button input:checked + span {
+      background-color: #FF7000;
+      color:white;
+   }
+   .ck-button input + span:hover
+   {
+      cursor: pointer !important;
+   }
+
+</style>
+<script type="text/ng-template" id="addcatalog">
+   <div ng-controller="CatalogAddUpdateController as showCase1" class="ngdialog-message">
+            
+      <div class="panel-heading"></div>
+         <div class="panel-body">
+         <form name="addcatalogform" ng-submit="" form-wizard="" validate-steps="true" novalidate="" steps="3" enctype="multipart/form-data" class="form-validate modelform">
+            <div class="form-wizard wizard-horizontal">
+                  <!-- START wizard steps indicator-->
+                  <ol class="row">
+                     <li ng-class="{'active':wizard.active(1)}" ng-click="wizard.go(1)" class="col-md-4">
+                        <h4>Product Details</h4>
+                     
+                     </li>
+                     <li ng-class="{'active':wizard.active(2)}" ng-click="wizard.go(2)" class="col-md-4">
+                        <h4>Fabric, Work & Other Details</h4>
+                     
+                     </li>
+                     <li ng-class="{'active':wizard.active(3)}" ng-click="wizard.go(3)" class="col-md-4" ng-hide="catalog.catalog_type == 'setmatching'">
+                        <h4>Add Products & Price</h4>
+                     </li>
+                     <li ng-class="{'active':wizard.active(3)}" class="col-md-4" ng-show="catalog.catalog_type == 'setmatching'">
+                        <h4>Add Products & Price </h4>
+                     </li>
+                  </ol>
+                  <!-- END wizard steps indicator-->
+                  <!-- START Wizard Step inputs -->
+                  <div id="step1" ng-show="wizard.active(1)">
+                     <fieldset>
+                        <!--legend>Catalog Details</legend-->
+                        <!-- START row -->
+                        <div class="row">
+                           <div class="col-md-12" ng-if="!update_flag">
+                              <div class="form-group">
+                                 <label>Product Type *</label>
+                                 <div class="controls">
+                                    <label class="radio-inline c-radio">
+                                       <input id="inlineradio1" type="radio" name="catalog_type" ng-model="catalog.catalog_type" data-parsley-group="step1" ng-change="catalogTypeChanged(catalog.catalog_type)" value="catalog" required="required" class="form-control"  />
+                                       <span class="fa fa-circle"></span>Catalog</label>
+                                    <label class="radio-inline c-radio">
+                                       <input id="inlineradio2" type="radio" name="catalog_type" ng-model="catalog.catalog_type" data-parsley-group="step1" ng-change="catalogTypeChanged(catalog.catalog_type)" value="noncatalog" required="required" class="form-control" />
+                                       <span class="fa fa-circle"></span>Non-Catalog</label>
+                                    <label class="radio-inline c-radio">
+                                       <input id="inlineradio2" type="radio" name="catalog_type" ng-model="catalog.catalog_type" data-parsley-group="step1" ng-change="catalogTypeChanged(catalog.catalog_type)" value="setmatching" required="required" class="form-control" />
+                                       <span class="fa fa-circle"></span>Set Matching</label>
+                                 </div>
+                              </div>
+                           </div>
+                        </div> 
+                        
+                        <div class="row">
+                           <div class="col-md-12">
+                              <div class="form-group"> 
+                                 <label ng-if="catalog.catalog_type == 'setmatching'">Enter item name *</label>
+                                 <label ng-if="catalog.catalog_type != 'setmatching'">Enter product name *</label>
+                                 <div class="controls">
+                                    <input type="text" autocomplete="off" name="title" ng-model="catalog.title" data-parsley-group="step1" placeholder="Enter Title"  class="form-control" pattern=".{0,40}"  required="required" />
+                                    <span ng-show="addcatalogform.title.$dirty &amp;&amp; addcatalogform.title.$error.required" class="text-danger">This field is required</span>
+                                    <span ng-show="addcatalogform.title.$error.pattern" class="text-danger">This field has character limit of 40</span>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+
+                        <div class="row" ng-if="is_staff && current_companies.length > 0 && catalog.catalog_type != 'setmatching'">
+                           <div class="col-md-12">
+                              <div class="form-group">
+                                 <label>Select Company*</label>
+                                 <div class="controls">
+                                    <select name="company" chosen="" ng-model="catalog.current_company_id" ng-options="c.id as c.name for c in current_companies" ng-change="slectCompany(catalog.current_company_id)" width="'100%'" data-parsley-group="step1" class="chosen-select input-md form-control" required="required">
+                                       <option value="" name="selectcompany">Select Company</option>
+                                    </select>
+                                 </div>
+                              </div>
+                              
+                           </div>
+                        </div>
+
+                        <div class="row">
+                           <div class="col-md-12">
+                              <div class="form-group" ng-if="catalog.catalog_type == 'catalog'">
+                                 <label>Brand*</label>
+                                 <div class="controls">
+                                    <select name="brand" chosen="" ng-model="catalog.brand" ng-options="b.id as b.name for b in brands" ng-change="getBrandDiscount(catalog.brand)" width="'100%'" data-parsley-group="step1" class="chosen-select input-md form-control selectbrand" required="required">
+                                       <option value="" name="selectbrandoption">Select Brand</option>
+                                    </select>
+                                 </div>
+                              </div>
+
+                              <div class="form-group"  ng-if="catalog.catalog_type == 'noncatalog' || catalog.catalog_type == 'setmatching'">
+                                 <label>Brand </label>
+                                 <div class="controls">
+                                    <select name="brand" chosen="" ng-model="catalog.brand" ng-options="b.id as b.name for b in brands" ng-change="getBrandDiscount(catalog.brand)" width="'100%'" data-parsley-group="step1" class="chosen-select input-md form-control selectbrand" >
+                                       <option value="null" name="selectbrandoption">Select Brand</option>
+                                    </select>
+                                 </div>
+                              </div>
+                              <div ng-show="discountNotSet" class="text-danger">
+                                 <p >You have not set any discount for this brand. To continue to upload a catalog under this brand, please set discount first. <a href="javascript:;" ng-click="showCase1.OpenDiscountSettings()">click here</a></p> 
+                              </div>
+
+                           </div>
+                        </div>
+                      
+                      <!--div class="row" ng-if="!update_flag">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Select Top Category *</label>
+                               <div class="controls">
+                                  <select name="topcategory" chosen="topcategories" ng-model="catalog.topcategory" ng-options="b.id as b.category_name for b in topcategories" width="'100%'" data-parsley-group="step1" class="chosen-select input-md form-control" ng-change="TopCategoryChanged(catalog.topcategory)" required="required" >
+                                  </select>
+                               </div>
+                            </div>
+                         </div>
+                      </div-->
+                      <!--div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Category *</label>
+                               <div class="controls">
+                                 <div id="tree_2" js-tree="treeConfig" should-apply="applyModelChanges()" ng-model="treeData" name="category" data-parsley-group="step1" tree="treeInstance" tree-events="" required></div> 
+                                 <span ng-show="addcatalogform.category.$dirty &amp;&amp; addcatalogform.category.$error.required" class="text-danger">This field is required</span> 
+                                 </div>
+                            </div>
+                         </div>
+                      </div-->
+                      <div class="row" ng-if="!update_flag && catalog.catalog_type != 'setmatching'">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Category *</label>
+                               <div class="controls">
+                                  <!--input type="text" autocomplete="off" name="brand" ng-model="entry.brand" data-parsley-group="step1" placeholder="Brand"  class="form-control" /-->
+                                  <select name="category" chosen="categories" ng-model="catalog.category" ng-options="b.id as b.category_name for b in categories" width="'100%'" data-parsley-group="step1" class="chosen-select input-md form-control" ng-change="CategoryChanged(catalog.category)"  required="required" >
+                                     <option value="">Select Category</option>
+                                  </select>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                      <div class="row" ng-if="!update_flag && catalog.catalog_type == 'setmatching'">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Category *</label>
+                               <div class="controls">
+                                  <!--input type="text" autocomplete="off" name="brand" ng-model="entry.brand" data-parsley-group="step1" placeholder="Brand"  class="form-control" /-->
+                                  <select name="category" chosen="categories" ng-model="catalog.category" ng-options="b.id as b.category_name for b in new_categories_with_set_type" width="'100%'" data-parsley-group="step1" class="chosen-select input-md form-control" ng-change="CategoryChanged(catalog.category)" required="required" >
+                                     <option value="">Select Category</option>
+                                  </select>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                      <div class="row" ng-if="!update_flag && catalog.catalog_type != 'catalog'">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Select photoshoot type *</label>
+                               <div class="controls">
+                                  <!--input type="text" autocomplete="off" name="brand" ng-model="entry.brand" data-parsley-group="step1" placeholder="Brand"  class="form-control" /-->
+                                  <select name="photoshoot_type" chosen="photoshoot_types" ng-model="catalog.photoshoot_type" ng-options="b.photoshoot_type as b.photoshoot_type for b in photoshoot_types" width="'100%'" data-parsley-group="step1" class="chosen-select input-md form-control" required="required" >
+                                   <option value="">Select Photoshoot type</option>    
+                                  </select>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+
+                        <!--  <div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                               <label>View Permission *</label>
+                               <div class="controls">
+                                   <label class="radio-inline c-radio">
+                                     <input id="inlineradio1" type="radio" name="view_permission" ng-model="catalog.view_permission" data-parsley-group="step1" value="push" required="required" class="form-control"  />
+                                     <span class="fa fa-circle"></span>Private</label>
+                                  <label class="radio-inline c-radio">
+                                     <input id="inlineradio2" type="radio" name="view_permission" ng-model="catalog.view_permission" data-parsley-group="step1" value="public" required="required" class="form-control" />
+                                     <span class="fa fa-circle"></span>Public</label>
+                                </div>
+                            </div>
+                         </div>
+                         <div class="col-md-6" ng-if="!update_flag">
+                            <div class="form-group">
+                               <label>Product Type *</label>
+                               <div class="controls">
+                                   <label class="radio-inline c-radio">
+                                     <input id="inlineradio1" type="radio" name="catalog_type" ng-model="catalog.catalog_type" data-parsley-group="step1" value="catalog" required="required" class="form-control"  />
+                                     <span class="fa fa-circle"></span>Catalog</label>
+                                  <label class="radio-inline c-radio">
+                                     <input id="inlineradio2" type="radio" name="catalog_type" ng-model="catalog.catalog_type" data-parsley-group="step1" value="noncatalog" required="required" class="form-control" />
+                                     <span class="fa fa-circle"></span>Non-Catalog</label>
+                                </div>
+                            </div>
+                         </div>
+                      </div> -->
+
+                      <div class="row" ng-if="catalog.catalog_type != 'setmatching' && update_flag != true">
+                         <div class="col-md-6">
+                            <div class="form-group"> 
+                               <label>Keep the product live for (days)</label>
+                               <div class="controls">
+                                  <input type="number" autocomplete="off" name="enable_duration" ng-model="catalog.enable_duration" data-parsley-group="step1" placeholder="Enter Duration (in Days)"  class="form-control" min="4" max="90" required/>
+                                  <span ng-show="addcatalogform.enable_duration.$error.min" class="text-danger">Enable Duration should be minimum 4 days and maximux 90 days.</span>
+                                  <span ng-show="addcatalogform.enable_duration.$error.max" class="text-danger">Enable Duration should be minimum 4 days and maximux 90 days.</span>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+
+                      
+                      <!--div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group"> 
+                               <label>Dispatch Date</label>
+                               <div class="controls">
+                                     <p class="input-group">
+                                      <input type="text" name="dispatch_date" required="" uib-datepicker-popup="{{format}}" ng-model="catalog.dispatch_date" is-open="opened" min-date="dt" uib-datepicker-options="dateOptions" 
+                                      close-text="Close" class="form-control" />
+                                      <span class="input-group-btn">
+                                         <button type="button" ng-click="open($event)" class="btn btn-default">
+                                      <em class="fa fa-calendar"></em>
+                                         </button>
+                                      </span>
+                                     </p>
+                              </div>
+                            </div>
+                         </div>
+                      </div--> 
+                      <div class="row" ng-if="catalog.catalog_type != 'setmatching'">
+                         <div class="col-md-6">
+                            <div class="form-group"> 
+                               <label>Dispatch Date</label>
+                               <div class="controls">
+                                  <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-start-date="dt" data-date-autoclose="true">
+                                      <input type="text" class="form-control" ng-model="catalog.dispatch_date" name="dispatch_date" placeholder="Select Dispatch date" data-parsley-group="step1" />
+                                      <div class="input-group-addon">
+                                          <span class="fa fa-calendar"></span>
+                                      </div>
+                                  </div>
+                                </div>
+                            </div>
+                         </div>
+                      </div>
+                      
+                     <!-- END row -->
+
+
+                     </fieldset>
+                     <ul class="pager">
+                        <li class="next" ng-if="!update_flag" ><a ng-click="wizard.go(2)">Next <span>&rarr;</span></a>
+                        </li>
+                        <li class="next" ng-if="update_flag" ><a ng-click="UpdateCatalog(); wizard.go(2); ">Save and Continue <span>&rarr;</span></a>
+                        </li>
+                     </ul>
+                  </div>
+                  <!-- END Wizard Step  1 inputs -->
+                  <!-- START Wizard Step inputs -->
+               
+                  <div id="step2" ng-show="wizard.active(2)">
+                     <fieldset>
+                      <!--legend>Upload Image</legend-->
+                      <!-- START row -->
+                      
+                      <!--div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group"> 
+                                <div class="checkbox c-checkbox needsclick">
+                                     <label class="needsclick">
+                                     <input class="needsclick" type="checkbox" value="" ng-model="catalog.dont_allow_crop" ng-change="allowCatalogCrop(catalog.dont_allow_crop)"/>
+                                     <span class="fa fa-check"></span>Keep Original Images (Do Not Crop)</label>
+                                </div>
+                            </div>
+                         </div>
+                      </div-->
+               
+                     <div class="row">
+                        <div class="col-md-6" ng-if="catalog.catalog_type != 'setmatching' ">
+                            <label>Select Photo from your computer *</label>
+                            <div class="form-group" style="text-align: center;">
+                              
+                               <div ng-if="!update_flag">
+                                    
+                                    <input type="file" ngf-select="uploadCatalogImage($file)" ng-model="catalog.thumbnail" name="thumbnail" ngf-accept="'image/*'" id="thumbnail" style="padding:10px 0px;" required>
+                                    <div ngf-drop style="height: 300px;" ng-model="catalog.thumbnail" ngf-pattern="image/*" class="cropArea">
+                                       <!--this-is-final--img-crop ng-show= "catalog.cropallow" image="catalog.thumbnail  | ngfDataUrl" result-image="showCase1.croppedDataUrl" ng-init="showCase1.croppedDataUrl=''" area-type="rectangle" aspect-ratio="0.714" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                       </img-crop-->
+                                       <ui-cropper ng-show= "catalog.cropallow" image="catalog.thumbnail  | ngfDataUrl" result-image="showCase1.croppedDataUrl" ng-init="showCase1.croppedDataUrl=''" area-type="rectangle" aspect-ratio="0.714" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                       </ui-cropper>
+                                       <img ng-hide= "catalog.cropallow"  ng-src="{{catalog.uncropped}}" style="max-width: 100%; max-height: 100%;"/> 
+                                    </div>
+                               </div>
+                                
+                               <div ng-if="update_flag">
+                                    <input type="file" ngf-select="uploadCatalogImage($file)" ng-model="catalog.thumbnail" name="thumbnail" ngf-accept="'image/*'" id="thumbnail" style="padding:10px 0px;">
+                                    <div  ng-if="!catalog.thumbnail" class="text-align: center;">
+                                      <img ng-src="{{catalogImage}}" style="width: 213px;" />
+                                    </div>
+                                    <div ng-if="catalog.thumbnail" class="text-align: center;">
+                                        <div ngf-drop style="height: 300px;" ng-model="catalog.thumbnail" ngf-pattern="image/*" class="cropArea">
+                                            <!--img-crop ng-show= "catalog.cropallow" image="catalog.thumbnail  | ngfDataUrl" result-image="showCase1.croppedDataUrl" ng-init="showCase1.croppedDataUrl=''" area-type="rectangle" aspect-ratio="0.714" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                            </img-crop-->
+                                            <ui-cropper ng-show= "catalog.cropallow" image="catalog.thumbnail  | ngfDataUrl" result-image="showCase1.croppedDataUrl" ng-init="showCase1.croppedDataUrl=''" area-type="rectangle" aspect-ratio="0.714" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                            </ui-cropper>
+                                            <img ng-hide= "catalog.cropallow"  ng-src="{{catalog.uncropped}}" style="max-width: 100%; max-height: 100%;"/> 
+                                        </div>
+                                    </div>
+                                 </div>
+                              </div>
+                        </div>
+                      
+
+                        <div class="col-md-6">
+
+                           <div ng-repeat="attribute in attribute_list | filter: workFilter track by $index" class="form-group">
+                              <label style="text-transform:capitalize;">{{attribute.attribute_slug}}* (max 4)</label>
+                              <div class="controls">
+                                 <ui-select multiple="" limit="4" ng-model="catalog[attribute.attribute_slug]" theme="bootstrap" name="work" required><!-- required="required"-->
+                                 <ui-select-match placeholder="Select {{attribute.attribute_slug}}">{{$item.value}} </ui-select-match>
+                                 <ui-select-choices repeat="attr.value as attr in attribute.attribute_values | propsFilter: {value: $select.search}">
+                                    <div ng-bind-html="attr.value | highlight: $select.search"></div>
+                                 </ui-select-choices>
+                                 </ui-select>
+                              </div>
+                              <span ng-show="addcatalogform.work.$dirty  &amp;&amp; addcatalogform.work.$error.required" class="text-danger">one or more works are required</span> 
+                           </div>
+
+                           <div ng-repeat="attribute in attribute_list | filter: fabricFilter track by $index" class="form-group">
+                              <label style="text-transform:capitalize;">{{attribute.attribute_slug}}* (max 4)</label>
+                              <div class="controls">
+                                 <ui-select multiple="" limit="4" ng-model="catalog[attribute.attribute_slug]" theme="bootstrap" name="fabric" required><!-- required="required"-->
+                                 <ui-select-match placeholder="Select {{attribute.attribute_slug}}">{{$item.value}} </ui-select-match>
+                                 <ui-select-choices repeat="attr.value as attr in attribute.attribute_values | propsFilter: {value: $select.search}">
+                                    <div ng-bind-html="attr.value | highlight: $select.search"></div>
+                                 </ui-select-choices>
+                                 </ui-select>
+                              </div>
+                              <span ng-show="addcatalogform.fabric.$dirty  &amp;&amp; addcatalogform.fabric.$error.required" class="text-danger">one or more fabrics are required</span> 
+                           </div>
+
+                           <div ng-if="catalog.catalog_type == 'setmatching'" ng-repeat="attribute in attribute_list | filter: sizeFilter track by $index" class="form-group" >
+                              <label style="text-transform:capitalize;">{{attribute.attribute_slug}}<span ng-if="attribute.is_required == true">*</span></label>
+                              <div class="controls">
+                                 <ui-select multiple="" ui-select-required data-parsley-group="step2" ng-model="catalog[attribute.attribute_slug]" theme="bootstrap" name="{{attribute.attribute_slug}}">
+                                 <ui-select-match placeholder="Select {{attribute.attribute_slug}}">{{$item.value}} </ui-select-match>
+                                 <ui-select-choices repeat="attr.value as attr in attribute.attribute_values | propsFilter: {value: $select.search}">
+                                    <div ng-bind-html="attr.value | highlight: $select.search"></div>
+                                 </ui-select-choices>
+                                 </ui-select>
+                              </div>
+                              <span ng-show="(attribute.is_required == true || attribute.is_required == 'true' ) && (!catalog[attribute.attribute_slug] || catalog[attribute.attribute_slug].length == 0)" name="addcatalogform.attribute.attribute_slug" class="text-danger">one or more items are required</span>
+                           </div>
+
+                           <div ng-repeat="attribute in attribute_list | filter: multiExceptWorkFabricSizeFilter track by $index" class="form-group" >
+                              <label style="text-transform:capitalize;">{{attribute.attribute_slug}}<span ng-if="attribute.is_required == true">*</span></label>
+                              <div class="controls">
+                                 <ui-select multiple="" ui-select-required data-parsley-group="step2" ng-model="catalog[attribute.attribute_slug]" theme="bootstrap" name="{{attribute.attribute_slug}}"><!--evaluated name="cat-{{attribute.attribute_slug}}" required="required" required-->
+                                 <ui-select-match placeholder="Select {{attribute.attribute_slug}}">{{$item.value}} </ui-select-match>
+                                 <ui-select-choices repeat="attr.value as attr in attribute.attribute_values | propsFilter: {value: $select.search}">
+                                    <div ng-bind-html="attr.value | highlight: $select.search"></div>
+                                 </ui-select-choices>
+                                 </ui-select>
+                              </div>
+                              <span ng-show="(attribute.is_required == true || attribute.is_required == 'true' ) && (!catalog[attribute.attribute_slug] || catalog[attribute.attribute_slug].length == 0)" name="addcatalogform.attribute.attribute_slug" class="text-danger">one or more items are required</span><!--&amp;&amp; addcatalogform.attribute.attribute_slug.$error.required addcatalogform.attribute.attribute_slug.$dirty-->
+                           </div>
+
+
+
+
+                           <div ng-repeat="attribute in attribute_list  | filter: enumStyleFilter  track by $index" class="form-group">
+                              <label style="text-transform:capitalize;"">{{attribute.attribute_slug}}</label>
+                              <div class="controls">
+                                    <select name="{{attribute.attribute_slug}}" data-parsley-group="step2" chosen="{{attribute.attribute_slug}}" ng-model="catalog[attribute.attribute_slug]" ng-options="s.value as s.value for s in attribute.attribute_values" width="'100%'" data-parsley-group="step2" class="chosen-select input-md form-control" >
+                                       <option value="">Select {{attribute.attribute_slug}}</option>
+                                    </select>
+                              </div>
+                              <span ng-show="(attribute.is_required == true || attribute.is_required == 'true') && (!catalog[attribute.attribute_slug] || catalog[attribute.attribute_slug].length == 0)" class="text-danger">This feild is required</span>
+                           </div>
+                           <div ng-repeat="attribute in attribute_list  | filter: enumExceptStyleFilter  track by $index" class="form-group">
+                              <label style="text-transform:capitalize;"">{{attribute.attribute_slug}}*</label>
+                              <div class="controls">
+                                    <select name="style" data-parsley-group="step2" chosen="{{attribute.attribute_slug}}" ng-model="catalog[attribute.attribute_slug]" ng-options="s.value as s.value for s in attribute.attribute_values" width="'100%'" data-parsley-group="step2" required="required" class="chosen-select input-md form-control" >
+                                       <option value="">Select {{attribute.attribute_slug}}</option>
+                                    </select>
+                              </div>
+                              <span ng-show="(attribute.is_required == true || attribute.is_required == 'true') && (!catalog[attribute.attribute_slug] || catalog[attribute.attribute_slug].length == 0)" class="text-danger">This feild is required</span>
+                           </div>
+
+
+
+                           <div ng-repeat="attribute in attribute_list  | filter: intFilter track by $index" class="form-group">
+                              <label style="text-transform:capitalize;">{{attribute.attribute_slug}}<span ng-if="attribute.is_required == true">*</span></label>
+                              <div class="controls">
+                                 <input type="number"  name="{{attribute.attribute_slug}}" ng-model="catalog[attribute.attribute_slug]" placeholder="Enter {{attribute.attribute_slug}} in {{attribute.unit}}" autocomplete="off" class="form-control" min="0" step="1"/>
+                              </div>
+                              <span ng-show="(attribute.is_required == true || attribute.is_required == 'true') && (!catalog[attribute.attribute_slug])" class="text-danger">This feild is required</span>
+                           </div>
+
+                           <div ng-repeat="attribute in attribute_list  | filter: floatFilter track by $index" class="form-group">
+                              <label style="text-transform:capitalize;">{{attribute.attribute_slug}}<span ng-if="attribute.is_required == true">*</span></label>
+                              <div class="controls" ng-if="attribute.max_value != null && attribute.min_value != null">
+                                 <input type="number" name="{{attribute.attribute_slug}}" ng-model="catalog[attribute.attribute_slug]" placeholder="Enter {{attribute.attribute_slug}} in {{attribute.unit}}" autocomplete="off" class="form-control" min="{{attribute.min_value}}" max="{{attribute.max_value}}" required="{{attribute.is_required}}" step="any"/>
+                                 <span ng-show="addcatalogform.{{attribute.attribute_slug}}.$error.min || addcatalogform.{{attribute.attribute_slug}}.$error.max" class="text-danger">Please enter value between {{attribute.min_value}} and {{attribute.max_value}} </span>
+                                 <span ng-show="addcatalogform.{{attribute.attribute_slug}}.$error.required" class="text-danger">This feild is required</span>
+                              </div>
+                              <div class="controls" ng-if="attribute.max_value == null && attribute.min_value != null">
+                                 <input type="number" name="{{attribute.attribute_slug}}" ng-model="catalog[attribute.attribute_slug]" placeholder="Enter {{attribute.attribute_slug}} in {{attribute.unit}}" autocomplete="off" class="form-control" min="{{attribute.min_value}}"  required="{{attribute.is_required}}" step="any"/>
+                                 <span ng-show="addcatalogform.{{attribute.attribute_slug}}.$error.min" class="text-danger">This value should be minimum {{attribute.min_value}} </span>
+                                 <span ng-show="addcatalogform.{{attribute.attribute_slug}}.$error.required" class="text-danger">This feild is required</span>
+                              </div>
+                              <div class="controls" ng-if="attribute.max_value != null && attribute.min_value == null">
+                                 <input type="number" name="{{attribute.attribute_slug}}" ng-model="catalog[attribute.attribute_slug]" placeholder="Enter {{attribute.attribute_slug}} in {{attribute.unit}}" autocomplete="off" class="form-control" min="{{attribute.min_value}}"  required="{{attribute.is_required}}" step="any"/>
+                                 <span ng-show="addcatalogform.{{attribute.attribute_slug}}.$error.max" class="text-danger">This value should be maximum {{attribute.max_value}} </span>
+                                 <span ng-show="addcatalogform.{{attribute.attribute_slug}}.$error.required" class="text-danger">This feild is required</span>
+                              </div>
+                              <div class="controls" ng-if="attribute.max_value == null && attribute.min_value == null">
+                                 <input type="number" name="{{attribute.attribute_slug}}" ng-model="catalog[attribute.attribute_slug]" placeholder="Enter {{attribute.attribute_slug}} in {{attribute.unit}}" autocomplete="off" class="form-control"  required="{{attribute.is_required}}" step="any"/>
+                                 <span ng-show="addcatalogform.{{attribute.attribute_slug}}.$error.required" class="text-danger">This feild is required</span>
+                              </div>
+                              
+                           </div>
+
+
+                           <div class="form-group">
+                              <label>Other Details</label>
+                              <div class="controls">
+                                 <input type="text"  data-parsley-group="step2" name="other" ng-model="catalog.other" placeholder="Enter other details" autocomplete="off"  class="form-control" />
+                              </div>
+                           </div>
+                           <div class="form-group" ng-if="catalog.catalog_type == 'setmatching' && catalog.multi_set_type != 'size_set'">
+                              <label>No. of Pcs./set*</label>
+                              <div class="controls">
+                                 <input type="number" data-parsley-group="step2" name="no_of_pcs_per_design" ng-model="catalog.no_of_pcs_per_design" placeholder="Enter number of pieces" autocomplete="off"  class="form-control" min="1"  required="required" />
+                              </div>
+                           </div>
+                           <div class="form-group" ng-if="catalog.catalog_type == 'setmatching' && catalog.multi_set_type == 'size_set'">
+                              <label>No. of Pcs./set*</label>
+                              <div class="controls">
+                                 <input type="number" data-parsley-group="step2" name="no_of_pcs_per_design" ng-model="catalog.no_of_pcs_per_design" placeholder="Enter number of pieces" autocomplete="off"  class="form-control" ng-min="catalog.size.length" ng-max="catalog.size.length" required="required" />
+                                 <span ng-show="addcatalogform.no_of_pcs_per_design.$error.max" class="text-danger">Please change the number of pieces in your set to {{catalog.size.length}}, it should be equal to number of sizes selected.</span>
+                                 <span ng-show="addcatalogform.no_of_pcs_per_design.$error.min" class="text-danger">Please change the number of pieces in your set to {{catalog.size.length}}, it should be equal to number of sizes selected.</span>
+                              </div>
+                           </div>
+
+                           <div class="form-group" ng-if="catalog.catalog_type == 'setmatching'">
+                              <label>Price/Pc.*</label>
+                              <div class="controls">
+                                 <input type="number"  data-parsley-group="step2" name="price_per_design" ng-model="catalog.price_per_design" placeholder="Enter price per Design" autocomplete="off"  class="form-control" min="71" required="required" />
+                                 <!-- <span ng-show="addcatalogform.price_per_design.$error.min" class="text-danger">Price should be minimum 101</span> -->
+                              </div>
+                           </div>
+
+                        </div><!--end of col md-6-->
+                     </div><!-- END row -->
+                        
+                     
+                     <div class="row" align="center" ng-show="!update_flag && catalog.catalog_type != 'setmatching'">
+                         <div class="col-md-12">
+                            <div class="form-group">                             
+                              <button type="submit" ng-click="AddCatalog()" ng-disabled="discountNotSet" class="btn btn-primary mt-lg" >Add Product</button>
+                            </div>
+                        </div>
+                     </div>
+                     
+                     </fieldset>
+
+
+                     <ul class="pager">
+                        <li class="previous">
+                           <a ng-click="wizard.go(1)">
+                              <span>&larr; Previous</span>
+                           </a>
+                        </li>
+                        <li class="next" ng-show="catalogId != null && update_flag==false"><a class="nexttoproduct" ng-click="wizard.go(3);">Next <span>&rarr;</span></a>
+                        <li class="next"  ng-show="catalog.catalog_type == 'setmatching'"><button type="button" ng-click="wizard.go(3)" ng-disabled="!catalog.work || !catalog.fabric || catalog.work.length == 0 || catalog.fabric.length == 0" class="nextbutton">Next <span>&rarr;</span></button>
+                        <li class="next" ng-if="update_flag"><a class="nexttoproduct" ng-click="wizard.go(3); UpdateCatalog();">Save and Continue <span>&rarr;</span></a>
+                        </li>
+                     </ul>
+                  </div>
+
+
+               </form> <!--as tthere are 3 forms & nesting forms causes issues-->
+                  <!-- END Wizard Step 2 inputs -->
+               
+                  <!-- START Wizard Step 3 inputs -->
+                  <div id="step3" ng-show="wizard.active(3)">
+                     <form  ng-if="catalog.catalog_type != 'setmatching' " editable-form name="showCase1.addDesigns" ng-submit="" form-wizard="" validate-steps="true" validate-form="" class="form-validate modelform2">
+
+                        <div class="row" >
+                           <div class="col-md-6" ng-if="show_size_forFullcatalog"><!-- ng-if="!update_flag" -->
+
+                              <div class="form-group has-feedback">
+                                 <label>How would you like to sell catalog?</label>
+                                 <div class="controls">
+                                    <div style="margin: 0px;">
+                                       <label class="radio-inline c-radio">
+                                          <input type="radio" id="sell_full_catalog"  name="sell_full_catalog" ng-change="ToggleSell_full_catalog()" ng-value="true" ng-model="catalog.sell_full_catalog" />
+                                          <span class="fa fa-circle"></span> Full set</label> <br>
+                                       <label class="radio-inline c-radio">
+                                          <input type="radio" id="sell_full_catalog"  name="sell_full_catalog" ng-change="ToggleSell_full_catalog()" ng-value="false" ng-model="catalog.sell_full_catalog" />
+                                          <span class="fa fa-circle"></span> Single pieces and full set both </label>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col-md-4" >
+                              <div class="form-group has-feedback">
+                                 <label>Number of Designs</label>
+                                 <div class="controls">
+                                    <input type="number"  autocomplete="off" name="noOfDesigns" ng-model="catalog.noOfDesigns"  placeholder="Enter no of Designs"  class="form-control" ng-min="catalog.minnoOfDesigns" required/>
+                                       <span ng-show="showCase1.addDesigns.noOfDesigns.$error.min" class="text-danger">Minimum {{catalog.minnoOfDesigns}} designs are required</span>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+
+                        <div class="row form-group" >
+                              <div class="form-group">
+                                 <label class="col-sm-12 control-label">Each Design has same price?</label>
+                                 <div class="col-sm-10">
+                                    
+                                    <label class="radio-inline c-radio">
+                                       <input id="inlineradio1" type="radio" name="price_type" ng-model="catalog.price_type"  value="single" required="required" class="form-control" ng-click="single();setNewPriceAndLimit();applyMarginToallpcs()" checked="checked" />
+                                       <span class="fa fa-circle"></span>Yes</label>
+                                    <label class="radio-inline c-radio">
+                                       <input id="inlineradio2" type="radio" name="price_type" ng-model="catalog.price_type"  value="individual" required="required" ng-click="individual();setNewPriceAndLimit();applyMarginToallpcs()" class="form-control" />
+                                       <span class="fa fa-circle"></span>No</label>
+                                    <span ng-show="showCase1.addDesigns.price_type.$dirty &amp;&amp; showCase1.addDesigns.price_type.$error.required" class="text-danger">This field is required</span>
+                                 </div>
+                              </div>
+                        </div>
+                       
+
+                        <div class="row ng-scope" ng-if="catalog.sell_full_catalog == false">
+                           <div class="col-md-12">
+                              <div class="form-group has-feedback">
+
+                                 <h4>Set the Margin for single pieces</h4>
+                                 <label>Full Catalog/ Piece Billing Price to Wishbook is calculated as: <span style="font-weight:bold;color:gray;">Wholesale Price/Pc - Full Catalog Discount </span> </label>
+                                 <label>Single Piece Billing Price to Wishbook is calculated as : <span style="font-weight:bold;color:gray;">(Wholesale Price/Pc + Margin) - Single Pc Discount</span> </label>
+                                 <br>
+                                 <ul>
+                                    <li>
+                                       <span style="font-weight:bold;">Wholesale price/pc:</span> To be entered below after adding image of each design
+                                    </li>
+                                    <li>
+                                       <span style="font-weight:bold;">Your discount to wishbook for selected brand:</span> <a href="javascript:;" ng-click="showCase1.OpenDiscountSettings()">{{full_catalog_discount}}%</a>(Full) <a href="javascript:;" ng-click="showCase1.OpenDiscountSettings()">{{single_pc_discount}}%</a>(Single pc)
+                                    </li>
+                                    <li>
+                                       <span style="font-weight:bold;">Margin:</span> Add your margin for this catalog below(you can change it after selecting the images)
+                                    </li>
+                                 </ul>
+                                 <div class="controls">
+
+                                    <div style="margin: 4px;" class="row">
+                                       <label class="radio-inline c-radio col-md-4">
+                                          <input type="radio" id="is_percentage" name="is_percentage" ng-value="true" ng-model="showCase1.is_percentage" ng-click="applyMarginToallpcs()" value="true" >
+                                          <span class="fa fa-circle"></span> Add margin in percentage %
+                                       </label>
+                                       <div class="controls col-md-4" ng-if="showCase1.is_percentage == true">
+                                          <input type="number" autocomplete="off" name="single_piece_price_percentage" ng-model="showCase1.single_piece_price_percentage" placeholder="Enter percentage" class="form-control" ng-max="showCase1.max_margin_percentage" required="required" min="0" ng-change="applyMarginToallpcs()">
+                                          <span ng-show="showCase1.addproduct.single_piece_price_percentage.$error.max" class="text-danger ng-binding ng-hide">You can not add margin more than {{showCase1.max_margin_percentage}}%</span>
+                                          <span ng-show="showCase1.addproduct.single_piece_price_percentage.$error.min" class="text-danger ng-hide">You can not add margin in negative %</span>
+                                       </div>
+                                    </div>
+
+                                    <div style="margin: 4px;" class="row form-group">
+                                       <label class="radio-inline c-radio col-md-4">
+                                          <input type="radio" id="is_percentage" name="is_percentage" ng-value="false" ng-model="showCase1.is_percentage" ng-click="applyMarginToallpcs()" value="false" >
+                                          <span class="fa fa-circle"></span> Add margin in Rs.
+                                       </label>
+                                       <div class="controls col-md-4" ng-if="showCase1.is_percentage == false">
+                                          <input type="number" autocomplete="off" name="single_piece_price_fix" ng-model="showCase1.single_piece_price_fix" placeholder="Enter rupees" ng-max="showCase1.max_margin_rs"  class="form-control" required="required" min="0" ng-change="applyMarginToallpcs()">
+                                          <span ng-show="showCase1.addproduct.single_piece_price_fix.$error.max" class="text-danger ">You can not add margin more than {{showCase1.max_margin_percentage}}%</span>
+                                          <span ng-show="showCase1.addproduct.single_piece_price_fix.$error.min" class="text-danger">You can not add margin in negative %</span>
+                                       </div>
+                                    </div>
+                                    <div>
+                                       <label>Max margin allowed : 10% of Wholesale price</label>
+                                    </div>
+                                    
+                                 </div>
+
+                              </div>
+                           </div>
+                        </div>
+                        <div class="row " ng-if="catalog.sell_full_catalog == true">
+                           <div class="col-md-12">
+                              <div class="form-group has-feedback">
+
+                                 <label>Full Catalog/ Piece Billing Price to Wishbook is calculated as: <span style="font-weight:bold;color:gray;">Wholesale Price/Pc - Full Catalog Discount </span> </label>
+                                 <br>
+                                 <ul>
+                                    <li>
+                                       <span style="font-weight:bold;">Wholesale price/pc:</span> To be entered below after adding image of each design
+                                    </li>
+                                    <li>
+                                       <span style="font-weight:bold;">Your discount to wishbook for selected brand:</span> <a href="javascript:;" ng-click="showCase1.OpenDiscountSettings()">{{full_catalog_discount}}%</a>(Full)
+                                    </li>
+                                 </ul>
+
+                              </div>
+                           </div>
+                        </div>
+
+                        <div ng-if="update_flag">
+                             
+                              <div class="row" ng-if="showCase1.catalog_products.length > 0 && products.length < 1  ">
+                                 <div class="col-md-12">
+                                    
+                                    <table class="table table-hover">
+                                       <thead>
+                                          <th>Image</th>
+                                          <th ng-if="!catalog_with_size">SKU</th>
+                                          <th ng-if="catalog_with_size">SKU & Size</th>
+                                          <th>Wholesale Price/Pc</th>
+                                          <th>Full Catalog/Pc billing price</th>
+                                          <th ng-if="!catalog.sell_full_catalog">Single Piece billing price</th>
+                                       </thead>
+                                       
+                                       <tbody ng-repeat="productupdate in showCase1.catalog_products">
+                                          <tr>
+                                             <td ><img class="loading" ng-src="{{productupdate.thumbimage}}" style="width: 100px; height: 100px"></td>
+                                             <td ng-if="catalog_with_size" style="width:50%">
+                                                {{productupdate.sku}}
+                                                <div class="row form-group" >
+                                                   <div class="col-md-12">
+                                                      <div style="display: flex;justify-content: space-evenly;"> 
+                                                         <div class="ck-button" ng-repeat="size in productupdate.all_sizes">
+                                                            <label>
+                                                              <input type="checkbox" name="size-{{size.value}}" value="" data-parsley-group="step3" ng-model="size.selected"><span>{{size.value}}</span>
+                                                            </label>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                </div>
+                                             </td>
+                                             <td ng-if="!catalog_with_size">{{productupdate.sku}}</td>
+                                             <td>
+                                                <input type="number" ng-change="applyMarginToallpcs()" name="{{productupdate.mwp_price}}" ng-model="productupdate.mwp_price" placeholder="Enter price" autocomplete="off"  class="form-control" min="101" required/><!-- catalog.price_type === 'single' -->
+                                                <span ng-show="showCase1.addDesigns.mwp_price.$error.min" class="text-danger">Price should be minimum 101</span>
+                                             </td>
+                                             <td>{{ productupdate.fullCatalog_billingprice}} </td>
+                                             <td ng-if="!catalog.sell_full_catalog">{{ productupdate.singlePc_billingprice}}</td>
+                                          </tr>
+                                       </tbody>
+                                    </table>
+                                   
+                                 </div>
+                              </div>
+                        </div><!-- end : ng-if  update flag -->
+
+
+                     
+                        <div class="row form-group" ng-if="catalog.sell_full_catalog && show_size_forFullcatalog && catalog.all_sizes.length > 0 && products.length > 0">
+                           <div class="col-md-4">
+                              <div class="form-group">
+                                 <label>Select size for all the designs</label>
+                              </div>
+                           </div>
+                           <div class="col-md-8">
+                              
+                              <div class="ck-button" ng-repeat="size in catalog.all_sizes">
+                                 <label>
+                                    <input type="checkbox" name={{size.value}}  value="" ng-model="size.selected"><span>{{size.value}}</span>
+                                 </label>
+                              </div>
+                           </div>
+                        </div>
+
+                        <div class="row" ng-hide="is_staff == 'true' && catalog.is_owner == false">
+                           <div class="col-md-6">
+                              <div class="form-group">
+                                 <label>Select Photos from your computer</label>
+                              </div>
+                           </div>
+                           <div class="col-md-6">
+                              <div class="form-group">
+                                    <input type="file" ngf-select="uploadFiles($files)" multiple  ng-model="thumbnails" name="thumbnails"  data-parsley-group="step3" ngf-accept="'image/*'"  style="padding:10px 0px;">
+                              </div>
+                           </div>
+                        </div>
+                        <div style="text-align: center;" class="row" ng-if="is_staff == 'true' && catalog.is_owner == false">
+                          <span class="text-danger">You can not add design as selected company is not owner of this catalog.</span>
+                        </div>
+
+                        <div class="row" ng-if="products.length > 0">
+                           <div class="col-md-6">
+                              <div class="form-group">
+                                 <h4>Note:</h4>
+                                    <ul>
+                                       <li>Billing price is the price which you will bill to wishbook</li>
+                                       <li>Billing price displayed are exclusive of GST</li>
+                                    </ul>
+                              </div>
+                           </div>
+                        </div>
+
+
+                     <div class="row">
+
+                        <div ng-repeat="product in products track by $index"><!-- | orderBy:orderByFunction -->
+
+                           <div class="col-md-6" ng-if="product.uploaded == false">
+                              <div class="form-group" style="text-align: center;">
+                                
+                                 <div ngf-drop ng-model="product.image" ngf-pattern="image/*" style="height: 200px;" class="thumb">
+
+                                    <ui-cropper ng-show= "product.cropallow" image="product.image | ngfDataUrl" result-image="product.imageCroped" ng-init="product.imageCroped='';" area-type="rectangle" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                    </ui-cropper>
+                                 
+                                    <img ng-hide= "product.cropallow"  ng-src="{{product.uncropped}}" style="max-width: 100%; max-height: 100%;"/>
+                                 </div>
+                                 <div style="text-align: center;" class="col-md-12">
+                                   <span ng-show="product.max_limit_error == true" class="text-danger">You can upload max 3 images.</span>
+                                   <div class="col-md-4" ng-repeat="pimage in product.products_photos track by $index" style="text-align:center;">
+                                      <a ng-click="DeleteProductImage($parent.$index,$index)">Delete</a>
+                                      <img ng-src="{{pimage.uncropped}}" style="max-width: 100%; max-height: 100%;"/>
+                                   </div>
+                                 </div>
+                                 <div style="text-align: center;" class="col-md-12">
+                                   <!-- <label style="font-weight: normal; width: 58%; padding-top: 2%; " class="linkButton" for="inputimages{{$index}}">Add more images for same design</label> | 
+                                   <input style="display: none;" id="inputimages{{$index}}" type="file" ngf-select="uploadProductPhotos($files,$index)" multiple ng-model="productimages" name="productimages"  ngf-accept="'image/*'" > -->
+                                    <a id="linkbtn" class="linkButton" ng-click="remove(product)">Remove Design</a>
+                                 </div>  
+                                 <div class="row form-group" ng-hide="without_sku">
+                                     <div class="col-md-3">
+                                       <div> 
+                                          <label for="sku">SKU ID</label>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                       <div > 
+                                          <input type="text" name="sku" ng-value="product.sku" ng-model="product.sku" class="form-control" placeholder="SKU" style="height: 25px;" ng-hide="without_sku" pattern=".{0,100}" required="required"  required/>
+                                          <span ng-show="showCase1.addDesigns.sku.$error.pattern" class="text-danger" >This field has character limit of 100</span>
+                                       </div>
+                                    </div>
+                                 </div>
+                                   
+                                 
+                                 <div class="row form-group" ng-if="catalog_with_size && !sell_full_catalog">
+                                    <div class="col-md-12">
+                                       <div style="display: flex;justify-content: space-evenly;"> 
+                                          <div class="ck-button" ng-repeat="size in product.all_sizes">
+                                             <label>
+                                                <input type="checkbox" name={{size.value}}  ng-click="AddSizeToProduct($parent.$index,size.value)"  value="" ng-model="size.selected"><span>{{size.value}}</span>
+                                             </label>
+                                             <!-- <p ng-show="(attribute.is_required == true || attribute.is_required == 'true' ) && (!product.available_sizes || product.available_sizes.length == 0)" name="showCase1.addDesigns.attribute.attribute_slug" class="text-danger">one or more sizes are required</p> -->
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+
+                                 <div class="row">
+                                     <div class="col-md-3">
+                                       <div class="form-group"> 
+                                          <label>Price</label>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                       <div class="form-group"> 
+                                          <div class="controls" ng-if="catalog.catalog_type == 'catalog'">
+                                                <input type="number" autocomplete="off" name="price" ng-value="product.price" ng-model="product.price" ng-change="setNewPriceAndLimit(product.price,$index);applyMarginToallpcs()" placeholder="Enter wholesale price/pc"  class="form-control" min="101" required/>
+                                                <span ng-show="showCase1.addDesigns.price.$error.min" class="text-danger">Price should be minimum 101</span>
+                                          </div>
+                                          <div class="controls" ng-if="catalog.catalog_type != 'catalog'">
+                                                <input type="number" autocomplete="off" name="price" ng-value="product.price" ng-model="product.price" ng-change="setNewPriceAndLimit(product.price,$index)" placeholder="Enter wholesale price/pc"  class="form-control" min="71" required/>
+                                                <span ng-show="showCase1.addDesigns.price.$error.min" class="text-danger">Price should be minimum 71</span>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+
+
+                                 <div >
+                                    <p ng-if="catalog.sell_full_catalog == false" style="margin:5px 0 -5px 0 !important"> Single pc Billing price: <label ng-if="product.newsinglepcPric && product.newsinglepcPric != NaN"> {{product.newsinglepcPric }}/pc</label></p>
+                                    <p> Full Catalog Billing price: <label ng-if="product.newFullcatalogPric &&  product.newFullcatalogPric != NaN"> {{product.newFullcatalogPric }}/pc</label></p>
+                                 </div>
+                                 
+                              </div>
+                            </div>
+                        </div>
+                     </div>
+
+
+                     
+
+                     <div class="row" align="center">
+                         <div class="col-md-12">
+                            <div ng-show="show_progress_text == true" style="z-index: 2; background: black; color: white; width: 50%; border-radius: 5px;">
+                              <h3 >{{completedproducts}} out of  {{totalproducts}} products uploaded.</h3>
+                            </div>
+                          </div>
+                     </div>            
+                         
+                      <div class="row" align="center">
+                        <div class="col-md-6">
+                           <div class="form-group">
+                              <button type="submit" ng-click="updateProducts()" class="btn btn-primary mt-lg" ng-disabled="products.length > 0">Update Designs</button>
+                           </div>
+                        </div>
+                         <div class="col-md-6">
+                            <div class="form-group">
+                               <button type="submit" ng-click="AddProducts()" class="btn btn-primary mt-lg" ng-disabled="products.length == 0 || product.max_limit_error == true">Add Designs</button>
+                            </div>
+                         </div>
+                      </div>
+                  </form>
+                  
+                  <form  ng-if="catalog.catalog_type == 'setmatching' " editable-form name="addsetForm" ng-submit="" form-wizard="" validate-steps="true" validate-form="" class="form-validate modelform2">
+                       
+                       <fieldset ng-repeat="set in setTobeAdded track by $index">
+                       <legend>Set {{$index+1}} Detail <span style="float: right;" ng-click="deleteSet($index)"><i class="fa fa-trash"></i>&nbsp;Delete</span></legend>
+                       <div class="row"> 
+                         <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Enter Design name/number *</label>
+                               <div class="controls">
+                                  <input type="text" autocomplete="off" name="title" ng-model="set.title" data-parsley-group="step3" placeholder="Enter Design name/number"  class="form-control" pattern=".{0,40}" required/>
+                                  <span ng-show="addsetForm.title.$dirty &amp;&amp; addsetForm.title.$error.required" class="text-danger">This field is required</span>   
+                                  <span ng-show="addsetForm.title.$error.pattern" class="text-danger">This field has character limit of 40</span>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                      <div class="row" ng-if="catalog.multi_set_type == 'color_set'">
+                         <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Color *</label>
+                               <div class="controls">
+                                  <input type="text" autocomplete="off" name="color" ng-model="set.color" data-parsley-group="step3" placeholder="Enter colors"  class="form-control" required/>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-3">
+                            <div class="form-group">
+                               <label>+ Add Images</label>   
+                                <input type="file" ngf-select="uploadSetFiles($files,$index)" multiple  ng-model="set.thumbnails" name="thumbnails"  data-parsley-group="step3" ngf-accept="'image/*'" required="required" >
+                            </div>
+                          </div>
+                          <div class="col-md-4" ng-repeat="product in set.products" >
+                              <img ng-src="{{product.uncropped || product.image.thumbnail_medium}}" style="max-width: 100%; max-height: 100%;"/>
+                          </div>
+                      </div>
+                      <div class="row">
+                         <div class="col-md-8">
+                            <div class="form-group"> 
+                               <label>Keep live for (days)</label>
+                               <div class="controls">
+                                  <input type="number" autocomplete="off" name="enable_duration" ng-model="set.enable_duration" data-parsley-group="step3" placeholder="Enter Duration (in Days)"  class="form-control" min="10" max="90" required/>
+                                  <span ng-show="addsetForm.enable_duration.$error.min" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                                  <span ng-show="addsetForm.enable_duration.$error.max" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                                
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                      
+                      </fieldset>
+                      <div class="row" align="center">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <button type="submit" ng-click="AddAnotherSet()" class="btn btn-primary mt-lg">Add another set</button>
+                            </div>
+                         </div>
+                      </div>
+
+                       <div class="row" align="center">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <button type="submit" ng-click="AddSetMatching()" class="btn btn-primary mt-lg">Upload Set Matching</button>
+                            </div>
+                         </div>
+                      </div>
+                  </form>              
+
+                   <ul class="pager">
+                      <li class="previous">
+                         <a ng-click="wizard.go(2)">
+                            <span>&larr; Previous</span>
+                         </a>
+                      </li>
+                   </ul>
+
+               </div><!-- END Wizard Step 3 inputs -->
+            
+             </div><!-- end of div class="form-wizard wizard-horizontal" -->
+               
+            <!--/form-->
+            </div><!--panel body-->
+          
+      <!--no need of  END panel  panel heading  as is ended when created-->
+   </div> <!-- End ng dialog  conntroller-->
+
+</script>
+
+
+
+
+
+
+<script type="text/ng-template" id="AddUpdateSetdialog">
+   <div ng-controller="CatalogAddUpdateController as showCase1" class="ngdialog-message">
+      <form  ng-if="catalog.catalog_type == 'setmatching' " editable-form name="AddUpdateSetdialog" ng-submit="" form-wizard="" validate-steps="true" validate-form="" class="form-validate modelform2 modelform">
+                       
+         <fieldset ng-repeat="set in setTobeAdded track by $index" style="margin-top: 15px;">
+         <legend>Set {{$index+1}} Detail <span style="float: right;" ng-click="deleteSet($index)"><i class="fa fa-trash"></i>&nbsp;Delete</span></legend>
+         <div class="row"> 
+            <div class="col-md-8">
+               <div class="form-group">
+                  <label>Enter Design name/number *</label>
+                  <div class="controls">
+                     <input type="text" autocomplete="off" name="title" ng-model="set.title" data-parsley-group="step3" placeholder="Enter Design name/number"  class="form-control" pattern=".{0,40}" required/>
+                     <span ng-show="AddUpdateSetdialog.title.$dirty &amp;&amp; AddUpdateSetdialog.title.$error.required" class="text-danger">This field is required</span>   
+                     <span ng-show="AddUpdateSetdialog.title.$error.pattern" class="text-danger">This field has character limit of 40</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="row" ng-if="catalog.multi_set_type == 'color_set'">
+            <div class="col-md-8">
+               <div class="form-group">
+                  <label>Color *</label>
+                  <div class="controls">
+                     <input type="text" autocomplete="off" name="color" ng-model="set.color" data-parsley-group="step3" placeholder="Enter colors"  class="form-control" required/>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-md-3">
+               <div class="form-group">
+                  <label>+ Add Images</label>
+                  <input type="file" ngf-select="uploadSetFiles($files,$index)" multiple  ng-model="set.thumbnails" name="thumbnails"  data-parsley-group="step3" ngf-accept="'image/*'" required="required" >
+               </div>
+            </div>           
+         </div>
+         <div class="row" style="padding-top:10px;">
+               <div class="col-md-8">
+                  <div class="form-group"> 
+                     <div class="col-md-4" ng-repeat="product in set.products" >
+                        <img ng-src="{{product.uncropped || product.image.thumbnail_medium}}" style="max-width: 100%; max-height: 100%;"/>
+                     </div>
+                  </div>
+               </div>
+         </div>
+         <div class="row">
+            <div class="col-md-8">
+               <div class="form-group"> 
+                  <label>Keep live for (days)</label>
+                  <div class="controls">
+                     <input type="number" autocomplete="off" name="enable_duration" ng-model="set.enable_duration" data-parsley-group="step3" placeholder="Enter Duration (in Days)"  class="form-control" min="10" max="90" required/>
+                     <span ng-show="AddUpdateSetdialog.enable_duration.$error.min" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                     <span ng-show="AddUpdateSetdialog.enable_duration.$error.max" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                  
+                  </div>
+               </div>
+            </div>
+         </div>
+         
+         </fieldset>
+
+         <div ng-hide="atype == 'update1'" class="row" align="center">
+            <div class="col-md-12">
+               <div class="form-group">
+                  <button type="submit" ng-click="AddAnotherSet()" class="btn btn-primary mt-lg">Add another set</button>
+               </div>
+            </div>
+         </div>
+
+         <div class="row" align="center">
+            <div class="col-md-12">
+               <div class="form-group">
+                  <button ng-if="atype != 'update1'" type="submit" ng-click="AddSettoScreen()" class="btn btn-primary mt-lg">Upload Set</button>
+                  <button ng-if="atype == 'update1'" type="submit" ng-click="UpdateSettoScreen()" class="btn btn-primary mt-lg">Update Set</button>
+               </div>
+            </div>
+         </div>
+      </form>
+   </div>
+</script>
+
+
+
+
+
+<script type="text/ng-template" id="inventory_update">
+   <div ng-controller="CatalogAddUpdateController as showCase1" class="ngdialog-message inventory_dialog">
+      <form editable-form name="InventoryUpdatedialog" ng-submit="" form-wizard="" validate-steps="true" validate-form="" class="form-validate modelform2">
+        <fieldset class="form-group">
+          <legend>Update Inventory - {{catalog_inv.title}}</legend>
+
+            <div class="row" ng-if="is_staff == 'true'" style="margin-bottom: 2%;">
+                 
+               <div class="col-md-6">
+                  <div class="form-group">
+                     <label>Selling company</label>
+                     <div class="controls">
+                        <select name="category" chosen="" ng-model="selling_company" ng-options="b.id as b.name +' ('+ b.id+')' for b in catalogs_sellers" width="'100%'" class="chosen-select input-md form-control" required="required" ng-change="GetCatalogStartStop(catalog_id,selling_company)" >
+                           <option value="">Select Selling Company</option>
+                        </select>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <div class="row"> 
+               <div class="col-md-6">
+                  <div class="form-group">
+                        <h4>Catalog Enable Duration(days)</h4>
+                        <span>Your catalog will get disabled automatically after the period mentioned below.</span>
+                        <div class="controls">
+                           <input type="number" autocomplete="off" name="enable_duration" ng-model="showCase1.enable_duration" placeholder="Enter Duration (in Days)"  class="form-control" min="10" required/>
+                           <span ng-show="showCase1.InventoryUpdatedialog.enable_duration.$error.min" class="text-danger">Duration should be minimum 10 Days</span>
+                        </div>
+                  </div>
+               </div>
+            </div>
+
+
+            <div ng-if="catalog_with_size == true">
+                  <div class="row">
+                        <div class="col-md-3">
+                           <div style="max-width: 100%;text-align:center">
+                              <label>{{catalog_inv.title}}</label>
+                           </div>                              
+                        </div>
+                        <div class="col-md-9">
+                           <div ng-if="full_set_only" style="float: right;" class="customUI">
+                                 <!-- <div>
+                                    <button type="button" class="linkButton" ng-click="selectfullCatalog()">Select All</button>
+                                 </div>
+                                 <div>
+                                    <button type="button" class="linkButton" ng-click="unselectfullCatalog()">Select None</button>
+                                 </div> -->
+                                 <input type="checkbox" value="" ng-click="showCase1.checkAllCatalog(catalog_inv.selectAll)" ng-model="catalog_inv.selectAll" />
+                           </div>
+                        </div>
+                  </div>
+                  <div ng-if="!full_set_only"  style="padding-left: 3%; margin-bottom: 3%;" ng-repeat="product in catalog_inv.products track by $index">
+                     
+                        <div class="row"> 
+
+                           <div class="col-md-2" style="text-align: center;">
+                           <img ng-src="{{product.image.thumbnail_small}}" class="loading" style="border-radius: 50%!important;width: 70px !important;height: 70px !important;float: right;">
+                           <!-- <img ng-if="!product.selectAll" ng-src="{{product.image.thumbnail_small}}" class="loading BlackWhiteImage" style="border-radius: 50%!important;width: 70px !important;height: 70px !important;float: right;"> -->  
+                           </div>
+                           
+                           <div class="col-md-8">
+                              <div style="font-weight: bold;padding:4px">{{product.title}}</div>
+
+                              <div class="ck-button" ng-repeat="size in product.all_sizes">
+                                 <label>
+                                    <input type="checkbox" name={{size.value}}  ng-click="showCase1.toggleCheckAllProduct($parent.$index)"  value="" ng-model="size.selected"><span>{{size.value}}</span>
+                                 </label>
+                              </div>
+                           </div>
+
+                           <div class="col-md-2">
+                              <div style="float: right;margin-top:10px;" class="customUI">
+                                 <!-- <div>
+                                    <button type="button" class="linkButton" ng-click="selectAllitems($index)">Select All</button>
+                                 </div>
+                                 <div>
+                                    <button type="button" class="linkButton" ng-click="unselectAllitems($index)">Select None</button>
+                                 </div> -->
+                                 <input type="checkbox" value="" ng-click="showCase1.checkAllProduct(product.selectAll,$index)" ng-model="product.selectAll" />
+                              </div>
+                           </div>
+                           
+                        </div>
+                  </div>
+
+                  <div ng-if="full_set_only" style="padding-left: 3%;">
+                     <div class="row">
+                        <div class="col-md-2" >
+                           <img ng-src="{{catalog_inv.image.thumbnail_small}}" class="loading"  style="border-radius: 50%!important;width: 70px !important;height: 70px !important;float: right;">
+                           <!-- <img ng-if="!catalog_inv.selectAll" ng-src="{{catalog_inv.image.thumbnail_small}}" class="loading BlackWhiteImage"  style="border-radius: 50%!important;width: 70px !important;height: 70px !important;float: right;"> -->  
+                        </div>
+
+                        <div class="col-md-10">
+
+                           <div class="ck-button" ng-repeat="size in all_sizes">
+                              <label>
+                                 <input type="checkbox" name={{size.value}} ng-click="showCase1.toggleCheckAllCatalog()" value="" ng-model="size.selected" /><span>{{size.value}}</span>
+                              </label>
+                           </div>
+                           
+                        </div>
+                     </div>
+                  
+                  </div>
+
+           </div><!-- end of catalog_with_size == true -->
+
+           <div ng-if="catalog_with_size == false">
+              <div ng-if="!full_set_only">
+                 <div class="row">
+                     <div class="col-md-12">
+                        <span style="font-weight: bold;padding-left:4%">{{catalog_inv.title}}</span>
+
+                        <label style="float: right;" class="customUI">
+                           Enabled? &nbsp; <input type="checkbox" value="" ng-click="showCase1.checkAllCatalogWithoutSize(catalog_inv.selectAll)" ng-model="catalog_inv.selectAll"  />
+                        </label>
+                     </div>
+                  </div>
+                  <div class="row" style="padding-left: 3%;margin-bottom: 3%;" ng-repeat="product in catalog_inv.products track by $index">
+                     
+                     <div class="col-md-2" >
+                        <img  ng-src="{{product.image.thumbnail_small}}" class="loading" style="float: left !important;border-radius: 50%!important;width: 70px !important;height: 70px !important;">
+                        <!-- <img ng-if="!product.selected" ng-src="{{product.image.thumbnail_small}}" class="loading BlackWhiteImage" style="float: left !important;border-radius: 50%!important;width: 70px !important;height: 70px !important;"> -->
+                     </div>
+                     <div class="col-md-10" style="height: 70px;padding-top: 17px;">
+                           <span style="font-weight: bold;">{{product.title}}</span>
+                     
+                           <label style="float: right;" class="customUI">
+                              <input type="checkbox" value="" ng-disabled="full_set_only" ng-click="showCase1.toggleCheckAllCatalogWithoutSize()" ng-model="product.selected" />
+                           </label>
+                     </div>
+                  </div>
+              </div>
+
+              <div ng-if="full_set_only">
+                  <div class="row">
+                     <div class="col-md-12">
+                        <span style="font-weight: bold;">{{catalog_inv.title}}</span>
+                     </div>
+                  </div>
+                  <div class="row" style="padding-left: 3%;margin-bottom: 3%;">
+                     
+                     <div class="col-md-2" ng-repeat="product in catalog_inv.products track by $index">
+                        <img ng-src="{{product.image.thumbnail_small}}" class="loading" style="float: left !important;margin: 10px 0;border-radius: 50%!important;width: 70px !important;height: 70px !important;">
+                        <!-- <div style="padding-top: 5px;">{{product.title}}</div> -->
+                     </div>
+                  </div>
+              </div>
+               
+           </div>
+         </fieldset>           
+         <div class="row">
+
+               <div class="col-md-6">
+                  <div class="form-group right">
+                     <button type="button" ng-click="showCase1.CloseDialog()" class="buttonSecondary">Cancel</button>
+                  </div>
+               </div>
+
+               <div class="col-md-6">
+                  <div class="form-group left" ng-if="!full_set_only || catalog_with_size != false">
+                     <button type="submit" ng-click="UpdateInventorySubmit()" class="buttonPrimary">Update</button>
+                  </div>
+                  <div class="form-group left" ng-if="full_set_only && catalog_with_size == false">
+                     <button type="button" ng-if="catalog_inv.selectAll == true || catalog_inv.selectAll == 'true'"  ng-click="stopSellingAllDesign()" class="buttonPrimary">Stop selling</button>
+                     <button type="button" ng-if="catalog_inv.selectAll != true && catalog_inv.selectAll != 'true'" ng-click="startSellingAllDesign()" class="buttonPrimary">Start selling</button>
+                  </div>
+               </div>
+         </div>
+      </form>
+   </div>
+</script>
+
+
+
+<script type="text/ng-template" id="updateQuality">
+   <div ng-controller="CatalogAddUpdateController as showCase1" class="ngdialog-message">
+         
+      <div class="panel-body modelform">
+         <form name="updateQuality" ng-submit=""  validate-form=""  validate-steps="true"  enctype="multipart/form-data" class="form-validate " id="modelform5">
+         <fieldset>
+               <legend>Quality Details</legend>
+            
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="form-group"> 
+                        <label>Quality Name *</label>
+                        <div class="controls">
+                           <input type="text" autocomplete="off" name="title" ng-model="quality.title" data-parsley-group="step1" placeholder="Enter Title"  class="form-control" required/>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="form-group">
+                        <label>Brand </label>
+                        <div class="controls">
+                           <select name="brand" chosen="" ng-model="quality.brand" ng-options="b.id as b.name for b in brands" width="'100%'" data-parsley-group="step1" class="chosen-select input-md form-control selectbrand" >
+                              <option value="null" name="selectbrandoption">Select Brand</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="form-group">
+                        <label>Category *</label>
+                        <div class="controls">
+                           <select name="category" chosen="categories" ng-model="quality.category" ng-options="b.id as b.category_name for b in new_categories_with_set_type" width="'100%'" data-parsley-group="step1" class="chosen-select input-md form-control" ng-change="CategoryChanged(quality.category)" required="required" >
+                              <option value="">Select Category</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+
+                  <div ng-repeat="attribute in attribute_list | filter: workFilter track by $index" class="form-group">
+                     <label style="text-transform:capitalize;">{{attribute.attribute_slug}}* (max 4)</label>
+                     <div class="controls">
+                        <ui-select multiple="" limit="4" ng-model="catalog[attribute.attribute_slug]" theme="bootstrap" name="work" required>
+                        <ui-select-match placeholder="Select {{attribute.attribute_slug}}">{{$item.value}} </ui-select-match>
+                        <ui-select-choices repeat="attr.value as attr in attribute.attribute_values | propsFilter: {value: $select.search}">
+                           <div ng-bind-html="attr.value | highlight: $select.search"></div>
+                        </ui-select-choices>
+                        </ui-select>
+                     </div>
+                     <span ng-show="updateQuality.work.$dirty  &amp;&amp; updateQuality.work.$error.required" class="text-danger">one or more works are required</span> 
+                  </div>
+
+                  <div ng-repeat="attribute in attribute_list | filter: fabricFilter track by $index" class="form-group">
+                     <label style="text-transform:capitalize;">{{attribute.attribute_slug}}* (max 4)</label>
+                     <div class="controls">
+                        <ui-select multiple="" limit="4" ng-model="catalog[attribute.attribute_slug]" theme="bootstrap" name="fabric" required><!-- required="required"-->
+                        <ui-select-match placeholder="Select {{attribute.attribute_slug}}">{{$item.value}} </ui-select-match>
+                        <ui-select-choices repeat="attr.value as attr in attribute.attribute_values | propsFilter: {value: $select.search}">
+                           <div ng-bind-html="attr.value | highlight: $select.search"></div>
+                        </ui-select-choices>
+                        </ui-select>
+                     </div>
+                     <span ng-show="updateQuality.fabric.$dirty  &amp;&amp; updateQuality.fabric.$error.required" class="text-danger">one or more fabrics are required</span> 
+                  </div>
+
+                  <div  ng-repeat="attribute in attribute_list | filter: sizeFilter track by $index" class="form-group" >
+                     <label style="text-transform:capitalize;">{{attribute.attribute_slug}}<span ng-if="attribute.is_required == true">*</span></label>
+                     <div class="controls">
+                        <ui-select multiple="" ui-select-required data-parsley-group="step2" ng-model="catalog[attribute.attribute_slug]" theme="bootstrap" name="{{attribute.attribute_slug}}">
+                        <ui-select-match placeholder="Select {{attribute.attribute_slug}}">{{$item.value}} </ui-select-match>
+                        <ui-select-choices repeat="attr.value as attr in attribute.attribute_values | propsFilter: {value: $select.search}">
+                           <div ng-bind-html="attr.value | highlight: $select.search"></div>
+                        </ui-select-choices>
+                        </ui-select>
+                     </div>
+                     <span ng-show="(attribute.is_required == true || attribute.is_required == 'true' ) && (!catalog[attribute.attribute_slug] || catalog[attribute.attribute_slug].length == 0)" name="updateQuality.attribute.attribute_slug" class="text-danger">one or more items are required</span>
+                  </div>
+
+                  <div ng-repeat="attribute in attribute_list | filter: multiExceptWorkFabricSizeFilter track by $index" class="form-group" >
+                     <label style="text-transform:capitalize;">{{attribute.attribute_slug}}<span ng-if="attribute.is_required == true">*</span></label>
+                     <div class="controls">
+                        <ui-select multiple="" ui-select-required data-parsley-group="step2" ng-model="catalog[attribute.attribute_slug]" theme="bootstrap" name="{{attribute.attribute_slug}}"><!--evaluated name="cat-{{attribute.attribute_slug}}" required="required" required-->
+                        <ui-select-match placeholder="Select {{attribute.attribute_slug}}">{{$item.value}} </ui-select-match>
+                        <ui-select-choices repeat="attr.value as attr in attribute.attribute_values | propsFilter: {value: $select.search}">
+                           <div ng-bind-html="attr.value | highlight: $select.search"></div>
+                        </ui-select-choices>
+                        </ui-select>
+                     </div>
+                     <span ng-show="(attribute.is_required == true || attribute.is_required == 'true' ) && (!catalog[attribute.attribute_slug] || catalog[attribute.attribute_slug].length == 0)" name="updateQuality.attribute.attribute_slug" class="text-danger">one or more items are required</span><!--&amp;&amp; updateQuality.attribute.attribute_slug.$error.required updateQuality.attribute.attribute_slug.$dirty-->
+                  </div>
+
+
+                  <div ng-repeat="attribute in attribute_list  | filter: enumStyleFilter  track by $index" class="form-group">
+                     <label style="text-transform:capitalize;"">{{attribute.attribute_slug}}</label>
+                     <div class="controls">
+                           <select name="{{attribute.attribute_slug}}" data-parsley-group="step2" chosen="{{attribute.attribute_slug}}" ng-model="catalog[attribute.attribute_slug]" ng-options="s.value as s.value for s in attribute.attribute_values" width="'100%'" data-parsley-group="step2" class="chosen-select input-md form-control" >
+                              <option value="">Select {{attribute.attribute_slug}}</option>
+                           </select>
+                     </div>
+                     <span ng-show="(attribute.is_required == true || attribute.is_required == 'true') && (!catalog[attribute.attribute_slug] || catalog[attribute.attribute_slug].length == 0)" class="text-danger">This feild is required</span>
+                  </div>
+                  <div ng-repeat="attribute in attribute_list  | filter: enumExceptStyleFilter  track by $index" class="form-group">
+                     <label style="text-transform:capitalize;"">{{attribute.attribute_slug}}*</label>
+                     <div class="controls">
+                           <select name="style" data-parsley-group="step2" chosen="{{attribute.attribute_slug}}" ng-model="catalog[attribute.attribute_slug]" ng-options="s.value as s.value for s in attribute.attribute_values" width="'100%'" data-parsley-group="step2" required="required" class="chosen-select input-md form-control" >
+                              <option value="">Select {{attribute.attribute_slug}}</option>
+                           </select>
+                     </div>
+                     <span ng-show="(attribute.is_required == true || attribute.is_required == 'true') && (!catalog[attribute.attribute_slug] || catalog[attribute.attribute_slug].length == 0)" class="text-danger">This feild is required</span>
+                  </div>
+
+                  <div class="form-group" ng-if="catalog.multi_set_type != 'size_set'">
+                     <label>No. of Pcs./set*</label>
+                     <div class="controls">
+                        <input type="number" data-parsley-group="step2" name="no_of_pcs_per_design" ng-model="catalog.no_of_pcs_per_design" placeholder="Enter number of pieces" autocomplete="off"  class="form-control" min="1"  required="required" />
+                     </div>
+                  </div>
+                  <div class="form-group" ng-if="catalog.multi_set_type == 'size_set'">
+                     <label>No. of Pcs./set*</label>
+                     <div class="controls">
+                        <input type="number" data-parsley-group="step2" name="no_of_pcs_per_design" ng-model="catalog.no_of_pcs_per_design" placeholder="Enter number of pieces" autocomplete="off"  class="form-control" ng-min="catalog.size.length" ng-max="catalog.size.length" required="required" />
+                        <span ng-show="updateQuality.no_of_pcs_per_design.$error.max" class="text-danger">Please change the number of pieces in your set to {{catalog.size.length}}, it should be equal to number of sizes selected.</span>
+                        <span ng-show="updateQuality.no_of_pcs_per_design.$error.min" class="text-danger">Please change the number of pieces in your set to {{catalog.size.length}}, it should be equal to number of sizes selected.</span>
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label>Price/Pc.*</label>
+                     <div class="controls">
+                        <input type="number"  data-parsley-group="step2" name="price_per_design" ng-model="catalog.price_per_design" placeholder="Enter price per Design" autocomplete="off"  class="form-control" min="71" required="required" />
+                        <!-- <span ng-show="updateQuality.price_per_design.$error.min" class="text-danger">Price should be minimum 101</span> -->
+                     </div>
+                  </div>
+
+               </fieldset>
+               <div class="row">
+
+                  <div class="col-md-6">
+                     <div class="form-group right">
+                        <button type="button" ng-click="showCase1.CloseDialog()" class="buttonSecondary">Cancel</button>
+                     </div>
+                  </div>
+
+                  <div class="col-md-6">
+                     <div class="form-group left" ng-if="!full_set_only || catalog_with_size != false">
+                        <button type="submit" ng-click="UpdateQualitySubmit()" class="buttonPrimary">Update</button>
+                     </div>
+                  </div>
+               </div>
+             </form>
+            </div><!-- END panel -->
+       </div> <!-- End ng dialog -->
+      </script>

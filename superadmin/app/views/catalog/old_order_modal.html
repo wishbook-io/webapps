@@ -1,0 +1,191 @@
+
+
+<script type="text/ng-template" id="createorder">
+      <div class="ngdialog-message">
+            
+        <div class="panel-heading"></div>
+        <div class="panel-body">
+          <form name="showCase.orderForm" ng-submit="" form-wizard="" validate-steps="true" novalidate="" steps="3" class="form-validate modelform">
+             <div class="form-wizard wizard-horizontal">
+                <!-- START wizard steps indicator-->
+                <ol class="row">
+                   <li ng-class="{'active':wizard.active(1)}" ng-click="wizard.go(1)" class="col-md-6">
+                      <h4>Order Details</h4>
+                    
+                   </li>
+                   <li ng-class="{'active':wizard.active(2)}" ng-click="wizard.go(2)" class="col-md-6">
+                      <h4>Product Details</h4>
+                   </li>
+                </ol>
+                <!-- END wizard steps indicator-->
+                <!-- START Wizard Step inputs -->
+                  <div id="step1" ng-show="wizard.active(1)">
+                   <fieldset>
+                      <legend>Order Details</legend>
+                   <div class="row">
+                    <div class="col-md-12"> 
+                        <div class="form-group has-feedback">
+                           <label>Catalog/Selection</label>
+                           <div class="controls">
+                            <lable class="form-control">{{showCase.order_title}}</lable>
+                           </div>
+                        </div>
+                    </div>
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-md-12"> 
+                        <div class="form-group has-feedback">
+                           <label>Order Number *</label>
+                           <div class="controls">
+                           <input type="text" name="order_number" placeholder="Order Number" autocomplete="off" ng-model="showCase.order.order_number" class="form-control" required="required" data-parsley-group="step1"/>
+                           <span class="fa fa-user form-control-feedback text-muted"></span>
+                           <span ng-show="showCase.orderForm.order_number.$dirty &amp;&amp; showCase.orderForm.order_number.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="row" ng-show="showCase.order_type == 'sales_order'">
+                     <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                           <label>Buyer *</label>
+                           <div class="controls">
+                            <select chosen="" name="buyer" ng-model="showCase.order.buyer" ng-options="c.company_id as c.company_name for c in showCase.buyers" data-placeholder="Select Buyer" class="chosen-select form-control" data-parsley-group="step1">
+                             <option value=""></option>
+                            </select>
+                          <!--span ng-show="showCase.orderForm.buyer.$dirty &amp;&amp; showCase.orderForm.buyer.$error.required" class="text-danger">This field is required</span-->
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  
+                  <!--div class="row" ng-show="showCase.order_type == 'purchase_order'">
+                     <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                           <label>Supplier</label>
+                           <div class="controls">
+                            <select chosen="" name="supplier" ng-model="showCase.order.supplier" ng-options="c.company_id as c.company_name for c in showCase.suppliers" data-placeholder="Select Supplier" class="chosen-select form-control" required="required" ng-required="showCase.order_type == 'purchase_order'" data-parsley-group="step1">
+                             <option value=""></option>
+                            </select>
+                          <span ng-show="showCase.orderForm.supplier.$dirty &amp;&amp; showCase.orderForm.supplier.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div-->
+                  <div class="row" ng-show="showCase.order_type == 'purchase_order'">
+                    <div class="col-md-12"> 
+                        <div class="form-group has-feedback">
+                           <label>Supplier *</label>
+                           <div class="controls">
+                            <lable class="form-control">{{showCase.supplier_title}}</lable>
+                           </div>
+                        </div>
+                    </div>
+                  </div>
+                  
+                  <div class="row">
+                     <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                           <label>Agent</label>
+                           <div class="controls">
+                            <select chosen="" name="agent" ng-model="showCase.order.agent" ng-options="c.company_id as c.company_name for c in showCase.agents" data-placeholder="Select Agent" class="chosen-select form-control" data-parsley-group="step1">
+                             <option value=""></option>
+                            </select>
+                            <!--span ng-show="showCase.orderForm.agent.$dirty &amp;&amp; showCase.orderForm.agent.$error.required" class="text-danger">This field is required</span-->
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  
+                  <!--div class="row">
+                    <div class="col-md-12">  
+                    <div class="form-group has-feedback">
+                      <label>Order Status *</label>
+                          <select name="customer_status" chosen="" ng-model="showCase.order.customer_status" ng-options="s.value as s.display_name for s in order_statuses" data-placeholder="Customer Status" width="'100%'" class="chosen-select input-md form-control" required="required" data-parsley-group="step1">
+                             <option value=""></option>
+                             
+                          </select>
+                           <span ng-show="showCase.orderForm.customer_status.$dirty &amp;&amp; showCase.orderForm.customer_status.$error.required" class="text-danger">This field is required</span>
+                       </div>
+                    </div>
+                  </div-->
+                  
+                  <!--div class="row" ng-show="showCase.order_type == 'sales_order'">
+                    <div class="col-md-12">  
+                    <div class="form-group has-feedback">
+                      <label>Sales Attachment</label>
+                           <div class="controls">
+                           <input type="text" name="order_number" placeholder="Attachment" autocomplete="off" ng-model="showCase.order.order_number" class="form-control" required="required" data-parsley-group="step1"/>
+                           <span class="fa fa-user form-control-feedback text-muted"></span>
+                           <span ng-show="showCase.orderForm.order_number.$dirty &amp;&amp; showCase.orderForm.order_number.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                       </div>
+                    </div>
+                  </div-->
+
+                   </fieldset>
+                   <ul class="pager">
+                      <li class="next"><a ng-click="wizard.go(2)">Next <span>&rarr;</span></a>
+                      </li>
+                   </ul>
+                </div>
+                <!-- END Wizard Step inputs -->
+                <!-- START Wizard Step inputs -->
+               
+                <div id="step2" ng-show="wizard.active(2)">
+                   <fieldset>
+                      <legend>Product Details</legend>
+                      <!-- START row -->
+                      <table class="table table-hover">
+                          <thead>
+                                <th>Image</th>
+                                <th>SKU</th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th>Select Product</th>
+                            
+                          </thead>
+                          
+                          <tbody ng-repeat="product in showCase.order.products">
+                            <tr>
+                                <td><img class="loading" ng-src="{{product.image}}" style="width: 100px; height: 100px"></td>
+                                <td>{{product.sku}}</td>
+                                <td ng-if="showCase.order_type == 'sales_order'">
+                                    <input type="number" name="product.selling_price" ng-model="product.selling_price" data-parsley-group="step2" placeholder="Enter price" autocomplete="off"  class="form-control"  required/>
+                                </td>
+                                <td ng-if="showCase.order_type == 'purchase_order'">
+                                    {{product.final_price}}
+                                </td>
+                                <td><input type="number" name="{{product.quantity}}" ng-model="product.quantity" ng-blur="showCase.changeQty(product.quantity)" data-parsley-group="step2" placeholder="Enter quantity"  class="form-control"  value="1" required/></td>
+                                <td><input class="needsclick" type="checkbox" value="" ng-model="product.is_select"/><!--button ng-click="showCase.removeProduct($index)">Remove</button--></td>
+                            </tr>
+                             
+                          </tbody>
+                       </table>
+                      
+                      <div class="row" align="center">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <button type="submit" ng-click="showCase.CreateOrder()" class="btn btn-primary mt-lg">Create Order</button>
+                            </div>
+                         </div>
+                      </div>
+                  </form>
+                      <!-- END row -->
+                   </fieldset>
+                   <ul class="pager">
+                      <li class="previous">
+                         <a ng-click="wizard.go(1)">
+                            <span>&larr; Previous</span>
+                         </a>
+                      </li>
+                   </ul>
+                </div>
+                <!-- END Wizard Step inputs -->
+              
+             </div>
+          
+         </div><!-- END panel -->
+    </div> <!-- End ng dialog -->
+   </script>

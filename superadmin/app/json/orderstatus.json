@@ -1,0 +1,23 @@
+[
+{
+"display_name": "Draft",
+"value": "Draft"
+},
+{
+"display_name": "Placed",
+"value": "Placed"
+},
+{
+"display_name": "Paid",
+"value": "Paid"
+},
+{
+"display_name": "Payment Confirmed",
+"value": "Payment Confirmed"
+},
+{
+"display_name": "Cancelled",
+"value": "Cancelled"
+}
+]
+

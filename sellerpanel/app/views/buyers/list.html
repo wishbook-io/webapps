@@ -1,0 +1,289 @@
+<style>
+
+   label
+   {
+      margin-bottom: 13px!important;
+   }
+
+
+   .loading {
+   background: transparent url('/media/logo-single.png') center no-repeat;
+   background-size: 100px 100px;
+   }
+
+   /* Base for label styling */
+   [type="checkbox"]:not(:checked),
+   [type="checkbox"]:checked {
+   position: absolute;
+   left: -9999px;
+   }
+   [type="checkbox"]:not(:checked) + label,
+   [type="checkbox"]:checked + label {
+   position: relative;
+   padding-left: 1.95em;
+   cursor: pointer;
+   }
+
+   /* checkbox aspect */
+   [type="checkbox"]:not(:checked) + label:before,
+   [type="checkbox"]:checked + label:before {
+   content: '';
+   position: absolute;
+   left: 0; top: 0;
+   width: 1.25em; height: 1.25em;
+   border: 2px solid #ccc;
+   background: #fff;
+   border-radius: 4px;
+   box-shadow: inset 0 1px 3px rgba(0,0,0,.1);
+   }
+   /* checked mark aspect */
+   [type="checkbox"]:not(:checked) + label:after,
+   [type="checkbox"]:checked + label:after {
+   content: '\2713\0020';
+   position: absolute;
+   top: .15em; left: .1em;
+   font-size: 1.3em;
+   line-height: 0.8;
+   color: #09ad7e;
+   transition: all .2s;
+   font-family: 'Lucida Sans Unicode', 'Arial Unicode MS', Arial;
+   }
+   /* checked mark aspect changes */
+   [type="checkbox"]:not(:checked) + label:after {
+   opacity: 0;
+   transform: scale(0);
+   }
+   [type="checkbox"]:checked + label:after {
+   opacity: 1;
+   transform: scale(1);
+   }
+   /* disabled checkbox */
+   [type="checkbox"]:disabled:not(:checked) + label:before,
+   [type="checkbox"]:disabled:checked + label:before {
+   box-shadow: none;
+   border-color: #bbb;
+   background-color: #ddd;
+   }
+   [type="checkbox"]:disabled:checked + label:after {
+   color: #999;
+   }
+   [type="checkbox"]:disabled + label {
+   color: #aaa;
+   }
+
+   /* hover style just for information */
+   label:hover:before {
+   border: 2px solid #4778d9!important;
+   }
+   
+</style>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;background-color: white" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Buyers List</h3>
+<div class="panel panel-default modelform4">
+   <div class="panel-body" >
+      <div ng-controller="BuyerslistController as showCase">
+		
+    <table id="buyers-datatables" datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="row-border hover" width="100%">
+    </table>
+
+
+      <script type="text/ng-template" id="addbuyer">
+          
+          <form role="form" ng-submit="showCase.AddBuyer()" name="showCase.addbuyerForm" novalidate="" class="form-validate mb-lg modelform">
+     
+          <legend>Buyer Details</legend>
+          <div class="row">
+            <div class="col-md-12"> 
+            <div class="form-group has-feedback">
+                <label>Buyer Name *</label>
+               <input type="text" name="buyername" placeholder="Buyer Name" autocomplete="off" ng-model="buyer.buyer_name" required="" class="form-control" pattern="[a-zA-Z ]{0,40}" />
+               <span class="fa fa-user form-control-feedback text-muted"></span>
+               <span ng-show="showCase.addbuyerForm.grouptype.$dirty &amp;&amp; showCase.addbuyerForm.buyername.$error.required" class="text-danger">This field is required</span>
+               <span ng-show="showCase.addbuyerForm.buyername.$error.pattern" class="text-danger">This field accepts alphabets and space only and character limit is 40.</span>
+            </div>
+          </div>
+          </div>
+
+        <div class="row">
+            <div class="col-md-12">  
+            <div class="form-group has-feedback">
+                <label>Select Type *</label>
+                  <select name="grouptype" chosen="" ng-model="buyer.group_type" ng-options="s.id as s.name for s in groupType" width="'100%'" class="chosen-select input-md form-control" required="">
+                     <option value="">Select Type</option>
+                  </select>
+                   <span ng-show="showCase.addbuyerForm.grouptype.$dirty &amp;&amp; showCase.addbuyerForm.grouptype.$error.required" class="text-danger">This field is required</span>
+               </div>
+            </div>
+        </div>
+
+
+          <!--div class="row">
+            <div class="col-md-12">  
+            <div class="form-group has-feedback">
+               <input type="text" name="phonenumber" placeholder="Phone Number" ng-model="buyer.buyer_number" required="" class="form-control" />
+               <span class="fa fa-phone form-control-feedback text-muted"></span>
+               <span ng-show="showCase.addbuyerForm.phonenumber.$dirty &amp;&amp; showCase.addbuyerForm.phonenumber.$error.required" class="text-danger">This field is required</span>
+            </div>
+            </div>
+          </div-->
+          <div class="row">
+             <div class="col-md-4">
+                <div class="form-group has-feedback">
+                   <label>Phone Number *</label>
+                   <div class="controls">
+                      <select name="country" chosen="" ng-model="buyer.country" ng-options="cd.id as cd.name for cd in countries"   width="'100%'" class="chosen-select input-md form-control" required="">
+                          <option value=""></option>
+                       </select>
+                      <span ng-show="showCase.addbuyerForm.country.$dirty &amp;&amp; showCase.addbuyerForm.country.$error.required" class="text-danger">This field is required</span>
+                   </div>
+                </div>
+             </div>
+             
+             <div class="col-md-5">
+                <div class="form-group has-feedback">
+                 <label>&nbsp;</label>
+                   <div class="controls">
+                      <input type="text" autocomplete="off" name="phone_number" ng-model="buyer.buyer_number" placeholder="Phone 1234567890" required="required" class="form-control"  pattern="[0-9]{7,10}" />
+                      <span ng-show="showCase.addbuyerForm.phone_number.$dirty &amp;&amp; showCase.addbuyerForm.phone_number.$error.required" class="text-danger">This field is required</span>
+                      <span ng-show="showCase.addbuyerForm.phone_number.$error.pattern" class="text-danger">This field has character limit of 7 to 10</span>
+                   </div>
+                </div>
+             </div>
+          </div> 
+
+          <div class="row">
+            <div style="float:right;" class="col-md-2"> 
+              <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+            </div>
+
+            <div style="float:right;" class="col-md-2"> 
+              <button type="submit" class="btn btn-block btn-primary mt-lg">Add</button>
+            </div>
+          </div>
+         </form>
+          
+   </script>
+
+    <script type="text/ng-template" id="updatestatus">
+        <form role="form" ng-submit="UpdateStatus()" name="showCase.updateStatus" novalidate="" class="form-validate mb-lg modelform2">
+   
+        <legend>Buyer Status</legend>
+            <div class="row">
+              <div class="col-md-12">  
+                  
+                 <div class="form-group has-feedback">
+                    <label class="radio-inline c-radio" style="color: green;">
+                      <input id="inlineradio1" type="radio" name="status" ng-model="buyer.status" value="approved" required="required" class="form-control"  />
+                   <span class="fa fa-circle"></span>Approve</label>
+
+                  <label class="radio-inline c-radio" style="color: red;">
+                     <input id="inlineradio2" type="radio" name="status" ng-model="buyer.status" value="rejected" required="required" class="form-control" />
+                     <span class="fa fa-circle"></span>Reject</label>
+                    
+                 </div>
+              </div>
+            </div>
+            <div class="row">
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Update</button>
+                </div>
+            </div>
+        </form>
+    </script>
+
+    <script type="text/ng-template" id="uploadcsv">
+        <form role="form" ng-submit="showCase.UploadBuyerCsv()" name="showCase.uploadcsv" novalidate="" class="form-validate mb-lg modelform3">
+   
+        <legend>Upload Buyer's CSV</legend>
+            <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                               <label>Select CSV from your computer</label>
+                                <input type="file" ngf-select="uploadFiles($files)" ng-model="showCase.file.buyer_csv" name="buyer_csv" required accept=".csv">
+                                <span ng-show="showCase.uploadcsv.buyer_csv.$dirty &amp;&amp; showCase.uploadcsv.buyer_csv.$error.required" class="text-danger">This field is required</span>   
+                                
+                            </div>
+                         </div>
+            </div>
+            <div class="row">
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+                <div style="float:right;" class="col-md-4"> 
+                  <a style="text-decoration: none;" href="app/csv/buyers.csv"><button type="button" class="btn btn-block btn-primary mt-lg">Download Sample</button></a>
+                </div>
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Upload</button>
+                </div>
+            </div>
+        </form>
+    </script>
+    
+    <script type="text/ng-template" id="updatebuyer">
+        <form role="form" ng-submit="UpdateBuyer()" name="showCase.updateBuyer" novalidate="" class="form-validate mb-lg modelform2">
+   
+        <legend>Buyer Details</legend>
+            <div class="row">
+                <div class="col-md-12">  
+                <div class="form-group has-feedback">
+                    <label>Select Type</label>
+                      <select name="grouptype" chosen="" ng-model="buyer.group_type" ng-options="s.id as s.name for s in groupType" width="'100%'" class="chosen-select input-md form-control" required="">
+                         <option value="">Select Type</option>
+                      </select>
+                       <span ng-show="showCase.updateBuyer.grouptype.$dirty &amp;&amp; showCase.updateBuyer.grouptype.$error.required" class="text-danger">This field is required</span>
+                   </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">  
+                <div class="form-group has-feedback">
+                    <label>Broker</label>
+                      <select name="broker_company" chosen="" ng-model="buyer.broker_company" ng-options="s.company_id as s.company_name for s in brokers" width="'100%'" class="chosen-select input-md form-control">
+                         <option value="">Broker</option>
+                      </select>
+                   </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12"> 
+                <div class="form-group has-feedback">
+                   <label>Payment Duration</label>
+                   <input type="number" name="payment_duration" placeholder="Payment Duration" autocomplete="off" ng-model="buyer.payment_duration" required="" class="form-control" />
+                   <span class="fa fa-user form-control-feedback text-muted"></span>
+                   <span ng-show="showCase.updateBuyer.payment_duration.$dirty &amp;&amp; showCase.updateBuyer.payment_duration.$error.required" class="text-danger">This field is required</span>
+                </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12"> 
+                <div class="form-group has-feedback">
+                   <label>Discount</label>
+                   <input type="text" name="discount" placeholder="Discount" autocomplete="off" ng-model="buyer.discount" required="" class="form-control" />
+                   <span class="fa fa-user form-control-feedback text-muted"></span>
+                   <span ng-show="showCase.updateBuyer.discount.$dirty &amp;&amp; showCase.updateBuyer.discount.$error.required" class="text-danger">This field is required</span>
+                </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Update</button>
+                </div>
+            </div>
+        </form>
+    </script>
+    
+
+		</div>
+   </div>
+</div>

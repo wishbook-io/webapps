@@ -1,0 +1,302 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Salesperson Details <span class="ptitle"> : {{$stateParams.name}}</span> </h3>
+
+	<div ng-controller="SalespersonDetailController as showCase" ng-init="indextab = 2">
+
+		<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+		
+		<legend>Order Statistics</legend>
+        <!--div class="row">
+          <div class="col-md-12"> 
+              <div class="panel panel-default">
+                 <div class="panel-body">
+                    <div class="table-responsive">
+                       <table class="table table-hover">
+                          <tbody>
+                             <tr>
+                                <td>Details:</td>
+                                <td>{{reports[0].day}}</td>
+                                <td>{{reports[2].day}}</td>
+                                <td>{{reports[4].day}}</td>
+                                <td>{{reports[5].day}}</td>
+                             </tr>
+                             <tr>
+                                <td>Total Orders:</td>
+                                <td>{{reports[0].total_order}}</td>
+                                <td>{{reports[2].total_order}}</td>
+                                <td>{{reports[4].total_order}}</td>
+                                <td>{{reports[5].total_order}}</td>
+                             </tr>
+                             <tr>
+                                <td>Total Items:</td>
+                                <td>{{reports[0].total_items}}</td>
+                                <td>{{reports[2].total_items}}</td>
+                                <td>{{reports[4].total_items}}</td>
+                                <td>{{reports[5].total_items}}</td>
+                             </tr>
+                             <tr>
+                                <td>Total Order Amount:</td>
+                                <td>{{reports[0].total_salesorder_amount}}</td>
+                                <td>{{reports[2].total_salesorder_amount}}</td>
+                                <td>{{reports[4].total_salesorder_amount}}</td>
+                                <td>{{reports[5].total_salesorder_amount}}</td>
+                                
+                             </tr>
+                             <tr>
+                                <td>Total Meetings:</td>
+                                <td>{{reports[0].total_meeting}}</td>
+                                <td>{{reports[2].total_meeting}}</td>
+                                <td>{{reports[4].total_meeting}}</td>
+                                <td>{{reports[5].total_meeting}}</td>
+                             </tr>
+                             <tr>
+                                <td>Total Meeting Duration:</td>
+                                <td>{{reports[0].total_duration}}</td>
+                                <td>{{reports[2].total_duration}}</td>
+                                <td>{{reports[4].total_duration}}</td>
+                                <td>{{reports[5].total_duration}}</td>
+                             </tr>
+                            
+                          </tbody>
+                       </table>
+                    </div>
+                 </div>
+              </div>
+          </div>
+        </div-->
+
+        <div class="row">
+          <div class="col-md-6"> 
+              <div class="panel panel-default">
+                 <div class="panel-body">
+                    <div class="table-responsive">
+                       <table class="table table-hover">
+                          <tbody>
+                             <tr>
+                                <td>Details:</td>
+                                <td>{{reports[0].day}}</td>
+                                <td>{{reports[2].day}}</td>
+                                <td>{{reports[4].day}}</td>
+                                <td>{{reports[6].day}}</td>
+                             </tr>
+                             <tr>
+                                <td>Meetings:</td>
+                                <td>{{reports[0].total_meeting}}</td>
+                                <td>{{reports[2].total_meeting}}</td>
+                                <td>{{reports[4].total_meeting}}</td>
+                                <td>{{reports[6].total_meeting}}</td>
+                             </tr>
+                             <tr>
+                                <td>No. of Orders:</td>
+                                <td>{{reports[0].total_order}}</td>
+                                <td>{{reports[2].total_order}}</td>
+                                <td>{{reports[4].total_order}}</td>
+                                <td>{{reports[6].total_order}}</td>
+                             </tr>
+                            
+                             <tr>
+                                <td>Total Order Value:</td>
+                                <td>{{reports[0].total_salesorder_amount}}</td>
+                                <td>{{reports[2].total_salesorder_amount}}</td>
+                                <td>{{reports[4].total_salesorder_amount}}</td>
+                                <td>{{reports[6].total_salesorder_amount}}</td>
+                                
+                             </tr>
+                             <!--tr>
+                                <td>Total Items:</td>
+                                <td>{{reports[0].total_items}}</td>
+                                <td>{{reports[2].total_items}}</td>
+                                <td>{{reports[4].total_items}}</td>
+                                <td>{{reports[5].total_items}}</td>
+                             </tr>
+                             <tr>
+                                <td>Total Meetings:</td>
+                                <td>{{reports[0].total_meeting}}</td>
+                                <td>{{reports[2].total_meeting}}</td>
+                                <td>{{reports[4].total_meeting}}</td>
+                                <td>{{reports[5].total_meeting}}</td>
+                             </tr>
+                             <tr>
+                                <td>Total Meeting Duration:</td>
+                                <td>{{reports[0].total_duration}}</td>
+                                <td>{{reports[2].total_duration}}</td>
+                                <td>{{reports[4].total_duration}}</td>
+                                <td>{{reports[5].total_duration}}</td>
+                             </tr-->
+                            
+                          </tbody>
+                       </table>
+                    </div>
+                 </div>
+              </div>
+          </div>
+          <div class="col-md-6"> 
+              <div class="panel panel-default">
+                 <div class="panel-body">
+                     
+                      <div class="table-responsive">
+                       <table class="table table-hover">
+                          <tbody>
+                             <tr>
+                                <td>Username:</td>
+                                <td>{{showCase.salesperson.username}}</td>
+                                <td>Phone No.:</td>
+                                <td>{{showCase.salesperson.userprofile.phone_number}}</td>
+                             </tr>
+                             <tr>
+                                <td>First Name:</td>
+                                <td>{{showCase.salesperson.first_name}}</td>
+                                <td>Email:</td>
+                                <td>{{showCase.salesperson.email}}</td>
+                             </tr>
+                             <tr>
+                                <td>Last Name:</td>
+                                <td>{{showCase.salesperson.last_name}}</td>
+                                <td>Deputed to Buyer:</td>
+                                <td>{{showCase.salesperson.companyuser.deputed_to_name}}</td>
+                             </tr>
+                             <tr>
+                               <td colspan="4"><button type="button" ng-click="showCase.OpenUpdateSalesperson()" class="btn btn-primary mt-md">Update</button></td>
+                             </tr>
+                          </tbody>
+                       </table>
+                      </div>
+                
+                   
+                   
+                 </div>
+              </div>
+          </div>
+        </div>
+
+  <form class="panel">
+     <uib-tabset justified="true" >
+
+        <uib-tab>
+          <uib-tab-heading>Meeting Details</uib-tab-heading> 
+            <div ng-include="'app/views/salespersons/map.html'"></div>
+        </uib-tab>
+
+        <uib-tab select="attendanceMap()">
+           <uib-tab-heading>Attendance</uib-tab-heading>
+              <div ng-include="templateURL"></div>
+        </uib-tab>
+
+        <uib-tab select="salesordersDatatable()">
+            <uib-tab-heading>Sales Order Details</uib-tab-heading>
+              <div ng-include="templateURL"></div>
+        </uib-tab>
+     </uib-tabset>
+  </form>
+
+		</div>
+   </div>
+   <script type="text/ng-template" id="addsalesperson">
+      <form role="form" ng-submit="showCase.UpdateSalesperson()" name="showCase.addSalespersonForm" novalidate="" class="form-validate mb-lg modelform">
+   
+            <legend>Salesperson Details</legend>
+            <div class="row">
+              <div class="col-md-12"> 
+                <div class="form-group has-feedback">
+        <label>Username *</label>
+                   <input type="text" name="username" placeholder="Username" autocomplete="off" ng-model="showCase.salesperson.username" required="" pattern=".{0,40}" class="form-control" />
+                   <span class="fa fa-user form-control-feedback text-muted"></span>
+                   <span ng-show="showCase.addSalespersonForm.username.$dirty &amp;&amp; showCase.addSalespersonForm.username.$error.required" class="text-danger">This field is required</span>
+                   <span ng-show="showCase.addSalespersonForm.username.$error.pattern" class="text-danger">This field has character limit of 40</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12"> 
+                <div class="form-group has-feedback">
+        <label>First Name*</label>
+                   <input type="text" name="first_name" placeholder="First Name" autocomplete="off" ng-model="showCase.salesperson.first_name" required="" pattern=".{0,40}" class="form-control" />
+                   <span class="fa fa-user form-control-feedback text-muted"></span>
+                   <span ng-show="showCase.addSalespersonForm.first_name.$dirty &amp;&amp; showCase.addSalespersonForm.first_name.$error.required" class="text-danger">This field is required</span>
+                   <span ng-show="showCase.addSalespersonForm.first_name.$error.pattern" class="text-danger">This field has character limit of 40</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12"> 
+                <div class="form-group has-feedback">
+        <label>Last Name</label>
+                   <input type="text" name="last_name" placeholder="Last Name" autocomplete="off" ng-model="showCase.salesperson.last_name" class="form-control" />
+                   <span class="fa fa-user form-control-feedback text-muted"></span>
+                   <span ng-show="showCase.addSalespersonForm.last_name.$dirty &amp;&amp; showCase.addSalespersonForm.last_name.$error.required" class="text-danger">This field is required</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12"> 
+                <div class="form-group has-feedback">
+        <label>Email</label>
+                   <input type="email" name="email" placeholder="Email" autocomplete="off" ng-model="showCase.salesperson.email" class="form-control" />
+
+                   <span class="fa fa-envelope form-control-feedback text-muted"></span>
+                   <span ng-show="showCase.addSalespersonForm.email.$dirty &amp;&amp; showCase.addSalespersonForm.email.$error.required" class="text-danger">This field is required</span>
+                   <span ng-show="showCase.addSalespersonForm.email.$dirty &amp;&amp; showCase.addSalespersonForm.email.$error.email" class="text-danger">This field must be a valid email address</span>
+                </div>
+              </div>
+            </div>
+
+            <!--div class="row">
+              <div class="col-md-12"> 
+                <div class="form-group has-feedback">
+                   <input type="text" name="phone_number" placeholder="Phone Number Eg. +911234567890" autocomplete="off" ng-model="showCase.salesperson.userprofile.phone_number" required="" class="form-control" />
+
+                   <span class="fa fa-phone form-control-feedback text-muted"></span>
+                   <span ng-show="showCase.addSalespersonForm.phone_number.$dirty &amp;&amp; showCase.addSalespersonForm.phone_number.$error.required" class="text-danger">This field is required</span>
+                </div>
+              </div>
+            </div-->
+  
+           <!--div class="row">
+              <div class="col-md-12"> 
+                <div class="form-group has-feedback">
+                   <input type="email" name="alternate_email" placeholder="Alternate Email" autocomplete="off" ng-model="showCase.salesperson.userprofile.alternate_email" class="form-control" />
+
+                   <span class="fa fa-envelope form-control-feedback text-muted"></span>
+                   <span ng-show="showCase.addSalespersonForm.alternate_email.$dirty &amp;&amp; showCase.addSalespersonForm.alternate_email.$error.email" class="text-danger">This field must be a valid email address</span>
+                </div>
+              </div>
+            </div-->
+
+          
+      <div class="row">
+         <div class="col-md-12">
+      <div class="form-group">
+         <label>Deputed to this Buyer</label>
+         <div class="controls">
+            <select name="deputed_to" chosen="" ng-model="showCase.salesperson.deputed_to" ng-options="b.company_id as b.company_name for b in buyers" width="'100%'" class="chosen-select input-md form-control">
+         <option value="">Select Buyer</option>
+            </select>
+         </div>
+      </div>
+         </div>
+      </div>
+          
+
+            <div class="row">
+              <div style="float:right;" class="col-md-2"> 
+                <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+              </div>
+
+              <div style="float:right;" class="col-md-2"> 
+                <button type="submit" class="btn btn-block btn-primary mt-lg">Update</button>
+            
+              </div>
+            </div>
+      </form>
+      </script>
+</div>

@@ -1,0 +1,31 @@
+# Ignore node_modules in apps
+*/node_modules/
+# Ignore compiled output
+*/dist/
+# Ignore temporary files
+*/*.log
+*.log
+*.swp
+*~
+
+# Ignore vendor and library source files
+!vendor/*/src/
+vendor/*/node_modules/
+# vendor/*/*.ts
+# vendor/*/*.js
+
+# Ignore vendor and library build output
+vendor/*/dist/
+vendor/*/lib/
+vendor/*/node_modules/
+vendor/*/*.log
+vendor/*/*.swp
+vendor/*/*~
+
+!*/vendor/
+!*/vendor/*/src
+*/vendor/*/dist/
+*/vendor/*/lib/
+# Ignore environment-specific files
+*.env
+*.env.*

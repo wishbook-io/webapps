@@ -1,0 +1,160 @@
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Registration</h3>
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+		
+	<div ng-controller="RegistrationsController as reg">
+	    <form role="form" name="reg.registerForm" novalidate="" ng-submit="reg.register()" class="form-validate mb-lg modelform">
+            <div class="form-group has-feedback">
+               <label class="text-muted">Buyer Company Name *</label>
+               <input type="text" name="account_company_name" placeholder="Enter buyer company name" autocomplete="off" ng-model="reg.account.company_name" required="" class="form-control"/>
+               <span class="fa fa-user form-control-feedback text-muted"></span>
+               <span ng-show="reg.registerForm.account_company_name.$dirty &amp;&amp; reg.registerForm.account_company_name.$error.required" class="text-danger">This field is required</span>
+               <span ng-show="reg.registerForm.account_company_name.$dirty &amp;&amp; reg.registerForm.account_company_name.$error.pattern" class="text-danger">This field is not valid</span>
+            </div>
+            
+		    <div class="row">
+			  <div class="col-md-6">
+				  <div class="form-group has-feedback">
+					<label class="text-muted">Country *</label>
+					<div class="controls">
+					<select name="country" chosen="" ng-model="reg.account.country" ng-options="cd.id as cd.name for cd in countries" class="chosen-select input-md form-control" ng-value="reg.account.country" required="">
+						<!--option value=""></option-->
+					</select>
+					</div>
+				  </div>
+			  </div>
+			  <div class="col-md-6">
+				  <div class="form-group has-feedback">
+					<label class="text-muted">Phone Number *</label>
+					<div class="controls">
+					<input type="text" name="account_phonenumber" placeholder="Phone 1234567890" autocomplete="off" ng-model="reg.account.phone_number" class="form-control" required="" ng-pattern="/^[0-9]{8,14}$/" />
+					<span style="right: 7%;" class="fa fa-phone form-control-feedback text-muted"></span>
+					<span ng-show="reg.registerForm.account_phonenumber.$dirty &amp;&amp; reg.registerForm.account_phonenumber.$error.required" class="text-danger">This field is required</span>
+					<span ng-show="reg.registerForm.account_phonenumber.$dirty &amp;&amp; reg.registerForm.account_phonenumber.$error.pattern" class="text-danger">Phone no. is not valid</span>
+					</div>
+				  </div>
+			  </div>
+		    </div>
+
+            <div class="row">
+               <div class="col-md-6">
+                  <div class="form-group has-feedback">
+                     <label class="text-muted">State *</label>
+                     <div class="controls">
+                      <select name="state" chosen="" ng-model="reg.account.state" ng-options="st.id as st.state_name for st in reg.states" width="'100%'" ng-change="reg.GetCity(reg.account.state)" class="chosen-select input-md form-control" data-parsley-group="step1" required="">
+                               <option value="">Select State</option>
+                     </select>
+                     <span ng-show="reg.registerForm.state.$dirty &amp;&amp; reg.registerForm.state.$error.required" class="text-danger">This field is required</span>
+                     </div>
+                       
+                     </div>
+                  </div>
+                <div class="col-md-6">
+                  <div class="form-group has-feedback">
+                     <label class="text-muted">City *</label>
+                     <div class="controls">
+                        <select name="city" chosen="" ng-model="reg.account.city" ng-options="st.id as st.city_name for st in reg.cities" width="'100%'" class="chosen-select input-md form-control" data-parsley-group="step1" required="required" >
+                               <option value="">Select City</option>
+                        </select>
+                        <span ng-show="reg.registerForm.city.$dirty &amp;&amp; reg.registerForm.city.$error.required" class="text-danger">This field is required</span>
+                     </div>
+                     </div>   
+               </div>  
+            </div>
+	    
+	    <div class="form-group has-feedback">
+		<label class="text-muted">Address</label>
+		<textarea name="address" placeholder="Address" ng-model="reg.account.address" class="form-control"></textarea>
+		<!--span ng-show="reg.registerForm.address.$dirty &amp;&amp; reg.registerForm.address.$error.required" class="text-danger">This field is required</span-->
+            </div>
+            
+            <div class="form-group has-feedback">
+               <label class="text-muted">Email address</label>
+               <input type="email" name="account_email" placeholder="Enter email" autocomplete="off" ng-model="reg.account.email"  class="form-control" />
+               <span class="fa fa-envelope form-control-feedback text-muted"></span>
+               <span ng-show="reg.registerForm.account_email.$dirty &amp;&amp; reg.registerForm.account_email.$error.email" class="text-danger">This field must be a valid email address</span>
+            </div>
+            <div class="form-group has-feedback">
+               <label class="text-muted">Password *</label>
+               <input id="id-password" type="password" name="account_password" ng-model="reg.account.password" ng-pattern="/^.{6,10}$/" autocomplete="off" required="" class="form-control" />
+               <span class="fa fa-lock form-control-feedback text-muted"></span>
+               <span ng-show="reg.registerForm.account_password.$dirty &amp;&amp; reg.registerForm.account_password.$error.required" class="text-danger">This field is required</span>
+               <span ng-show="reg.registerForm.account_password.$dirty &amp;&amp; reg.registerForm.account_password.$error.pattern" class="text-danger">Password should be of 6-10 characters</span>
+            </div>
+            <!--div class="form-group has-feedback">
+               <label class="text-muted">Retype Password</label>
+               <input type="password" name="account_password_confirm" ng-model="reg.account.password_confirm" ui-validate="'$value==reg.account.password'" autocomplete="off" required="" ui-validate-watch="'password'" class="form-control" />
+               <span class="fa fa-lock form-control-feedback text-muted"></span>
+                <span ng-show="reg.registerForm.account_password_confirm.$dirty &amp;&amp; reg.registerForm.account_password_confirm.$error.required" class="text-danger">This field is required</span>
+               <span ng-show="reg.registerForm.account_password_confirm.$dirty &amp;&amp; reg.registerForm.account_password_confirm.$error.validator" class="text-danger">Password does Not match</span>
+            </div-->
+            
+            
+            
+            <div class="form-group has-feedback">
+				<label class="text-muted">Agent</label>
+				<select name="agent" chosen="" ng-model="reg.account.agent" ng-options="st.company_id as st.company_name for st in reg.agent" width="'100%'" class="chosen-select input-md form-control">
+                    <option value="">Select Agent</option>
+				</select>
+				<!--span ng-show="reg.registerForm.agent.$dirty &amp;&amp; reg.registerForm.agent.$error.required" class="text-danger">This field is required</span-->
+            </div>
+			
+			<div class="form-group has-feedback">
+				<label class="text-muted">Buyer Type *</label>
+				<select name="buyer_type" chosen="" ng-model="reg.account.buyer_type" ng-options="st.id as st.name for st in reg.groupType" width="'100%'" class="chosen-select input-md form-control" required="required" >
+                    <option value="">Select Buyer Type</option>
+				</select>
+				<span ng-show="reg.registerForm.buyer_type.$dirty &amp;&amp; reg.registerForm.buyer_type.$error.required" class="text-danger">This field is required</span>
+            </div>
+	    <div class="form-group has-feedback">
+               <label class="text-muted">Logistics</label>
+               <input type="text" name="logistics" placeholder="Enter Logistics" autocomplete="off" ng-model="reg.account.logistics" class="form-control" />
+               <span class="fa fa-user form-control-feedback text-muted"></span>
+            </div>
+	    
+            <label class="text-muted">Deputed Salesperson</label>
+            <div class="form-group has-feedback">
+               <label class="text-muted">Salesperson Name</label>
+               <input type="text" name="deputed_salesperson_name" placeholder="Enter salesperson name" autocomplete="off" ng-model="reg.account.deputed_salesperson_name" class="form-control" />
+               <span class="fa fa-user form-control-feedback text-muted"></span>
+               <!--span ng-show="reg.registerForm.deputed_company_name.$dirty &amp;&amp; reg.registerForm.deputed_company_name.$error.required" class="text-danger">This field is required</span>
+               <span ng-show="reg.registerForm.deputed_company_name.$dirty &amp;&amp; reg.registerForm.deputed_company_name.$error.pattern" class="text-danger">This field is not valid</span-->
+            </div>
+            <div class="row">
+		  <div class="col-md-6">
+			  <div class="form-group has-feedback">
+				<label class="text-muted">Country</label>
+				<div class="controls">
+				<select name="deputed_country" chosen="" ng-model="reg.account.deputed_country" ng-options="cd.id as cd.name for cd in countries" class="chosen-select input-md form-control" ng-value="reg.account.country">
+					<option value=""></option>
+				</select>
+				</div>
+			  </div>
+		  </div>
+		  <div class="col-md-6">
+			  <div class="form-group has-feedback">
+				<label class="text-muted">Phone Number</label>
+				<div class="controls">
+				<input type="text" name="deputed_phonenumber" placeholder="Phone 1234567890" autocomplete="off" ng-model="reg.account.deputed_phonenumber" class="form-control" />
+				<span style="right: 7%;" class="fa fa-phone form-control-feedback text-muted"></span>
+				<!--span ng-show="reg.registerForm.deputed_phonenumber.$dirty &amp;&amp; reg.registerForm.deputed_phonenumber.$error.required" class="text-danger">This field is required</span>
+				<span ng-show="reg.registerForm.deputed_phonenumber.$dirty &amp;&amp; reg.registerForm.deputed_phonenumber.$error.pattern" class="text-danger">Phone no. is not valid</span-->
+				</div>
+			  </div>
+		  </div>
+	    </div>
+	    <div class="form-group has-feedback">
+               <label class="text-muted">Sales Person Password</label>
+               <input id="id-password" type="password" name="deputed_password" ng-model="reg.account.deputed_password" ng-pattern="/^.{6,10}$/" autocomplete="off" class="form-control" />
+               <span class="fa fa-lock form-control-feedback text-muted"></span>
+               <!--span ng-show="reg.registerForm.deputed_password.$dirty &amp;&amp; reg.registerForm.deputed_password.$error.required" class="text-danger">This field is required</span-->
+               <span ng-show="reg.registerForm.deputed_password.$dirty &amp;&amp; reg.registerForm.deputed_password.$error.pattern" class="text-danger">Password should be of 6-10 characters</span>
+            </div>            
+
+            <button type="submit" class="btn btn-block btn-primary mt-lg">Create an account</button>
+         </form>
+	    
+	    
+	</div>	
+   </div>
+</div>

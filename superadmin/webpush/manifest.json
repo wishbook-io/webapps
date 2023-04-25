@@ -1,0 +1,11 @@
+{
+  "name": "Wishbook",
+  "short_name": "Wishbok Catalog Application",
+  "icons": [{
+        "src": "media/logo-single.png",
+        "sizes": "192x192"
+      }],
+  "start_url": "./",
+  "display": "standalone",
+  "gcm_sender_id": "103953800507"
+}

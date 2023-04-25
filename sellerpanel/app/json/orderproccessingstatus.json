@@ -1,0 +1,23 @@
+[
+{
+"display_name": "Pending",
+"value": "Pending"
+},
+{
+"display_name": "Accepted",
+"value": "Accepted"
+},
+{
+"display_name": "Dispatched",
+"value": "Dispatched"
+},
+{
+"display_name": "Delivered",
+"value": "Delivered"
+},
+{
+"display_name": "Cancelled",
+"value": "Cancelled"
+}
+]
+

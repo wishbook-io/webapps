@@ -1,0 +1,91 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Supplier <span class="ptitle"> : {{$stateParams.name}}</span> </h3>
+
+<div ng-controller="SupplierDetailController as showCase">
+    
+    <div class="panel panel-default modelforoderdetail">
+	<div class="panel-body" >
+	    <div class="row">
+		<div class="col-md-12"> 
+		  <!--div class="panel panel-default">
+		     <div class="panel-body"-->
+			<div class="table-responsive">
+			   <table class="table table-hover">
+			      <tbody>
+				 <tr>
+				    <td>Supplier Name : {{supplier.selling_company_name}}</td>
+				    <td><span ng-if="is_staff">Supplier Number : {{supplier.selling_company_phone_number}}</span></td>
+				 </tr>
+				 <tr>
+				    <td>State : {{suppliercompanydetail.state_name}}</td>
+				    <td>City : {{suppliercompanydetail.city_name}}</td>
+				 </tr>
+				 <tr>
+				    <td>Address : {{suppliercompanydetail.street_address}}</td>
+				    <td>Pin Code : {{suppliercompanydetail.pincode}}</td>
+				 </tr>
+				 
+				 <tr>
+
+				    <td>Add Margin (Fix Amount) : <input type="number" name="fix_amount" placeholder="Fix Amount" autocomplete="off" ng-model="supplier.fix_amount" required="" class="form-control" /> </td>
+				    <td>Add Margin (Percentage) : <input type="number" name="percentage_amount" placeholder="Percentage Amount" autocomplete="off" ng-model="supplier.percentage_amount" required="" class="form-control" /></td>
+				 </tr>
+
+				 <tr>
+				    <td ng-if="supplier.group_type_name =='Broker'" >
+				    	Brokerage % : <input type="number" min="0" name="brokerage_fees" placeholder="Brokerage %" autocomplete="off" ng-model="supplier.brokerage_fees" required="" class="form-control" ng-readonly="supplier_brokerage_fees > 0" /> 
+				    </td>
+				    <td>
+					 Status :
+					 <div class="form-group has-feedback">
+					    <label class="radio-inline c-radio" style="color: green;">
+					      <input id="inlineradio1" type="radio" name="status" ng-model="supplier.status" value="approved" required="required" class="form-control"  />
+					   <span class="fa fa-circle"></span>Approve</label>
+
+					  <label class="radio-inline c-radio" style="color: red;">
+					     <input id="inlineradio2" type="radio" name="status" ng-model="supplier.status" value="rejected" required="required" class="form-control" />
+					     <span class="fa fa-circle"></span>Reject</label>
+					    
+					 </div>
+				    </td>
+				 </tr>
+				 				 
+				 
+				 <tr>
+				     <td>
+					<span>
+					    <button type="button" ng-click="Update()" class="btn btn-primary mt-lg orange-button">Update</button>
+					</span>
+					
+				     </td>
+				     <td>&nbsp;</td> 
+				 </tr>
+
+			      </tbody>
+			   </table>
+			</div>
+		     <!--/div>
+		  </div-->
+		</div>
+	    </div>
+	</div>
+    </div>
+    
+    <div class="panel panel-default modelform3">
+	<div class="panel-body" >
+	
+	<legend>Purchase Orders Details</legend>
+	<table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover " width="100%">
+	</table>
+	    
+	    
+	</div>
+    </div>
+	
+</div>

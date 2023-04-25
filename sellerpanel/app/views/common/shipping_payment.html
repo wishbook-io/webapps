@@ -1,0 +1,457 @@
+  <script type="text/ng-template" id="shippingpaymentmodal">
+  <div ng-controller="ShippingPaymentController as showCase2">
+      <div class="ngdialog-message">
+            
+        <div class="panel-heading"></div>
+        <div class="panel-body">
+          <form name="showCase2.shippingPaymentForm" form-wizard="" ng-submit="savePay()" validate-steps="true" novalidate="" steps="2" class="form-validate modelform-shippingpayment">
+             <div class="form-wizard wizard-horizontal">
+                <!-- START wizard steps indicator-->
+                <ol class="row">
+                   <li ng-class="{'active':wizard.active(1)}" ng-click="wizard.go(1)" class="col-md-6">
+                      <h4>Shipping Details</h4>
+                   </li>
+
+                   <li ng-class="{'active':wizard.active(2)}" ng-click="wizard.go(2); updateOrder();" class="col-md-6">
+                      <h4>Payment</h4>
+                   </li>
+
+                   <!--li ng-class="{'active':wizard.active(3)}" ng-click="wizard.go(3)" class="col-md-4">
+                      <h4>Shipping Details</h4>
+                   </li-->
+                </ol>
+                <!-- END wizard steps indicator-->
+                <!-- START Wizard Step inputs -->
+          <div id="step1" ng-show="wizard.active(1)">
+                   <div class="row">
+                        <div class="col-md-9">
+                          <div class="form-group has-feedback">
+                             <label>Buyer Address *</label>
+                             <div class="controls">
+                              <select chosen="" name="orderaddress" ng-model="showCase2.orderaddress" ng-options="c.id as c.street_address + ' ' + c.city.city_name + ' ' + c.state.state_name + ' ' + c.country.name + ' ' + c.pincode for c in showCase2.addresses" data-placeholder="Select Address" class="chosen-select form-control" data-parsley-group="step1"  ng-change="showCase2.setAddress(showCase2.orderaddress)" ng-required="order_type != 'brokerage'" >
+                               <option value=""></option>
+
+                              </select>
+                              <span ng-show="showCase2.shippingPaymentForm.orderaddress.$dirty &amp;&amp; showCase2.shippingPaymentForm.orderaddress.$error.required" class="text-danger">This field is required</span>
+                             </div>
+                          </div>
+                          <div ng-if="order_type == 'brokerage'" class="form-group has-feedback">
+                             <label>Broker Address</label>
+                              <div class="controls">
+                                    <select chosen="" name="broker_orderaddress" ng-model="showCase2.broker_orderaddress" ng-options="c.id as c.street_address + ' ' + c.city.city_name + ' ' + c.state.state_name + ' ' + c.country.name + ' ' + c.pincode for c in showCase2.broker_addresses" data-placeholder="Select Address" class="chosen-select form-control" data-parsley-group="step1"  ng-change="showCase2.setAddress(showCase2.broker_orderaddress)" ng-required="!showCase2.orderaddress" >
+                                     <option value=""></option>
+
+                                    </select>
+                              </div>
+                          </div>
+                        </div>
+                    
+                        <div class="col-md-3" style="text-align: right;"> 
+                           <button type="button" ng-click="showCase2.addNewAddress()" class="btn btn-primary mt-lg" style="background-color: green;"> + Add New Address </button>
+                        </div>
+                    </div>
+                    
+                    <div ng-if="addaddress == true">
+                     
+                        <div class="row"> 
+                           <div class="col-md-12">
+                              <div class="form-group has-feedback">
+
+                                 <label>Street Address</label>
+                                 <div class="controls">
+                                    <input type="text" autocomplete="off" name="street_address" ng-model="address.street_address" placeholder="Enter street address" required="required" class="form-control" />
+                                    <span ng-show="showCase2.shippingAddressForm.$dirty &amp;&amp; showCase2.shippingAddressForm.$error.required" class="text-danger">This field is required</span>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                
+                        <div class="row">
+                           <div class="col-md-4">
+                              <div class="form-group has-feedback">
+                                 <label>State</label>
+                                 <div class="controls">
+                                  <select name="state" chosen="" ng-model="address.state" ng-options="st.id as st.state_name for st in showCase2.states" width="'100%'" ng-change="showCase2.GetCity(address.state)" class="chosen-select input-md form-control" required="">
+                                           <option value="">Select State</option>
+                                 </select>
+                                 <span ng-show="showCase2.shippingAddressForm.state.$dirty &amp;&amp; showCase2.shippingAddressForm.state.$error.required" class="text-danger">This field is required</span>
+                                 </div>
+                                   
+                                 </div>
+                           </div>
+                           <div class="col-md-4">
+                              <div class="form-group has-feedback">
+                                 <label>City</label>
+                                 <div class="controls">
+                                    <select name="city" chosen="" ng-model="address.city" ng-options="st.id as st.city_name for st in showCase2.cities" width="'100%'" class="chosen-select input-md form-control" required="required" >
+                                           <option value="">Select City</option>
+                                    </select>
+                                    <span ng-show="showCase2.shippingAddressForm.city.$dirty &amp;&amp; showCase2.shippingAddressForm.city.$error.required" class="text-danger">This field is required</span>
+                                 </div>
+                              </div>   
+                           </div>
+                           <div class="col-md-4">
+                              <div class="form-group">
+                                 <label>Pincode / Zipcode</label>
+                                 <div class="controls">
+                                    <input type="number" autocomplete="off" name="pincode" ng-model="address.pincode" placeholder="Pincode" class="form-control" />
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-md-3" style="text-align: right;"> 
+                           <button type="button" ng-click="showCase2.SubmitNewAddress()" class="btn btn-primary mt-lg" style="background-color: green;"> Submit Address </button>
+                        </div>
+                        <div class="col-md-3" style="text-align: right;"> 
+                           <button type="button" ng-click="showCase2.CancelAddress()" class="btn btn-primary mt-lg"> Cancel </button>
+                        </div>
+                      
+                    </div> 
+
+              <!--      <div class="row" ng-if="address_selected"> 
+                    <div class="col-md-12">
+                      <div class="form-group has-feedback">
+                        <div class="controls">
+                          <label class="radio-inline c-radio">
+                             <input id="wishbook" type="radio" name="shippingpartner" ng-model="shippingpartner" value="wishbook"  class="form-control" checked="checked" ng-change="shipingModeChanged(shippingpartner)" style="display: none;" />
+                             <span class="fa fa-circle"></span>Tranport via Wishbook Shipping Partner</label><br>
+                             <span ng-show="shippingpartner == 'wishbook'">Shipping Charges: &nbsp; &#8377; {{shippingcharge}}</span><br>
+                          <label ng-show="wbOnly == false  || is_staff == 'true'" class="radio-inline c-radio">
+                             <input id="other" type="radio" name="shippingpartner" ng-model="shippingpartner"  value="other"  class="form-control" checked="checked" ng-change="shipingModeChanged(shippingpartner)" style="display: none;" />
+                             <span class="fa fa-circle"></span>Other transportation medium</label><br>
+                             <span ng-show="shippingpartner != 'wishbook'" style="color: green;">The supplier will take care of transportation. Transport charges will be payable by you on delivery.</span>
+                        </div>
+                      </div>
+                    </div>
+                   </div>   -->
+
+                  <div class="row" ng-if="address_selected"> 
+                    <div class="col-md-12">
+                      <div class="form-group has-feedback">
+                      <!--   <div class="controls">
+                          <span>Tranport via Wishbook Shipping Partner</span><br>
+                          
+                            <label class="radio-inline c-radio" ng-repeat = "method in shipping_methods" >
+                               <span class="fa fa-circle"></span> 
+                               <input id="mehtod-{{method.shipping_method_id}}" type="radio" name="shippingmethod" ng-model="shippingmethod" ng-value="method.shipping_method_id"  class="form-control" checked="checked" ng-change="shippingMethodChanged(shippingmethod)" style="display: none;" />
+                               <strong>{{method.shipping_method_name}}</strong> &nbsp;&nbsp;Shipping Charges: &nbsp; &#8377; {{method.shipping_charge}}&nbsp;&nbsp; (Shipping Duration: &nbsp; {{method.shipping_method_duration}})</label>
+                                
+                        </div> -->
+                           <div class="controls">
+                              <label>Tranport via Wishbook Shipping Partner </label>
+                              <select name="shippingmethod" chosen="shippingmethod" ng-model="shippingmethod" ng-options="s.shipping_method_id as s.shipping_method_name + ' - Rs. ' + s.shipping_charge + ' (' + s.shipping_method_duration + ')' for s in shipping_methods" width="'100%'" data-parsley-group="step1" class="chosen-select input-md form-control" ng-change="shippingMethodChanged(shippingmethod)" required>
+                                 <!-- <option value="">Select Shipping Method</option> -->
+                              </select>
+                           </div> 
+                      </div>
+                    </div>
+                   </div>                   
+                    
+                   
+                    <div class="row"> 
+                      <div class="col-md-12">
+                      <label>Invoice Details</label>
+                        <table class="table table-hover">
+                        <tr>
+                          <td>Order No</td> <td>{{orderdetail.order_number}}</td>
+                        </tr>
+                        <tr>
+                          <td>Supplier Name</td> <td>{{orderdetail.seller_company_name}}</td>
+                        </tr>
+                        <tr>
+                          <td>Order Date</td> <td>{{orderdetail.date}}</td>
+                        </tr>
+                        </table>
+                        <hr>
+                          <div class="col-md-12" style="font-weight: bold;">
+                              <div class="col-md-4">Catalog</div>
+                              <div class="col-md-4">Pcs</div>
+                              <div class="col-md-4">Price</div>
+                          </div>
+                          <div class="col-md-12" ng-repeat="cat in ordered_catalogs">
+                            <div class="col-md-12" style="border: 1px solid gray; padding: 0.5%; margin-bottom: 2px;">
+                              <div class="col-md-4">{{cat.title}}</div>
+                              <div class="col-md-4">{{cat.pcs}}</div>
+                              <div class="col-md-4">&#8377; {{cat.catalogsprice}}</div>
+                            </div>
+                          </div>
+                          <div ng-if="order.discount != 0" class="col-md-12" style="font-weight: bold;">
+                              <div class="col-md-4"></div>
+                              <div ng-if="order.discount_type == 'Cash'" class="col-md-4">Total Discount <span style="color: green;">(  {{supplierCashDiscount}}% <span>+</span> {{order.seller_extra_discount_percentage}}%  )</span></div>
+                              <!--div ng-if="order.discount_type == 'Credit'" class="col-md-4">Discount <span style="color: green;">( {{order.discount_type}} - {{supplierCreditDiscount}}% )</span></div-->
+                              <div ng-if="order.discount_type == 'Cash'" class="col-md-4" style="color: green;"> &#8377; {{order.discount}}</div>
+                          </div>
+                          
+                      <!--     <div ng-if="extra_discount_amount != 0" class="col-md-12" style="font-weight: bold;">
+                              <div class="col-md-4"></div>
+                              <div class="col-md-4">Additional Discount <span style="color: green;"> ({{order.seller_extra_discount_percentage}}% )</span></div>
+                              <div class="col-md-4" style="color: green;"> &#8377; {{extra_discount_amount}}</div>
+                          </div> -->
+                          <div ng-if="order.tax_value1 != 0" class="col-md-12" style="font-weight: bold;">
+                              <div class="col-md-4"></div>
+                              <div class="col-md-4">{{order.tax_lable1}}</div>
+                              <div class="col-md-4">&#8377; {{order.tax_value1}}</div>
+                          </div>
+                          <div ng-if="order.tax_value2 != 0" class="col-md-12" style="font-weight: bold;">
+                              <div class="col-md-4"></div>
+                              <div class="col-md-4">{{order.tax_lable2}}</div>
+                              <div class="col-md-4">&#8377; {{order.tax_value2}}</div>
+                          </div>
+                          <div ng-if="shippingcharge" class="col-md-12" style="font-weight: bold;">
+                              <div class="col-md-4"></div>
+                              <div class="col-md-4">Shipping Charge</div>
+                              <div class="col-md-4">&#8377; {{shippingcharge}}</div>
+                          </div>
+                          <div ng-if="order.wbmoney" class="col-md-12" style="font-weight: bold; color: #5d9cec;">
+                              <div class="col-md-4"></div>
+                              <div class="col-md-4">WB Money</div>
+                              <div class="col-md-4">&#8377; {{order.wbmoney_points_used}}</div>
+                          </div>
+                          <div class="col-md-12" style="font-weight: bold;">
+                              <div class="col-md-4"></div>
+                              <div class="col-md-4">Total Amount</div>
+                              <!--div class="col-md-4">&#8377; {{order.calculated_total_amount}}</div-->
+                              <div class="col-md-4">&#8377; {{order.calculated_total_amount}}</div>
+                          </div>
+                      </div>
+                    </div>
+
+                  <ul class="pager">
+                      <li class="next"><a ng-click="wizard.go(2); updateOrder();">Next <span>&rarr;</span></a>
+                      </li>
+                  </ul>
+            </div>  <!-- End: wizard step 1 -->
+
+            <div id="step2" ng-show="wizard.active(2)">
+             <fieldset>
+                <legend>Payment: Rs. {{order.calculated_total_amount}}</legend>
+                <div class="row">
+                  <div class="col-md-6">
+                      <div class="row" ng-if="available_wbmoney > 0"> 
+                        <div class="col-md-12">
+                          <div class="form-group has-feedback">
+                           <label>Use WB money for this payement</label>
+                            <div class="controls">
+                              <div class="col-md-10">
+                                <label class="checkbox c-checkbox" style="color: #5d9cec;">
+                                <input id="inlineradio1" type="checkbox" name="wbmoney" ng-model="order.wbmoney" class="form-control" checked="checked" ng-change="wbMoneySelected(order.wbmoney)" />
+                                <span class="fa fa-check"></span>{{available_wbmoney}} WB money available</label>
+                              </div>                      
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" ng-if="online == true"> 
+                        <div class="col-md-12">
+                          <div class="form-group has-feedback">
+                           <label>Online</label>
+                            <div class="controls">
+                              <div class="col-md-10">
+                                <label class="radio-inline c-radio">
+                                <input id="inlineradio1" type="radio" name="paymentmethod" ng-model="order.paymentmethod"  value="Zaakpay"  class="form-control" checked="checked" ng-change="paymentmethodChanged(order.paymentmethod)" />
+                                <span class="fa fa-circle"></span>Net Banking/ Credit Card / Debit Card</label>
+                              </div>                      
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" ng-if="COD == true"> 
+                        <div class="col-md-12">
+                          <div class="form-group has-feedback">
+                           <label>Cash On Delivery</label>
+                            <div class="controls">
+                              <div class="col-md-10">
+                                <label class="radio-inline c-radio">
+                                <input id="inlineradio1" type="radio" name="paymentmethod" ng-model="order.paymentmethod"  value="COD"  class="form-control" checked="checked" ng-change="paymentmethodChanged(order.paymentmethod)" />
+                                <span class="fa fa-circle"></span>Cash On Delivery</label>
+                              </div>                      
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" ng-if="offline == true"> 
+                        <div class="col-md-12">
+                          <div class="form-group has-feedback">
+                           <label>Offline</label>
+                            <div class="controls">
+                               <div class="col-md-10">
+                                  <label class="radio-inline c-radio">
+                                  <input id="inlineradio1" type="radio" name="paymentmethod" ng-model="order.paymentmethod"  value="NEFT"  class="form-control" checked="checked" ng-change="paymentmethodChanged(order.paymentmethod)" required="" />
+                                  <span class="fa fa-circle"></span>NEFT</label>
+                                </div>  
+                                <div class="col-md-10">
+                                  <label class="radio-inline c-radio">
+                                  <input id="inlineradio1" type="radio" name="paymentmethod" ng-model="order.paymentmethod"  value="Cheque"  class="form-control" checked="checked" ng-change="paymentmethodChanged(order.paymentmethod)" required="" />
+                                  <span class="fa fa-circle"></span>Cheque</label>
+                                </div>
+                                <div class="col-md-10">
+                                  <label class="radio-inline c-radio">
+                                  <input id="inlineradio1" type="radio" name="paymentmethod" ng-model="order.paymentmethod"  value="Other"  class="form-control" checked="checked" ng-change="paymentmethodChanged(order.paymentmethod)" required="" />
+                                  <span class="fa fa-circle"></span>Other</label>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" ng-if="wishbookcredit == true"> 
+                        <div class="col-md-12">
+                          <div class="form-group has-feedback">
+                           <label>Credit</label>
+
+                     <!--        <div class="controls">
+                              <div class="col-md-10">
+                                <label class="radio-inline c-radio">
+                                <input id="inlineradio1" type="radio" name="paymentmethod" ng-model="order.paymentmethod"  value="Credit"  class="form-control" checked="checked" ng-change="paymentmethodChanged(order.paymentmethod)" required="" />
+                                <span class="fa fa-circle"></span>Buy on Credit</label>
+                              </div>                      
+                            </div>  -->
+
+                            <div class="controls" ng-if="wishbookcredit">
+                              <div class="col-md-10">
+                                <label class="radio-inline c-radio">
+                                <input id="inlineradio1" type="radio" name="paymentmethod" ng-model="order.paymentmethod"  value="Wishbook Credit"  class="form-control" checked="checked" ng-change="paymentmethodChanged(order.paymentmethod)" ng-disabled="wcdisable" required="" />
+                                <span class="fa fa-circle"></span>Wishbook Credit</label>
+                                 <div style="margin-left: 10%;">
+                                   <span ng-if="wcdisable" style="color: red;">Your order is exceeding the available limit, please reduce the product in your cart. <br></span>
+                                   <span>Approved Limit: {{creditline.approved_line}}</span>
+                                   <br><span>Used Limit: {{creditline.used_line}}</span>
+                                   <br><span>Available Limit: {{creditline.available_line}}</span>
+                                 </div>
+                              </div>                      
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                      <input type="hidden" name="orderid" ng-model="order.id" />
+                      <input type="hidden" name="invoiceid" ng-model="order.invoice_id" />
+                      <input type="hidden" name="invoiceamount" ng-model="order.calculated_total_amount" />
+                  </div>
+                  <div class="col-md-6">
+                      <div class="row" ng-if="order.paymentmethod == 'NEFT' || order.paymentmethod == 'Cheque' || order.paymentmethod == 'Other' || order.paymentmethod == 'COD'">
+                        <div class="col-md-12"> 
+                          <div class="form-group has-feedback">
+                             <label>Payment Date *</label>
+                              <div class="controls">
+                                     <p class="input-group">
+                                      <input type="text" name="payment_date" required="" uib-datepicker-popup="{{format}}" ng-model="order.payment_date" is-open="opened" max-date="dt" uib-datepicker-options="dateOptions" 
+                                      close-text="Close" class="form-control" />
+                                      <span class="input-group-btn">
+                                         <button type="button" ng-click="open($event)" class="btn btn-default">
+                                      <em class="fa fa-calendar"></em>
+                                         </button>
+                                      </span>
+                                     </p>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div ng-if="order.paymentmethod == 'COD'" class="row">
+                        <div class="col-md-12"> 
+                          <div class="form-group has-feedback">
+                              <label>Enter Prepaid amount</label>
+                                <div class="controls">         
+                                   <input type="number" name="prepaid_amount" placeholder="Enter Prepaid Amount" autocomplete="off" ng-model="order.prepaid_amount" required="" ng-change="prepaidAmountChanged();" class="form-control" >
+                                   <span ng-show="showCase2.shippingPaymentForm.prepaid_amount.$dirty &amp;&amp; paymentForm.prepaid_amount.$error.required" class="text-danger">This field is required</span>
+                                </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div ng-if="order.paymentmethod == 'COD'" class="row">
+                        <div class="col-md-12"> 
+                          <div class="form-group has-feedback">
+                              <label>Pending amount</label>
+                                <div class="controls">         
+                                   Rs. {{order.pending_amount}}
+                                </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div ng-if="order.paymentmethod == 'Other' || order.paymentmethod == 'COD'" class="row">
+                        <div class="col-md-12"> 
+                          <div class="form-group has-feedback">
+                              <label>Enter Payment Details</label>
+                                <div class="controls">
+                                   <textarea name="payment_details" placeholder="Enter Payment Details" autocomplete="off" ng-model="order.payment_details" required="" class="form-control" ></textarea>
+                                   
+                                   <span ng-show="showCase2.shippingPaymentForm.payment_details.$dirty &amp;&amp; paymentForm.payment_details.$error.required" class="text-danger">This field is required</span>
+                                </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div ng-if="order.paymentmethod == 'NEFT'" class="row">
+                        <div class="col-md-12"> 
+                          <div class="form-group has-feedback">
+                              <label>Enter Transcation ID</label>
+                                <div class="controls">
+                                   
+                                   <input type="text" name="transcation_id" placeholder="Enter Transcation ID" autocomplete="off" ng-model="order.transcation_id" required="" class="form-control" >
+                                   <span ng-show="showCase2.shippingPaymentForm.transcation_id.$dirty &amp;&amp; paymentForm.transcation_id.$error.required" class="text-danger">This field is required</span>
+                                </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div ng-if="order.paymentmethod == 'Cheque'" class="row">
+                        <div class="col-md-12"> 
+                          <div class="form-group has-feedback">
+                              <label>Enter Cheque Details</label>
+                                <div class="controls">
+                                   <input type="text" name="bank_name" placeholder="Enter Bank Name" autocomplete="off" ng-model="order.bank_name" required="" class="form-control" >
+                                   
+                                   <span ng-show="showCase2.shippingPaymentForm.bank_name.$dirty &amp;&amp; paymentForm.bank_name.$error.required" class="text-danger">This field is required</span>
+                                </div>
+                                <div class="controls">
+                                   <input type="text" name="cheque_number" placeholder="Enter Cheque Number" autocomplete="off" ng-model="order.cheque_number" required="" class="form-control" >
+                                   
+                                   <span ng-show="showCase2.shippingPaymentForm.cheque_number.$dirty &amp;&amp; paymentForm.cheque_number.$error.required" class="text-danger">This field is required</span>
+                                </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                  </div>
+                </div>
+                    <div class="row" ng-show="order.paymentmethod != 'Zaakpay'">
+                          <div style="float:right;" class="col-md-2"> 
+                            <button type="submit" class="btn btn-block btn-primary mt-lg">Save</button>
+                          </div>
+                          <div style="float:right;" class="col-md-2"> 
+                            <button type="button" ng-click="CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                          </div>
+                    </div>
+                   </fieldset>
+            </div>  <!-- End: wizard step 2 -->
+            <!-- END Wizard Step inputs -->
+            </div> <!-- end: form-wizard div -->
+          </form>  <!-- end: form-wizard init div -->
+          <div ng-if="order.paymentmethod == 'Zaakpay' && online == true" class="row">
+            <div class="col-md-12">
+              <!--form action="http://zaakpaystaging.centralindia.cloudapp.azure.com:8080/api/paymentTransact/V7" method="post"-->
+              <form action="https://api.zaakpay.com/api/paymentTransact/V7" method="post">
+                <input type="hidden" name="orderId" ng-model="zaakpay.orderId" value="{{zaakpay.orderId}}" >
+                <input type="hidden" name="amount" ng-model="zaakpay.amount" value="{{zaakpay.amount}}" />
+                <input type="hidden" name="currency" ng-model="zaakpay.currency" value="INR" >
+
+                <input type="hidden" name="buyerEmail" ng-model="zaakpay.buyerEmail" value="{{zaakpay.buyerEmail}}" />
+                <input type="hidden" name="buyerFirstName" ng-model="zaakpay.buyerFirstName" value="{{zaakpay.buyerFirstName}}" />
+                <input type="hidden" name="buyerLastName" ng-model="zaakpay.buyerLastName" value="{{zaakpay.buyerLastName}}" />
+                <input type="hidden" name="buyerPhoneNumber" ng-model="zaakpay.buyerPhoneNumber" value="{{zaakpay.buyerPhoneNumber}}" />
+                <input type="hidden" name="merchantIdentifier" ng-model="zaakpay.merchantIdentifier" value="{{zaakpay.merchantIdentifier}}" >
+                <input type="hidden" name="returnUrl" ng-model="zaakpay.returnUrl" value="{{zaakpay.returnUrl}}" >
+                <input type="hidden" name="checksum" ng-model="checksum" value="{{zaakpay.checksum_value}}" > 
+              
+                <div class="row">
+                  <div style="float:right;" class="col-md-3"> 
+                    <button type="submit" class="btn btn-block btn-primary mt-lg">Proceed</button>
+                  </div>
+                  <div style="float:right;" class="col-md-2"> 
+                    <button type="button" ng-click="CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+         </div><!-- END panel -->
+    </div> <!-- End ng dialog -->
+    </div> <!-- End ng-controller -->
+   </script>

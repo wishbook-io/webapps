@@ -1,0 +1,222 @@
+<h3>Company
+   <small></small>
+</h3>
+<!--div class="row">
+   <div class="col-lg-12" >
+      <p>Company details</p>
+   </div>
+</div-->
+
+<!-- START panel-->
+<div ng-controller="CompanyFormController as cmp"  class="panel panel-default">
+   <div class="panel-heading"></div>
+   <div class="panel-body">
+      <form role="form" name="cmp.companyForm" form-wizard="" validate-steps="true" novalidate="" class="form-validate mb-lg modelform" steps="2">
+         <div class="form-wizard wizard-horizontal">
+            <!-- START wizard steps indicator-->
+            <ol class="row">
+               <li ng-class="{'active':wizard.active(1)}" ng-click="wizard.go(1)" class="col-md-6">
+                  <h4>Company Details</h4>
+                  <small class="text-muted"></small>
+               </li>
+               <li ng-class="{'active':wizard.active(2)}" ng-click="wizard.go(2)" class="col-md-6">
+                  <h4>Brand Details</h4>
+                  <small class="text-muted"></small>
+               </li>
+               
+            </ol>
+            <!-- END wizard steps indicator-->
+            <!-- START Wizard Step inputs -->
+            <div id="step1" ng-show="wizard.active(1)">
+               <fieldset>
+                  <legend>Company Details</legend>
+                  <!-- START row -->
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                           <label>Company Name</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="name" ng-model="company.name" data-parsley-group="step1" placeholder="Enter company name" required="required" class="form-control" />
+                              <span ng-show="cmp.companyForm.name.$dirty &amp;&amp; cmp.companyForm.name.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-8">
+                        <div class="form-group has-feedback">
+                           <label>Street Address</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="street_address" ng-model="company.street_address" data-parsley-group="step1" placeholder="Enter street address" class="form-control" />
+                           </div>
+                        </div>
+                     </div>
+                     <!--div class="col-md-4">
+                        <div class="form-group has-feedback">
+                           <label>Country</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="country" data-parsley-group="step1" placeholder="Select Country" required="required" class="form-control" />
+                           </div>
+                        </div>
+                     </div-->
+                  </div>
+                  <!-- END row -->
+
+                  <!-- START row -->
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                           <label>State</label>
+                           <div class="controls">
+                            <select name="state" chosen="" ng-model="company.state" ng-options="st.id as st.state_name for st in cmp.states" width="'100%'" ng-change="cmp.GetCity(company.state)" class="chosen-select input-md form-control" data-parsley-group="step1" required="">
+                                     <option value="">Select State</option>
+                           </select>
+                           <span ng-show="cmp.companyForm.state.$dirty &amp;&amp; cmp.companyForm.state.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                             
+                           </div>
+                        </div>
+                      <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                           <label>City</label>
+                           <div class="controls">
+                              <select name="city" chosen="" ng-model="company.city" ng-options="st.id as st.city_name for st in cmp.cities" width="'100%'" class="chosen-select input-md form-control" data-parsley-group="step1" required="required" >
+                                     <option value="">Select City</option>
+                              </select>
+                              <span ng-show="cmp.companyForm.city.$dirty &amp;&amp; cmp.companyForm.city.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                           </div>   
+                     </div>
+                     <!--div class="col-md-4">
+                        <div class="form-group">
+                           <label>Pincode / Zipcode</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="pincode" ng-model="company.pincode" data-parsley-group="step1" placeholder="Pincode" class="form-control" />
+                           </div>
+                        </div>
+                     </div-->
+                     <div class="col-md-4">
+                        <div class="form-group">
+                           <label>Automatically share received catalogs </label>
+                           <div class="controls">
+					               <div class="col-sm-10">
+					                  <label class="radio-inline c-radio">
+					                     <input id="inlineradio1" type="radio" name="push_downstream" ng-model="company.push_downstream" data-parsley-group="step1" value="no" required="required" class="form-control" checked="checked" />
+					                     <span class="fa fa-circle"></span>No</label>
+					                  <label class="radio-inline c-radio">
+					                     <input id="inlineradio2" type="radio" name="push_downstream" ng-model="company.push_downstream" data-parsley-group="step1" value="yes" required="required" class="form-control" />
+					                     <span class="fa fa-circle"></span>Yes</label>
+					               </div>
+                           </div>
+                           <span ng-show="cmp.companyForm.push_downstream.name.$dirty &amp;&amp; cmp.companyForm.push_downstream.name.$error.required" class="text-danger">This field is required</span>
+                        </div>
+                     </div>
+                     
+                  </div>
+                  <!-- END row -->
+                  <!-- START row -->
+                  <!--div class="row">
+                     
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>Company Type</label>
+                           <div class="controls">
+                           	   <div class="col-sm-10">
+				                  <label class="radio-inline c-radio">
+				                     <input id="inlineradio1" type="radio" name="company_type" ng-model="company.company_type" data-parsley-group="step1" value="manufacturer" required="required" class="form-control" checked="checked" />
+				                     <span class="fa fa-circle"></span>Manufacturer</label>
+				                  <label class="radio-inline c-radio">
+				                     <input id="inlineradio2" type="radio" name="company_type" ng-model="company.company_type" data-parsley-group="step1" value="nonmanufacturer" required="required" class="form-control" />
+				                     <span class="fa fa-circle"></span>Non-Manufacturer</label>
+				               </div>
+                           </div>
+                           <span ng-show="cmp.companyForm.company_type.$dirty &amp;&amp; cmp.companyForm.company_type.$error.required" class="text-danger">This field is required</span>
+                        </div>
+                     </div>
+                  </div-->
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group">
+                           <button type="submit" ng-click="cmp.SubmitCompany()" class="btn btn-primary mt-lg">Submit</button>
+
+                        </div>
+                     </div>
+                  </div>
+                  
+                  <!-- END row -->
+                  
+               </fieldset>
+               </form>
+               <ul class="pager">
+                  <li class="next"><a ng-click="wizard.go(2)">Next <span>&rarr;</span></a>
+                  </li>
+               </ul>
+            </div>
+            <!-- END Wizard Step inputs -->
+            <!-- START Wizard Step inputs -->
+            <div id="step2" ng-show="wizard.active(2)">
+               <fieldset>
+                  <legend>Brand Details</legend>
+                  <!-- START row -->
+                  <form role="form" name="cmp.brandForm" ng-submit="cmp.createBrand()" novalidate="" class="form-validate mb-lg modelform2">
+                     <div class="row">
+                        <div class="col-md-8">
+
+                           <!--div class="form-group" ng-show="manufacturer">
+                              <label>Brand I Own</label>
+                              <input type="text" autocomplete="off" name="name" ng-model="brand.name" data-parsley-group="step2" placeholder="Brand i Own"  class="form-control" />
+                              <span ng-show="cmp.brandForm.name.$dirty &amp;&amp; cmp.brandForm.name.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                           <div class="form-group" ng-show="manufacturer">
+                              <label>Brand's Logo</label>
+                              <input type="file" ngf-select name="image" ng-model="brand.image"  data-parsley-group="step2" class="form-control" ngf-accept="'image/*'" required="required" >
+                              <span ng-show="cmp.brandForm.image.$dirty &amp;&amp; cmp.brandForm.image.$error.required" class="text-danger">This field is required</span>
+                           </div-->
+
+                          
+                            <div class="form-group">
+                                 <label>Brand I Own</label>
+                                 <input type="text" autocomplete="off" name="name" ng-model="brand.name" data-parsley-group="step2" placeholder="Brand i Own"  class="form-control" required="required"/>
+                                 <span ng-show="cmp.brandForm.name.$dirty &amp;&amp; cmp.brandForm.name.$error.required" class="text-danger">This field is required</span>
+                              </div>
+                              <div class="form-group">
+                                 <label>Brand's Logo</label>
+                                 <input type="file" ngf-select name="image" ng-model="brand.image"  data-parsley-group="step2" class="form-control" ngf-accept="'image/*'" required="required" >
+                                 <span ng-show="cmp.brandForm.image.$dirty &amp;&amp; cmp.brandForm.image.$error.required" class="text-danger">This field is required</span>
+                              </div>
+
+                           <div class="form-group" ng-show="nonmanufacturer">
+                              <label>Brands I Sell</label>
+                              <select chosen="" multiple="multiple" name="brand" ng-model="company.brand" ng-options="b.id as b.name for b in cmp.brands" data-placeholder="Brands i Sell" data-parsley-group="step2" class="chosen-select form-control">
+                                 <option value="">Select Brands</option>
+                              </select>
+                              <!--span ng-show="cmp.brandForm.brand.$dirty &amp;&amp; cmp.brandForm.brand.$error.required" class="text-danger">This field is required</span-->
+                           </div>
+                        
+                       
+                        </div>
+                     </div>   
+
+                     <div class="row">
+                        <div class="col-md-4">
+                           <div class="form-group">
+                              <button type="submit" class="btn btn-primary mt-lg">Submit</button>
+                           </div>
+                        </div>
+                     </div>
+                  </form>
+                  <!-- END row -->
+               </fieldset>
+               <ul class="pager">
+                  <li class="previous">
+                     <a ng-click="wizard.go(1)">
+                        <span>&larr; Previous</span>
+                     </a>
+                  </li>
+               </ul>
+            </div>
+            <!-- END Wizard Step inputs -->
+          
+         </div>
+      
+   </div>
+</div>
+<!-- END panel -->

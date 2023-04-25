@@ -1,0 +1,99 @@
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Assign Salesman</h3>
+<div class="panel panel-default">
+   <div class="panel-body" >
+      <div ng-controller="SalesmanIndividualController as showCase">
+	<table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+	</table>
+
+
+	    <script type="text/ng-template" id="assignlocation">
+	    <form role="form" ng-submit="SubmitAssignLocation()" name="showCase.assignlocationform" novalidate="" class="form-validate mb-lg modelform">
+			
+	          <legend>Assign Salesman Details</legend>
+	          
+	          <div class="row">
+				 <div class="col-md-12">
+					<div class="form-group">
+					   <label>Salesman</label>
+					   <div class="controls">
+						  <select name="salesman" chosen="" ng-model="showCase.assignlocation.salesman" ng-options="b.id as b.username for b in users" width="'100%'" class="chosen-select input-md form-control">
+						 <option value="">Select Salesman</option>
+						  </select>
+					   </div>
+					</div>
+				 </div>
+			  </div>
+			  
+			  <!--div class="row">
+				 <div class="col-md-12">
+					<div class="form-group">
+					   <label>Buyer</label>
+					   <div class="controls">
+						  <select name="buyer" chosen="" ng-model="showCase.assignlocation.buyer" ng-options="b.company_id as b.company_name for b in buyers" width="'100%'" class="chosen-select input-md form-control">
+						 <option value="">Select Buyer</option>
+						  </select>
+					   </div>
+					</div>
+				 </div>
+			  </div-->
+			  
+				<div class="row">
+					<div class="col-md-12">
+					<div class="form-group has-feedback">
+					   <label>Buyers (You can select multiple)</label>
+					   <div class="controls">
+						  <ui-select multiple="" ng-model="showCase.assignlocation.buyers" theme="bootstrap" >
+						   <ui-select-match placeholder="Select Buyers">{{$item.company_name}} </ui-select-match>
+						   <ui-select-choices repeat="b.company_id as b in buyers | propsFilter: {company_name: $select.search}">
+							  <div ng-bind-html="b.company_name | highlight: $select.search"></div>
+						   </ui-select-choices>
+						  </ui-select>
+					   </div>
+					</div>   
+					</div>
+				</div>
+			  
+	          <div class="row">
+	            <div style="float:right;" class="col-md-2"> 
+	              <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+	            </div>
+
+	            <div style="float:right;" class="col-md-2"> 
+	              <button type="submit" ng-show="update_flag" class="btn btn-block btn-primary mt-lg">Update</button>
+	              <button type="submit" ng-show="!update_flag" class="btn btn-block btn-primary mt-lg">Add</button>
+	            </div>
+	          </div>
+	    </form>
+	    </script>
+	    
+	    <script type="text/ng-template" id="uploadcsv">
+			<form role="form" ng-submit="showCase.UploadBuyerSalesmenCsv()" name="showCase.uploadcsv" novalidate="" class="form-validate mb-lg modelform3">
+	   
+			<legend>Upload Buyer-Salesman CSV</legend>
+				<div class="row">
+							  <div class="col-md-6">
+								<div class="form-group">
+								   <label>Select CSV from your computer</label>
+									<input type="file" ngf-select="uploadFiles($files)" ng-model="showCase.file.buyersalesmen_csv" name="buyersalesmen_csv" required accept=".csv">
+									<span ng-show="showCase.uploadcsv.buyersalesmen_csv.$dirty &amp;&amp; showCase.uploadcsv.buyersalesmen_csv.$error.required" class="text-danger">This field is required</span>   
+									
+								</div>
+							 </div>
+				</div>
+				<div class="row">
+					<div style="float:right;" class="col-md-2"> 
+					  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+					</div>
+					<div style="float:right;" class="col-md-4"> 
+					  <a style="text-decoration: none;" href="app/csv/assign_salesman.csv"><button type="button" class="btn btn-block btn-primary mt-lg">Download Sample</button></a>
+					</div>
+					<div style="float:right;" class="col-md-2"> 
+					  <button type="submit" class="btn btn-block btn-primary mt-lg">Upload</button>
+					</div>
+				</div>
+			</form>
+		</script>
+	    
+      </div>
+   </div>
+</div>

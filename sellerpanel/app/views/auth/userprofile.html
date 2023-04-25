@@ -1,0 +1,143 @@
+<style>
+   .panel-body {
+      margin-left: 20px !important;
+   }
+</style>
+
+<h3>
+   <!-- <span class="btn-label" style="margin-left: 2%; color: #51c6ea;background-color: white" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> --> User Profile
+</h3>
+<!--div class="row">
+   <div class="col-lg-12" >
+      <p>Company details</p>
+   </div>
+</div-->
+
+<!-- START panel-->
+<div ng-controller="UserprofileFormController as usr"  class="panel panel-default">
+   <div class="panel-heading"></div>
+   <div class="panel-body">
+      <form role="form" name="usr.userForm" form-wizard="" validate-steps="true" novalidate="" class="form-validate mb-lg modelform" steps="2">
+     
+               <fieldset>
+                  <!--legend>Company Details</legend-->
+                  <!-- START row -->
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                           <label>Userame</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="username" ng-model="user.username" placeholder="Enter username" required="required" class="form-control" />
+                              <span ng-show="usr.userForm.username.$dirty &amp;&amp; usr.userForm.username.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- END row -->
+                  <div class="row">
+                    
+                     <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                         <label>First Name</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="first_name" ng-model="user.first_name" placeholder="Enter first name" required="required" pattern="[a-zA-Z ]*$" class="form-control" />
+                              <span ng-show="usr.userForm.first_name.$dirty &amp;&amp; usr.userForm.first_name.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="usr.userForm.first_name.$error.pattern" class="text-danger">This field accepts only alphabets and space.</span>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-4">
+
+                        <div class="form-group has-feedback">
+                         <label>Last Name</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="last_name" ng-model="user.last_name" placeholder="Enter last name" required="required" pattern="[a-zA-Z ]*$" class="form-control" />
+                              <span ng-show="usr.userForm.last_name.$dirty &amp;&amp; usr.userForm.last_name.$error.required" class="text-danger">This field is required</span>
+                               <span ng-show="usr.userForm.last_name.$error.pattern" class="text-danger">This field accepts only alphabets and space.</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>   
+
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                           <label>Phone Number</label>
+                           <div class="controls">
+                              <select name="country" chosen="" ng-model="user.userprofile.country" ng-options="cd.id as cd.name for cd in countries"   width="'100%'" class="chosen-select input-md form-control" required="">
+                                  <option value=""></option>
+                               </select>
+                              <span ng-show="usr.userForm.country.$dirty &amp;&amp; usr.userForm.country.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                         <label>&nbsp;</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="phone_number" ng-model="user.userprofile.phone_number" placeholder="Enter phone number" required="required" class="form-control" ng-pattern="/^[6-9]{1}[0-9]{9}$/" />
+                              <span ng-show="usr.userForm.phone_number.$dirty &amp;&amp; usr.userForm.phone_number.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="usr.userForm.phone_number.$dirty &amp;&amp; usr.userForm.phone_number.$error.pattern" class="text-danger">Phone number is not valid.</span>
+                           </div>
+                        </div>
+                     </div>
+                     
+                  </div>        
+
+                  <div class="row">
+                     <div class="col-md-4"> 
+                        <div class="form-group has-feedback">
+                           <label>Email</label>
+                           <div class="controls">
+                              <input type="email" name="email" placeholder="Enter Email" autocomplete="off" ng-model="user.email" required="" class="form-control" />
+                              
+                              <span ng-show="usr.userForm.email.$dirty &amp;&amp; usr.userForm.email.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="usr.userForm.email.$dirty &amp;&amp; usr.userForm.email.$error.email" class="text-danger">This field must be a valid email address</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>  
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group left">
+                           <button type="submit" ng-click="usr.UpdateUserProfile()" class="buttonPrimary">Submit</button>
+
+                        </div>
+                     </div>
+                  </div>
+                  
+                  <!-- END row -->
+                  
+               </fieldset>
+               </form>              
+   </div>
+
+    <script type="text/ng-template" id="otpform">
+         <form role="form" name="usr.otpForm" novalidate="" ng-submit="usr.UpdateUserProfileWithPhone()" class="form-validate mb-lg modelformOtp">  
+            <div class="form-group has-feedback">
+               <label class="text-muted">One Time Password</label>
+
+               <input type="text" name="otp" placeholder="Enter otp" autocomplete="off" ng-model="user.otp" required="" class="form-control" />
+               
+               <span ng-show="usr.otpForm.otp.$dirty &amp;&amp; usr.otpForm.otp.$error.required" class="text-danger">This field is required</span>
+            </div>
+            <div class="row">
+               <div class="col-md-4">
+                  <div class="form-group"> 
+                     <button type="submit" class="buttonPrimary">Submit</button>
+                  </div>
+               </div>
+               <div class="col-md-4"> 
+                  <div class="form-group"> 
+                  <button type="button" ng-click="usr.CloseDialog()" class="buttonSecondary">Cancel
+                  </button>
+                  </div>
+                </div>
+            </div>
+         </form> 
+   </script>
+
+</div>
+
+
+<!-- END panel -->

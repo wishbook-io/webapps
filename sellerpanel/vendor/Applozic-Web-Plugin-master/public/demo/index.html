@@ -1,0 +1,78 @@
+<!--  Applozic Chat Demo  -->
+<!DOCTYPE html>
+<html class="">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Custom Fonts -->
+    <!-- <link href="./root/css" rel="stylesheet" type="text/css">-->
+    <!-- Plugin CSS -->
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="./root/style.css">
+
+    <script type="text/javascript" src="index.js"></script>
+</head>
+
+<body id="page-top" style="margin-bottom: 0px; padding-bottom: 0px;">
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="https://applozic.com/">
+                <img src="https://www.applozic.com/assets/resources/images/applozic_logo.gif" alt="Applozic logo"></a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="sign-up">
+                        <a class="header-link btn btn-green" href="https://dashboard.applozic.com/signup.html">SignUp For Free</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section id="login" class="main-block bg-F1F4F9">
+        <div class="container">
+            <div class="row">
+                <form id="login-form" class="ph35">
+                    <div class="form-group">
+                        <input type="text" title="Enter your application id here. You can generate application Id from applozic Dashboard." class="form-control" id="applicationId" name="applicationId" placeholder="applozic-sample-app" value="applozic-sample-app" required="">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="loginId" name="loginId" placeholder="Email *" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,10}$" required="">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="loginPassword" name="loginPassword" placeholder="Password *" required="" Click me.>
+                    </div>
+                    <p id="login-response" class="hide response text-center mb-15"></p>
+                    <div id="login-spinner" class="form-group text-center hide">
+                        <i class="fa fa-spin fa-spinner fa-lg"></i>
+                    </div>
+                    <div class="form-group mb-15">
+                        <button id="login-submit" type="button" class="btn btn btn-green w-full pd-12 btn-submit"
+                        value = "" Click me.>
+                            <strong>Enter Chat</strong>
+                        </button>
+                    </div>
+                </form>
+                <div id="success-text" class="n-vis">
+                    <p>Welcome to Applozic</p>
+                    <button id="logout" type="button" class="btn btn btn-green w-full pd-12 btn-submit" value="Click me">
+                        <strong>Logout</strong>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="footer-section" class="footer-section footer-sec-block pb-0">
+        <footer>
+            <div class="container">
+                <div class="row b-bottom">
+                    <p class="text-center c-white m-20">Copyright © Applozic Inc, 2018 All Rights Reserved</p>
+                </div>
+            </div>
+        </footer>
+    </section>
+</body>
+
+</html>

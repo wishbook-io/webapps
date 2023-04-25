@@ -1,0 +1,25 @@
+<style>
+  .full button span {
+    background-color: limegreen;
+    border-radius: 32px;
+    color: black;
+  }
+  .partially button span {
+    background-color: orange;
+    border-radius: 32px;
+    color: black;
+  }
+</style>
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Brokerage Orders</h3>
+<div class="panel panel-default modelform6">
+   <div class="panel-body" >
+  	<div ng-controller="BrokerageorderslistController as showCase">
+      	
+		<table id="purchaseorders-datatables" datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+		</table>
+	
+    <div ng-include="'app/views/common/brokerage_order_modal.html'"></div>
+    <div ng-include="'wishbook_libs/views/shippingpayment/shipping_payment.html'"></div>
+ 	</div>
+   </div>
+</div>

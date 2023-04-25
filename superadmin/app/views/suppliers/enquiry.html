@@ -1,0 +1,38 @@
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Supplier Enquiry List</h3>
+<div class="panel panel-default modelform4">
+   <div class="panel-body" >
+      <div ng-controller="SupplierEnquirylistController as showCase">
+	
+        <table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+        </table>
+        
+        <script type="text/ng-template" id="fillreference">
+            <form role="form" ng-submit="FillReference()" name="showCase.updateBuyer" novalidate="" class="form-validate mb-lg modelform2">
+       
+            <legend>Supplier Enquiry Details</legend>
+                <div class="row">
+                    <div class="col-md-12"> 
+                    <div class="form-group has-feedback">
+                       <label>References</label>
+                       <input type="text" name="references" placeholder="References" autocomplete="off" ng-model="buyer.references" required="" class="form-control" />
+                       <span class="fa fa-user form-control-feedback text-muted"></span>
+                       <span ng-show="showCase.updateBuyer.references.$dirty &amp;&amp; showCase.updateBuyer.references.$error.required" class="text-danger">This field is required</span>
+                    </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div style="float:right;" class="col-md-2"> 
+                      <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                    </div>
+
+                    <div style="float:right;" class="col-md-2"> 
+                      <button type="submit" class="btn btn-block btn-primary mt-lg">Save</button>
+                    </div>
+                </div>
+            </form>
+        </script>
+        <div ng-include="'app/views/common/purchase_order_modal.html'"></div>
+		</div>
+   </div>
+</div>

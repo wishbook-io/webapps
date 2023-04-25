@@ -1,0 +1,91 @@
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Accounting Mapping</h3>
+<div class="panel panel-default">
+   <div class="panel-body" >
+      <div ng-controller="CompanyAccountController as showCase">
+		<!--table datatable="" dt-options="cat.dtOptions" dt-columns="cat.dtColumns" class="row-border hover"></table-->
+		<table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover " width="100%">
+		</table>
+		
+		<script type="text/ng-template" id="addmapping">
+          
+			  <form role="form" ng-submit="showCase.AddAccountMapping()" name="showCase.mappingForm" novalidate="" class="form-validate mb-lg modelform">
+		 
+			  <legend>Accounting Mapping Details</legend>
+			  
+			  <div class="row">
+				<div class="col-md-12">  
+				<div class="form-group has-feedback">
+					  <select name="company" chosen="" ng-model="mapping.company" ng-options="s.id as s.name for s in company" width="'100%'" class="chosen-select input-md form-control" required="">
+						 <option value="">Select Company</option>
+					  </select>
+					   <span ng-show="showCase.mappingForm.company.$dirty &amp;&amp; showCase.mappingForm.company.$error.required" class="text-danger">This field is required</span>
+				   </div>
+				</div>
+			  </div>
+			
+			  <div class="row">
+				<div class="col-md-12"> 
+				<div class="form-group has-feedback">
+				   <input type="text" name="mapped_accout_ref" placeholder="Mapped Accout Reference" autocomplete="off" ng-model="mapping.mapped_accout_ref" required="" class="form-control" />
+				   <span class="fa fa-user form-control-feedback text-muted"></span>
+				   <span ng-show="showCase.mappingForm.buyername.$dirty &amp;&amp; showCase.mappingForm.buyername.$error.required" class="text-danger">This field is required</span>
+				</div>
+			  </div>
+			  </div>
+
+			  <div class="row">
+				<div style="float:right;" class="col-md-2"> 
+				  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+				</div>
+
+				<div style="float:right;" class="col-md-2"> 
+				  <button type="submit" class="btn btn-block btn-primary mt-lg">Add</button>
+				</div>
+			  </div>
+			 </form>
+			  
+	   </script>
+	   
+	   
+	   <script type="text/ng-template" id="uploadcsv">
+			<form role="form" ng-submit="showCase.UploadCompanyAccountCsv()" name="showCase.uploadcsv" novalidate="" class="form-validate mb-lg modelform3">
+	   
+			<legend>Upload Accounting Mapping CSV</legend>
+				<div class="row">
+							  <div class="col-md-6">
+								<div class="form-group">
+								   <label>Select CSV from your computer</label>
+									<input type="file" ngf-select="uploadFiles($files)" ng-model="showCase.file.skumap_csv" name="skumap_csv" required accept=".csv">
+									<span ng-show="showCase.uploadcsv.skumap_csv.$dirty &amp;&amp; showCase.uploadcsv.skumap_csv.$error.required" class="text-danger">This field is required</span>   
+								</div>
+							 </div>
+				</div>
+				<div class="row">
+					<div style="float:right;" class="col-md-2"> 
+					  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+					</div>
+					<div style="float:right;" class="col-md-4"> 
+					  <a style="text-decoration: none;" href="app/csv/companymap.csv"><button type="button" class="btn btn-block btn-primary mt-lg">Download Sample</button></a>
+					</div>
+					<div style="float:right;" class="col-md-2"> 
+					  <button type="submit" class="btn btn-block btn-primary mt-lg">Upload</button>
+					</div>
+				</div>
+			</form>
+		</script>
+
+		
+	  </div>
+   </div>
+</div>

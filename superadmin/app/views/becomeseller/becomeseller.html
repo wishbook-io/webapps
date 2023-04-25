@@ -1,0 +1,115 @@
+<h3>Become a Seller</h3>
+<div class="panel panel-default">
+   <div class="panel-body" >
+		<div ng-controller="becomeSellerController as showCase">
+		
+		  <form role="form" ng-submit="showCase.BecomeSeller()" name="showCase.becomeSellerForm" novalidate="" class="form-validate mb-lg modelform">
+		  
+		  <div class="row">
+		    <div class="col-md-8">  
+			<div class="form-group has-feedback">
+			  <label>Select Catalog*</label>
+			    <div class="controls">  
+			      <select name="catalog" chosen="" ng-model="showCase.seller.catalog" ng-options="s as s.title+' [catalog id: '+s.id+']' for s in catalogs" width="'100%'" class="chosen-select input-md form-control" required ng-change="showCase.catalogSelected(showCase.seller.catalog)">
+				 <option value="">Select Catalog</option>
+			      </select>
+			       <span ng-show="showCase.becomeSellerForm.catalog.$dirty &amp;&amp; showCase.becomeSellerForm.catalog.$error.required" class="text-danger">This field is required</span>
+			    </div>
+			</div>
+		    </div>
+		  </div>
+
+		  <!--div class="row">
+		    <div class="col-md-12">  
+			<div class="form-group has-feedback">
+			  <label>Select Company*</label>
+			    <div class="controls">  
+			      <select name="brand" chosen="" ng-model="showCase.seller.catalog" ng-options="s.id as s.name for s in companies"  width="'100%'" class="chosen-select input-md form-control" required="">
+				 <option value="">Select Company</option>
+			      </select>
+			       <span ng-show="showCase.becomeSellerForm.brand.$dirty &amp;&amp; showCase.becomeSellerForm.brand.$error.required" class="text-danger">This field is required</span>
+			    </div>
+			</div>
+		    </div>
+		  </div-->
+
+		  <div class="row">
+		    <div class="col-md-4">  
+				<div class="form-group has-feedback">
+			  	<label>Enter Company ID*</label>
+			    <div class="controls">  
+			   
+			      	<input type="number" autocomplete="off" name="company" ng-model="showCase.seller.company" placeholder="Enter Company ID"  class="form-control" min=0 required/>
+			      	<span ng-show="showCase.becomeSellerForm.company.$dirty &amp;&amp; showCase.becomeSellerForm.company.$error.required" class="text-danger">This field is required</span>
+			    	</div>
+				</div>
+		    </div>
+		  
+           	<div class="col-md-4">
+              	<div class="form-group"> 
+                 	<label>Enter Catalog Enable Duration (in Days)</label>
+                 	<div class="controls">
+                    	<input type="number" autocomplete="off" name="enable_duration" ng-model="showCase.seller.enable_duration" placeholder="Enter Duration"  class="form-control" min="10" required/>
+                    	<span ng-show="showCase.becomeSellerForm.enable_duration.$error.min" class="text-danger">Duration should be minimum 10 Days</span>
+                	</div>
+              	</div>
+           	</div>
+        </div>
+        <div class="row">
+             <div class="col-md-4">
+                <div class="form-group has-feedback">
+                  <label>How would you like to sell catalog?</label>
+                   <div class="controls">
+                      <div style="margin: 0px;">
+                      <label class="radio-inline c-radio">
+                         <input type="radio" id="sell_full_catalog"  name="sell_full_catalog" ng-value="true" ng-model="showCase.seller.sell_full_catalog" />
+                         <span class="fa fa-circle"></span> Full Catalog only</label> <br>
+                      <label class="radio-inline c-radio">
+                         <input type="radio" id="sell_full_catalog"  name="sell_full_catalog" ng-value="false" ng-model="showCase.seller.sell_full_catalog" />
+                         <span class="fa fa-circle"></span> Single pieces and full catalog both </label>
+                      </div>
+                   </div>
+                </div>
+             </div>
+         <!-- WB-3817  Seller panel : remove set single pc margin when become seller, add and update catalog etc -->
+    <!--          <div class="col-md-4" ng-if="showCase.seller.sell_full_catalog == false && showCase.show_margin_setting == true">
+                  <div class="form-group has-feedback">
+                    <label>Set the price for single pieces</label><br>
+                  <span>Current Price: {{showCase.current_price1}}<span ng-if="showCase.current_price2">-{{showCase.current_price2}}</span>/Pc.</span><br>
+
+                  <span ng-if="showCase.is_percentage == true">New Price: {{showCase.current_price1+showCase.current_price1*showCase.single_piece_price_percentage/100}}<span ng-if="showCase.current_price2">-{{showCase.current_price2+showCase.current_price2*showCase.single_piece_price_percentage/100}}</span>/Pc.</span>
+
+                  <span ng-if="showCase.is_percentage == false">New Price: {{showCase.current_price1+showCase.single_piece_price}}<span ng-if="showCase.current_price2">-{{showCase.current_price2++showCase.single_piece_price}}</span>/Pc.</span>
+
+                     <div class="controls">
+                        <div style="margin: 0px;">
+                        <label class="radio-inline c-radio">
+                           <input type="radio" id="is_percentage" name="is_percentage" ng-value="true" ng-model="showCase.is_percentage" />
+                           <span class="fa fa-circle"></span> Add margin in percentage %</label> <br>
+                           <div class="controls" ng-if="showCase.is_percentage == true">
+                              <input type="number" autocomplete="off" autocomplete="off" name="single_piece_price_percentage" ng-model="showCase.single_piece_price_percentage"  placeholder="Enter percentage"  class="form-control" max="20" required="required" />
+                              <span ng-show="showCase.becomeSellerForm.single_piece_price_percentage.$error.max" class="text-danger">You can not add margin more than 20%</span>
+                            </div>
+                        <label class="radio-inline c-radio">
+                           <input type="radio" id="is_percentage"  name="is_percentage" ng-value="false" ng-model="showCase.is_percentage" />
+                           <span class="fa fa-circle"></span> Add margin in Rs. </label>
+                           <div class="controls" ng-if="showCase.is_percentage == false">
+                              <input type="number" autocomplete="off" autocomplete="off" name="single_piece_price" ng-model="showCase.single_piece_price" ng-max="showCase.max_margin_rs" placeholder="Enter Price (Rs.)"  class="form-control" required="required"  />
+                              <span ng-show="showCase.becomeSellerForm.single_piece_price.$error.max" class="text-danger">You can not add margin more than 20%</span>
+                            </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>  -->
+        </div> 
+			
+	    <div class="row">
+		    <div class="col-md-8"> 
+		      <button type="submit" class="btn btn-default btn-primary mt-lg" style="float:right;">Submit</button>
+		    </div>
+	    </div>
+	  </form>
+		 
+		</div>
+   </div>
+</div>

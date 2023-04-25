@@ -1,0 +1,153 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+
+.ngdialog.ngdialog-theme-default .ngdialog-content
+{
+	width: 50% !important;
+}
+.linkButton
+{
+	width: 112% !important;
+}
+
+</style>
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+      <div ng-controller="manifestsController as showCase">
+		
+
+		<table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="row-border hover" width="100%">
+		</table>
+
+		<script type="text/ng-template" id="UploadAttachments">
+			<form role="form" name="showCase.UploadSellerInvoiceForm" novalidate="" class="form-validate mb-lg modelform3">
+	   
+			<legend>Upload {{filetype}}</legend>	    
+			 <!--  <div class="row form-group">
+               <div class="col-md-5">
+                  <div class="right">
+                     <label>Shipment</label>
+                  </div>
+               </div>
+               <div class="col-md-7">
+                  <div class="left">
+                     <span >{{shipment[0]}}</span>
+                  </div>
+               </div>
+				</div>		
+				<div class="row form-group">
+               <div class="col-md-5">
+                  <div class="right">
+                     <label>Order No.</label>
+                  </div>
+               </div>
+               <div class="col-md-7">
+                  <div class="left">
+                     <span >{{shipment[1].order_id}}</span>
+                  </div>
+               </div>
+				</div> 
+			
+				<div class="row form-group" ng-if="filetype == 'Seller invoice'">
+               <div class="col-md-5">
+                  <div class="right">
+                     <label>Select seller Invoice</label>
+                  </div>
+               </div>
+               <div class="col-md-7">
+                  <div class="left">
+							<input type="file" ngf-select="loadAttachments($file)" ng-model="invoiceImagethumbnail" name="thumbnail" id="thumbnail"  ngf-accept="'image/*,application/pdf'"  >
+					    	<span ng-show="showCase.UploadSellerInvoice.thumbnail.$dirty &amp;&amp; showCase.UploadSellerInvoice.thumbnail.$error.required" class="text-danger">This field is required</span>
+                  </div>
+					</div>	
+				</div>
+
+				<div ng-if="filetype == 'Shipping Label'">
+
+					<div class="row form-group" >
+						<div class="col-md-5">
+							<div class="right">
+								<label>Select shipping label</label>
+							</div>
+						</div>
+						<div class="col-md-7">
+							<div class="left">
+								<input type="file" ngf-select="loadAttachments($file)" ng-model="labelImagethumbnail" name="thumbnail" id="shippinglabel" ngf-accept="'image/*,application/pdf'"  >
+								<span ng-show="showCase.UploadSellerInvoice.thumbnail.$dirty &amp;&amp; showCase.UploadSellerInvoice.thumbnail.$error.required" class="text-danger">This field is required</span>
+							</div>
+						</div>
+					</div>
+					<div class="row form-group" >
+						<div class="col-md-5">
+							<div class="right">
+								<label>Provider</label>
+							</div>
+						</div>
+						<div class="col-md-7">
+							<div class="left">
+								<select name="shippingProvider" chosen="" ng-model="shipmentDetails.shippingProvider" ng-options="p for p in shippingProviders" width="'100%'"  class="chosen-select input-md form-control" required="required">
+									<option value="">Select Provider</option>
+								</select>
+					    		<span ng-show="showCase.UploadSellerInvoice.shippingProvider.$dirty &amp;&amp; showCase.UploadSellerInvoice.shippingProvider.$error.required" class="text-danger">This field is required</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="row form-group" >
+						<div class="col-md-5">
+							<div class="right">
+								<label>AWB Number</label>
+							</div>
+						</div>
+						<div class="col-md-7">
+							<div class="left">
+								<input type="text" autocomplete="off" name="AWBnumber" ng-model="shipmentDetails.AWBnumber" placeholder="Enter AWB number" required="required" class="form-control"  />
+								<span ng-show="showCase.UploadSellerInvoice.AWBnumber.$dirty &amp;&amp; showCase.showCase.UploadSellerInvoice.AWBnumber.$error.required" class="text-danger">This field is required</span>
+							</div>
+						</div>
+					</div>
+				</div> -->
+        
+        <div class="row form-group" ng-if="filetype == 'Manifest/Acknowledgement copy'">
+               <div class="col-md-5">
+                  <div class="right">
+                     <label>Select Manifest/Acknowledgement copy</label>
+                  </div>
+               </div>
+               <div class="col-md-7">
+                  <div class="left">
+							             <input type="file" ngf-select="loadAttachments($file)" ng-model="ackCopyImagethumbnail" name="thumbnail" id="thumbnail"  ngf-accept="'image/*,application/pdf'"  >
+					    	<span ng-show="showCase.UploadSellerInvoice.thumbnail.$dirty &amp;&amp; showCase.UploadSellerInvoice.thumbnail.$error.required" class="text-danger">This field is required</span>
+                  </div>
+					     </div>
+				</div>
+				
+				
+				<div class="row">
+					<div class="col-md-6">
+                  <div class="right">
+                     <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                  </div>
+               </div>
+               <div class="col-md-3">
+                  <div class="left">
+      							<button ng-show="filetype == 'Seller invoice'" type="button" ng-click="UploadAttachment()" class="btn btn-block btn-primary mt-lg">Upload</button>
+                    <button ng-show="filetype == 'Manifest/Acknowledgement copy'" type="button" ng-click="UploadAttachment()" class="btn btn-block btn-primary mt-lg">Upload</button>
+      							<button ng-show="filetype == 'Shipping Label'" type="button" ng-click="UpdateProvider_shippingLabel()"  class="btn btn-block btn-primary mt-lg">Save</button>
+                  </div>
+					    </div>
+				</div>
+			   
+			</form>
+		</script>
+
+	  </div>
+   </div>
+</div>

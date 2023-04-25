@@ -1,0 +1,36 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Received Catalogs</h3>
+<div class="panel panel-default">
+   <div class="panel-body" >
+      <div ng-controller="ReceivedcatalogController as showCase">
+        	<table id="receivedcatalogs-datatables" datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+        	</table>
+        	
+        	
+        	<!--div ng-include="'app/views/catalog/old_order_modal.html'"></div-->
+          <div ng-include="'app/views/common/order_modal.html'"></div>
+          <div ng-include="'app/views/common/purchase_order_modal.html'"></div>
+        	<!--script type="text/ng-template" id="productimages">
+                  <uib-carousel interval="showCase.myInterval">
+                       <uib-slide ng-repeat="slide in showCase.slides" active="slide.active">
+                          <img class="loading" ng-src="{{slide.image}}" style="margin: auto; width: 50%; height: 50%;" alt="" />
+                          <div class="carousel-caption" style="color:black;">
+              
+                             <p>SKU : {{slide.text}}</p>
+                          </div>
+                       </uib-slide>
+                    </uib-carousel>
+        	</script-->
+          <!--div ng-include="'app/views/common/imageslider.html'"></div-->
+        	<div ng-include="'app/views/shares/share_form.html'"></div> 
+          <div ng-include="'app/views/common/brokerage_order_modal.html'"></div>
+          <div ng-include="'wishbook_libs/views/shippingpayment/shipping_payment.html'"></div>
+      </div>
+   </div>
+</div>

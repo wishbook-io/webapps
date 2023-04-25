@@ -1,0 +1,24 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span>Reseller Payouts Items</h3>
+<div class="panel panel-default modelform6 datatable-loader">
+   <div class="panel-body" >
+      <div ng-controller="ResellerPayoutsControllerItems as showCase">
+
+	<!--table datatable="" dt-options="cat.dtOptions" dt-columns="cat.dtColumns" class="row-border hover"></table-->
+         <!--toaster-container toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}"></toaster-container-->
+        <table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover " width="100%">
+        </table>
+
+        
+    </div>
+   </div>
+</div>

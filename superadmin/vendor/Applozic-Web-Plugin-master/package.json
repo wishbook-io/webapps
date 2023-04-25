@@ -1,0 +1,22 @@
+{
+  "name": "nodejs-web-plugin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "author": "Abhinav <abhinav@applozic.com>",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^1.29.4",
+    "express": "^4.15.3",
+    "express-minify": "^1.0.0",
+    "express-validation": "^1.0.2",
+    "fs.realpath": "^1.0.0",
+    "hbs": "^4.0.1",
+    "minimatch": "^3.0.2",
+    "node-minify": "^2.4.1",
+    "path": "^0.12.7",
+    "replace": "^0.3.0",
+    "request": "^2.81.0",
+    "yargs": "^11.0.0"
+  }
+}

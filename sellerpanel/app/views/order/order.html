@@ -1,0 +1,430 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Order</h3>
+<div class="panel panel-default modelform6 datatable-loader">
+   <div class="panel-body" >
+      <div ng-controller="OrderController as showCase">
+
+	<!--table datatable="" dt-options="cat.dtOptions" dt-columns="cat.dtColumns" class="row-border hover"></table-->
+         <!--toaster-container toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}"></toaster-container-->
+        <table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover " width="100%">
+        </table>
+
+	<!--script type="text/ng-template" id="companydetails">
+	    <legend>Buyer Details</legend>
+	    <div class="row">
+	      <div class="col-md-12">
+		  <div class="panel panel-default">
+		     <div class="panel-body">
+			<div class="table-responsive">
+			   <table class="table table-hover">
+			      <tbody>
+				 <tr>
+				    <td>Name:</td>
+				    <td>{{company.name}}</td>
+				 </tr>
+				 <tr>
+				    <td>Phone Number:</td>
+				    <td>{{company.phone_number}}</td>
+				 </tr>
+				 <tr>
+				    <td>State:</td>
+				    <td>{{company.branches[0].state.state_name}}</td>
+				 </tr>
+				 <tr>
+				    <td>City:</td>
+				    <td>{{company.branches[0].city.city_name}}</td>
+				 </tr>
+				 <tr>
+				    <td>Address:</td>
+				    <td>{{company.street_address}}</td>
+				 </tr>
+				 <tr>
+				    <td>Pincode:</td>
+				    <td>{{company.pincode}}</td>
+				 </tr>
+			      </tbody>
+			   </table>
+			</div>
+		     </div>
+		  </div>
+	      </div>
+	    </div>
+	</script-->
+
+	<script type="text/ng-template" id="cancelorderfromadmin">
+	    <form role="form" ng-submit="showCase.CancelOrderFromAdmin()" name="showCase.cancelOrderForm" novalidate="" class="form-validate mb-lg modelform4">
+
+	    <legend>Cancel Order</legend>
+
+		<div class="row">
+		  <div class="col-md-12">
+		    <div class="form-group has-feedback">
+		      <input type="hidden" name="id" ng-model="order.id" />
+		       <textarea name="supplier_cancel" placeholder="Enter cancel note" autocomplete="off" ng-model="order.supplier_cancel" required="" class="form-control" ></textarea>
+		       <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+		       <span ng-show="showCase.cancelOrderForm.supplier_cancel.$dirty &amp;&amp; showCase.cancelOrderForm.supplier_cancel.$error.required" class="text-danger">This field is required</span>
+		    </div>
+		  </div>
+		</div>
+
+		<div class="row">
+		    <div  class="col-md-4">
+		      <button type="submit" class="btn btn-block btn-primary mt-lg">Yes</button>
+		    </div>
+		    <div class="col-md-4">
+		      <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">No</button>
+		    </div>
+		</div>
+	    </form>
+	</script>
+
+
+  <script type="text/ng-template" id="placeorderonshiprocket">
+	    <form role="form" ng-submit="showCase.placeorderonshiprocket()" name="showCase.ShipForm" class="form-validate mb-lg modelform4">
+
+	    <legend ng-if="order_ids.length == 0 ">Place Order for {{order.id}}</legend>
+	    <legend ng-if="order_ids.length > 0 ">Place Order for <span ng-repeat="id in order_ids"> {{id}}, </span></legend>
+      <span ng-if="order_ids.length > 0" class="text-danger">(Buyer must be same for all Order)</span>
+
+      <div class="row">
+        <div class="col-md-6">
+  		    <div class="form-group has-feedback">
+            <label>First Name*</label>
+  		       <input type="text"  name="first_name" placeholder="First Name" class="form-control" ng-model="value_list.billing_customer_name" required="" >
+             <span ng-show="showCase.ShipForm.first_name.$dirty &amp;&amp; showCase.ShipForm.first_name.$error.required" class="text-danger">This field is required</span>
+  		    </div>
+  		  </div>
+        <div class="col-md-6">
+  		    <div class="form-group has-feedback">
+            <label>Last Name*</label>
+  		       <input type="text"  name="last_name" placeholder="Last Name" class="form-control" ng-model="value_list.billing_last_name" required="" >
+             <span ng-show="showCase.ShipForm.last_name.$dirty &amp;&amp; showCase.ShipForm.last_name.$error.required" class="text-danger">This field is required</span>
+  		    </div>
+  		  </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+  		    <div class="form-group has-feedback">
+            <label>Address Line 1</label>
+            <input type="text"  name="address_line_1" placeholder="Address Line 1" class="form-control" ng-model="value_list.billing_address" required=""  maxlength="50">
+            <span ng-show="showCase.ShipForm.address_line_1.$dirty &amp;&amp; showCase.ShipForm.address_line_1.$error.required" class="text-danger">This field is required and should be less than 50 characters!</span>
+  		    </div>
+  		  </div>
+        <div class="col-md-6">
+  		    <div class="form-group has-feedback">
+            <label>Address Line 2</label>
+            <input type="text"  name="address_line_2" placeholder="Address Line 2" class="form-control" ng-model="value_list.billing_address_2" required="" maxlength="50" >
+            <span ng-show="showCase.ShipForm.address_line_2.$dirty &amp;&amp; showCase.ShipForm.address_line_2.$error.required" class="text-danger">This field is required and should be less than 50 characters!</span>
+  		    </div>
+  		  </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+  		    <div class="form-group has-feedback">
+            <label>Pincode*</label>
+  		       <input type="number"  name="pincode" placeholder="pincode" class="form-control" ng-model="value_list.billing_pincode" required="" >
+             <span ng-show="showCase.ShipForm.pincode.$dirty &amp;&amp; showCase.ShipForm.pincode.$error.required" class="text-danger">This field is required</span>
+  		    </div>
+  		  </div>
+  		  <div class="col-md-4">
+  		    <div class="form-group has-feedback">
+            <label>City*</label>
+  		      <input type="text" name="city" placeholder="City" class="form-control" ng-model="value_list.billing_city" required="" >
+            <span ng-show="showCase.ShipForm.city.$dirty &amp;&amp; showCase.ShipForm.breadth.$error.required" class="text-danger">This field is required</span>
+  		    </div>
+  		  </div>
+  		  <div class="col-md-4">
+  		    <div class="form-group has-feedback">
+            <label>State*</label>
+  		      <input type="text" name="state" placeholder="State" class="form-control" ng-model="value_list.billing_state" required="" >
+            <span ng-show="showCase.ShipForm.state.$dirty &amp;&amp; showCase.ShipForm.state.$error.required" class="text-danger">This field is required</span>
+  		    </div>
+  		  </div>
+      </div>
+
+		<div class="row">
+		  <div class="col-md-3">
+		    <div class="form-group has-feedback">
+          <label>length</label>
+		       <input type="number" step="any" min="1" name="length" placeholder="length" class="form-control" ng-model="matrix.length" required="" >
+           <span ng-show="showCase.ShipForm.length.$dirty &amp;&amp; showCase.ShipForm.length.$error.required" class="text-danger">This field is required</span>
+		    </div>
+		  </div>
+		  <div class="col-md-3">
+		    <div class="form-group has-feedback">
+          <label>breadth</label>
+		      <input type="number" step="any" min="1" name="breadth" placeholder="breadth" class="form-control" ng-model="matrix.breadth" required="" >
+          <span ng-show="showCase.ShipForm.breadth.$dirty &amp;&amp; showCase.ShipForm.breadth.$error.required" class="text-danger">This field is required</span>
+		    </div>
+		  </div>
+		  <div class="col-md-3">
+		    <div class="form-group has-feedback">
+          <label>height</label>
+		      <input type="number" step="any" min="1" name="heigth" placeholder="heigth" class="form-control" ng-model="matrix.height" required="" >
+          <span ng-show="showCase.ShipForm.height.$dirty &amp;&amp; showCase.ShipForm.height.$error.required" class="text-danger">This field is required</span>
+		    </div>
+		  </div>
+		  <div class="col-md-3">
+		    <div class="form-group has-feedback">
+          <label>weight</label>
+		      <input type="number" step="any" name="weight" placeholder="weight" class="form-control" ng-model="matrix.weight" required="" >
+          <span ng-show="showCase.ShipForm.weight.$dirty &amp;&amp; showCase.ShipForm.weight.$error.required" class="text-danger">This field is required</span>
+		    </div>
+		  </div>
+		</div>
+    <div class="controls">
+      <label>Pickup Location*</label>
+      <select name="pickup_location" id="warehouse" class="form-control input-sm error-append ng-pristine ng-valid ng-not-empty ng-touched" ng-model="showCase.pickup_location" ng-options="option as (option.pickup_location+' ('+option.address+')') for option in piclupLocationList" style="">
+        <option value="">Select a Pickup Location</option>
+      </select>
+    </div>
+
+		<div class="row">
+		    <div  class="col-md-6">
+		      <button type="submit" class="btn btn-block btn-primary mt-lg">Place</button>
+		    </div>
+		    <div class="col-md-6">
+		      <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+		    </div>
+		</div>
+	  </form>
+	</script>
+  <script type="text/ng-template" id="shiprocketcourierdetails">
+    <legend>Select Shipping Partner</legend>
+    <div class="row modelform4">
+      <div class="col-md-12">
+  	      <div class="panel panel-default">
+  		 <div class="panel-body">
+  		    <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <th></th>
+                <th>COURIER COMPANY</th>
+                <th>RATES</th>
+                <th>RATING</th>
+              </thead>
+              <tbody ng-repeat="detail in service_detail.available_courier_companies">
+                <tr>
+                  <td>
+                    <label class="radio-inline c-radio">
+                      <input type="radio" id="courier-{{detail.courier_company_id}}" ng-model="showCase.courierid" ng-value={{detail.courier_company_id}} name="courierid" value="{{detail.courier_company_id}}" ng-checked="detail.courier_company_id == service_detail.recommended_courier_company_id" required="required">
+                      <span class="fa fa-circle"></span></label>
+                   </td>
+                  <td>{{detail.courier_name}}</td>
+                  <td>{{detail.rate}}</td>
+                  <td>({{detail.rating}})</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+  		 </div>
+  	      </div>
+  	  </div>
+      <div class="text-center">
+        <button type="button" ng-click="showCase.ShipAWB(showCase.courierid,order.id)" class="btn btn-block btn-primary mt-lg">Ship</button>
+      </div>
+    </div>
+	</script>
+
+	<!--script type="text/ng-template" id="trackingdetails">
+	    <form role="form" ng-submit="showCase.SaveDispatch()" name="showCase.saveDispatchForm" novalidate="" class="form-validate mb-lg modelform3">
+
+	    <legend>Tracking Details</legend>
+		  <label class="col-md-3 control-label">Dispatch Date</label>
+		  <div class="col-md-6">
+		     <p class="input-group">
+			<input type="text" name="dispatch_date" required="" uib-datepicker-popup="{{showCase.format}}" ng-model="order.dispatch_date" is-open="showCase.opened" max-date="showCase.dt" uib-datepicker-options="showCase.dateOptions"
+			close-text="Close" class="form-control" />
+			<span class="input-group-btn">
+			   <button type="button" ng-click="showCase.open($event)" class="btn btn-default">
+			      <em class="fa fa-calendar"></em>
+			   </button>
+			</span>
+		     </p>
+		     <span ng-show="showCase.saveDispatchForm.dispatch_date.$dirty &amp;&amp; showCase.saveDispatchForm.dispatch_date.$error.required" class="text-danger">This field is required</span>
+		  </div>
+
+		<div class="row">
+		  <div class="col-md-12">
+		    <div class="form-group has-feedback">
+
+		       <textarea name="tracking_details" placeholder="Enter Tracking Details" autocomplete="off" ng-model="order.tracking_details" required="" class="form-control" ></textarea>
+		       <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+		       <span ng-show="showCase.saveDispatchForm.tracking_details.$dirty &amp;&amp; showCase.saveDispatchForm.tracking_details.$error.required" class="text-danger">This field is required</span>
+		    </div>
+		  </div>
+		</div>
+
+		<div class="row">
+		    <div style="float:right;" class="col-md-2">
+		      <button type="submit" class="btn btn-block btn-primary mt-lg">Save</button>
+		    </div>
+		    <div style="float:right;" class="col-md-2">
+		      <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+		    </div>
+		</div>
+	    </form>
+	</script-->
+	<script type="text/ng-template" id="trackingdetails">
+	    <form role="form" ng-submit="showCase.SaveDispatch()" name="showCase.saveDispatchForm" novalidate="" class="form-validate mb-lg modelform3">
+
+	    <legend>Tracking Details</legend>
+		<div class="row">
+		 <div class="col-md-12">
+		    <div class="form-group">
+		       <label>Warehouse *</label>
+		       <div class="controls">
+			  <!--input type="text" autocomplete="off" name="brand" ng-model="entry.brand" data-parsley-group="step1" placeholder="Brand"  class="form-control" /-->
+			  <select name="warehouse" chosen="" ng-model="order.warehouse" ng-options="w.id as w.name for w in warehouses" width="'100%'" class="chosen-select input-md form-control" required>
+			     <option value="">Select Warehouse</option>
+			  </select>
+			  <span ng-show="showCase.saveDispatchForm.warehouse.$dirty &amp;&amp; showCase.saveDispatchForm.warehouse.$error.required" class="text-danger">This field is required</span>
+		       </div>
+		    </div>
+		 </div>
+		</div>
+		<div class="row">
+		  <div class="col-md-12">
+		    <div class="form-group has-feedback">
+		       <label>Dispatch Date *</label>
+		    <div class="controls">
+			   <p class="input-group">
+			   <input type="text" name="dispatch_date" required="" uib-datepicker-popup="{{showCase.format}}" ng-model="order.dispatch_date" is-open="showCase.opened" uib-datepicker-options="showCase.dateOptions"
+			    close-text="Close" class="form-control" />
+			    <span class="input-group-btn">
+			       <button type="button" ng-click="showCase.open($event)" class="btn btn-default">
+				  <em class="fa fa-calendar"></em>
+			       </button>
+			    </span>
+			   </p>
+			   <span ng-show="showCase.saveDispatchForm.dispatch_date.$dirty &amp;&amp; showCase.saveDispatchForm.dispatch_date.$error.required" class="text-danger">This field is required</span>
+		       </div>
+		    </div>
+		  </div>
+		</div>
+
+		<div class="row">
+		  <div class="col-md-12">
+		    <div class="form-group has-feedback">
+		       <label>Enter Tracking Details</label>
+		    <div class="controls">
+			   <textarea name="tracking_details" placeholder="Enter Tracking Details" autocomplete="off" ng-model="order.tracking_details" class="form-control" ></textarea>
+			   <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+			   <span ng-show="showCase.saveDispatchForm.tracking_details.$dirty &amp;&amp; showCase.saveDispatchForm.tracking_details.$error.required" class="text-danger">This field is required</span>
+		    </div>
+		    </div>
+		  </div>
+		</div>
+
+		<div class="row">
+		<div class="col-md-12">
+		    <div class="form-group has-feedback">
+		       <label>Mode</label>
+		       <div class="controls">
+		       <input type="text" name="mode" placeholder="Mode" autocomplete="off" ng-model="order.mode" class="form-control" data-parsley-group="step1"/>
+		       <!--span class="fa fa-user form-control-feedback text-muted"></span-->
+		       <span ng-show="showCase.saveDispatchForm.mode.$dirty &amp;&amp; showCase.saveDispatchForm.mode.$error.required" class="text-danger">This field is required</span>
+		       </div>
+		    </div>
+		</div>
+		</div>
+
+		<div class="row">
+		<div class="col-md-12">
+		    <div class="form-group has-feedback">
+		       <label>Tracking Number</label>
+		       <div class="controls">
+		       <input type="text" name="tracking_number" placeholder="Tracking Number" autocomplete="off" ng-model="order.tracking_number" class="form-control" data-parsley-group="step1"/>
+		       <!--span class="fa fa-user form-control-feedback text-muted"></span-->
+		       <span ng-show="showCase.saveDispatchForm.tracking_number.$dirty &amp;&amp; showCase.saveDispatchForm.tracking_number.$error.required" class="text-danger">This field is required</span>
+		       </div>
+		    </div>
+		</div>
+		</div>
+
+		<div class="row">
+		<div class="col-md-12">
+		    <div class="form-group has-feedback">
+		       <label>Transporter Courier</label>
+		       <div class="controls">
+		       <input type="text" name="transporter_courier" placeholder="Transporter Courier" autocomplete="off" ng-model="order.transporter_courier" class="form-control" data-parsley-group="step1"/>
+		       <!--span class="fa fa-user form-control-feedback text-muted"></span-->
+		       <span ng-show="showCase.saveDispatchForm.transporter_courier.$dirty &amp;&amp; showCase.saveDispatchForm.transporter_courier.$error.required" class="text-danger">This field is required</span>
+		       </div>
+		    </div>
+		</div>
+		</div>
+
+		<div class="row">
+		    <div style="float:right;" class="col-md-2">
+		      <button type="submit" class="btn btn-block btn-primary mt-lg">Save</button>
+		    </div>
+		    <div style="float:right;" class="col-md-2">
+		      <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+		    </div>
+		</div>
+	    </form>
+	</script>
+
+	<script type="text/ng-template" id="pay">
+	    <form role="form" editable-form="" ng-submit="showCase.Pay()" name="showCase.paymentForm" novalidate="" class="form-validate mb-lg modelform4">
+
+	    <legend>Payment information</legend>
+
+		  <label class="col-md-3 control-label">Payment Date</label>
+		  <div class="col-md-6">
+		     <p class="input-group">
+			<input type="text" name="payment_date" required="" uib-datepicker-popup="{{showCase.format}}" ng-model="order.payment_date" is-open="showCase.opened" max-date="showCase.dt" uib-datepicker-options="showCase.dateOptions"
+			close-text="Close" class="form-control" />
+			<span class="input-group-btn">
+			   <button type="button" ng-click="showCase.open($event)" class="btn btn-default">
+			      <em class="fa fa-calendar"></em>
+			   </button>
+			</span>
+		     </p>
+		     <span ng-show="showCase.paymentForm.payment_date.$dirty &amp;&amp; showCase.paymentForm.payment_date.$error.required" class="text-danger">This field is required</span>
+		     <!--span ng-show="form.validateInput('date', 'required')" class="text-danger">This field is required</span-->
+		  </div>
+
+
+		<div class="row">
+		  <div class="col-md-12">
+		    <div class="form-group has-feedback">
+		      <input type="hidden" name="id" ng-model="order.id" />
+		       <textarea name="payment_details" placeholder="Enter Payment Details" autocomplete="off" ng-model="order.payment_details" required="" class="form-control" ></textarea>
+		       <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+		       <span ng-show="showCase.paymentForm.payment_details.$dirty &amp;&amp; showCase.paymentForm.payment_details.$error.required" class="text-danger">This field is required</span>
+		    </div>
+		  </div>
+		</div>
+
+		<div class="row">
+		    <div style="float:right;" class="col-md-2">
+		      <button type="submit" class="btn btn-block btn-primary mt-lg">Save</button>
+		    </div>
+		    <div style="float:right;" class="col-md-2">
+		      <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+		    </div>
+		</div>
+	    </form>
+	</script>
+
+
+	<div ng-include="'app/views/common/orderstatus.html'"></div>
+	<div ng-include="'wishbook_libs/views/shippingpayment/shipping_payment.html'"></div>
+	<div ng-include="'app/views/common/company_detail.html'"></div>
+	<div ng-include="'app/views/common/company_detail_edit.html'"></div>
+  <div ng-if="is_staff == true" ng-include="'app/views/common/notification.html'"></div>
+
+    </div>
+   </div>
+</div>

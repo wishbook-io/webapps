@@ -1,0 +1,204 @@
+<script type="text/ng-template" id="companydetails_edit">
+    <div ng-controller="CompanyDetailEditController as cmp">
+	<legend>Company Details</legend>
+	<div class="row">
+	  <div class="col-md-12"> 
+	      <div class="panel panel-default">
+		 <div class="panel-body">
+<!-- 		    <div class="table-responsive">
+		       <table class="table table-hover">
+			  <tbody>
+			     <tr>
+				<td>Name:</td>
+				<td>{{company.name}}</td>
+			     </tr>
+			     <tr>
+				<td>Phone Number:</td>
+				<td>{{company.phone_number}}</td>
+			     </tr>
+			     <tr>
+				<td>State:</td>
+				<td>{{company.address.state.state_name}}</td>
+			     </tr>
+			     <tr>
+				<td>City:</td>
+				<td>{{company.address.city.city_name}}</td>
+			     </tr>
+			     <tr>
+				<td>Address:</td>
+				<td>{{company.address.street_address}}</td>
+			     </tr>
+			     <tr>
+				<td>Pincode:</td>
+				<td>{{company.address.pincode}}</td>
+			     </tr>
+			  </tbody>
+		       </table>
+		    </div> -->
+		     <form role="form" name="cmp.companyForm" form-wizard="" validate-steps="true" novalidate="" class="form-validate mb-lg modelform" ng-submit="submitCompanyDetails()" >
+     
+               <fieldset>
+                  <!--legend>Company Details</legend-->
+                  <!-- START row -->
+                  <span style="font-weight: bold; font-size: 17px;">Edit: <input type="checkbox" ng-model="editmode"><br></span>
+                  <div class="row">
+                     <div class="col-md-8">
+                        <div class="form-group has-feedback">
+                           <label>Company Name</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="name" ng-model="company.name" placeholder="Enter company name" required="required" class="form-control" ng-readonly="!editmode" />
+                              <span ng-show="cmp.companyForm.name.$dirty &amp;&amp; cmp.companyForm.name.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div class="row">
+                     <div class="col-md-8"> 
+                        <div class="form-group has-feedback">
+                           <label>Email</label>
+                           <div class="controls">
+                              <input type="email" name="email" placeholder="Enter Email" autocomplete="off" ng-model="company.email" required="" class="form-control" ng-readonly="!editmode"  />
+                              
+                              <span ng-show="cmp.companyForm.email.$dirty &amp;&amp; cmp.companyForm.email.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="cmp.companyForm.email.$dirty &amp;&amp; cmp.companyForm.email.$error.email" class="text-danger">This field must be a valid email address</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>     
+
+                  <div class="row">
+                     <div class="col-md-3">
+                        <div class="form-group has-feedback">
+                           <label>Phone Number</label>
+                           <div class="controls">
+                              <select name="country" chosen="" ng-model="company.country" ng-options="cd.id as cd.name for cd in countries"   width="'100%'" class="chosen-select input-md form-control" required="" ng-readonly="!editmode" >
+                                  <option value=""></option>
+                               </select>
+                              <span ng-show="cmp.companyForm.country.$dirty &amp;&amp; cmp.companyForm.country.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+                     
+                     <div class="col-md-3">
+                        <div class="form-group has-feedback">
+                         <label>&nbsp;</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="phone_number" ng-model="company.phone_number" placeholder="Phone 1234567890" required="required" class="form-control" ng-pattern="/^[0-9]{8,14}$/" ng-readonly="!editmode"  />
+                              <span ng-show="cmp.companyForm.phone_number.$dirty &amp;&amp; cmp.companyForm.phone_number.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="cmp.companyForm.phone_number.$dirty &amp;&amp; cmp.companyForm.phone_number.$error.pattern" class="text-danger">Phone no. is not valid</span>
+                           </div>
+                        </div>
+                     </div>
+                     
+                     
+                     
+                  </div>                  
+                  <div class="row"> 
+                     <div class="col-md-8">
+                        <div class="form-group has-feedback">
+
+                           <label>Street Address</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="street_address" ng-model="address.street_address" placeholder="Enter street address" required="required" class="form-control" ng-readonly="!editmode"  />
+                              <span ng-show="cmp.companyForm.street_address.$dirty &amp;&amp; cmp.companyForm.street_address.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- START row -->
+                  <div class="row">
+                     <div class="col-md-3">
+                        <div class="form-group has-feedback">
+                           <label>State</label>
+                           <div class="controls">
+                            <select name="state" chosen="" ng-model="address.state.id" ng-options="st.id as st.state_name for st in cmp.states" width="'100%'" ng-change="cmp.GetCity(address.state.id)" class="chosen-select input-md form-control" ng-readonly="!editmode"  required="">
+                                     <option value="">Select State</option>
+                           </select>
+                           <span ng-show="cmp.companyForm.state.$dirty &amp;&amp; cmp.companyForm.state.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                             
+                           </div>
+                     </div>
+                     <div class="col-md-3">
+                        <div class="form-group has-feedback">
+                           <label>City</label>
+                           <div class="controls">
+                              <select name="city" chosen="" ng-model="address.city.id" ng-options="st.id as st.city_name for st in cmp.cities" width="'100%'" class="chosen-select input-md form-control" readonly="!editmode" required="required" >
+                                     <option value="">Select City</option>
+                              </select>
+                              <span ng-show="cmp.companyForm.city.$dirty &amp;&amp; cmp.companyForm.city.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                           </div>   
+                     </div>
+                     <div class="col-md-2">
+                        <div class="form-group">
+                           <label>Pincode</label>
+                           <div class="controls">
+                              <input type="number" autocomplete="off" name="pincode" ng-model="address.pincode" placeholder="Pincode" class="form-control" ng-readonly="!editmode"  />
+                              <!--span ng-show="cmp.companyForm.pincode.$dirty &amp;&amp; cmp.companyForm.pincode.$error.required" class="text-danger">This field is required</span-->
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div ng-if="show_last_shipping_add" class="row">
+                  		<div class="col-md-8">
+                  			<div class="form-group">
+                  			<label>Last Shipping Address</label>
+                  				<div class="controls">
+                  					{{last_shipping_address}}
+                  				</div>
+                  			</div>
+                  		</div>
+                  </div>
+                  <div class="row">
+                   	<div class="col-md-6">
+	                    <div class="form-group">
+	                       <label>COD Verified</label>
+	                       <div class="controls">
+	                           <label class="radio-inline c-radio">
+	                             <input id="inlineradio1" type="radio" name="cod_verified" ng-model="company.cod_verified" ng-value="true" required="required" class="form-control"   />
+	                             <span class="fa fa-circle"></span>Yes</label>
+	                          <label class="radio-inline c-radio">
+	                             <input id="inlineradio2" type="radio" name="cod_verified" ng-model="company.cod_verified" ng-value="false" required="required" class="form-control"   />
+	                             <span class="fa fa-circle"></span>No</label>
+	                        </div>
+	                    </div>
+	                 </div>
+	               </div>
+	               <div class="row">
+                  		<div class="col-md-8">
+                  			<div class="form-group">
+                  			<label>is Bank Details Filled? :</label>
+                  				<div class="controls">
+                  					{{bankdetails_added}}
+                  				</div>
+                  			</div>
+                  		</div>
+                  </div>
+                  <div class="row">
+                  		<div class="col-md-8">
+                  			<div class="form-group">
+                  			<label>is GST Details Filled? :</label>
+                  				<div class="controls">
+                  					{{gstdetails_added}}
+                  				</div>
+                  			</div>
+                  		</div>
+                  </div>
+
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group">
+                           <button type="submit" class="btn btn-primary mt-lg" ng-disabled="!editmode" >Submit</button>
+                        </div>
+                     </div>
+                  </div> 
+                  </fieldset>
+                </form>
+		 </div>
+	      </div>
+	  </div>
+	</div>
+    </div>
+</script>

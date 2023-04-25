@@ -1,0 +1,386 @@
+<h3>Marketing</h3>
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+      <div ng-controller="MarketingController as showCase">
+
+        <toaster-container toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}"></toaster-container>
+
+        <table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+        </table>
+
+
+        <script type="text/ng-template" id="marketing_form">
+            <form role="form" ng-submit="showCase.SubmitMarketing('save')" name="showCase.marketingForm" novalidate="" class="form-validate mb-lg modelform-share modelform" enctype="multipart/form-data">
+              <!-- <form role="form" ng-submit="form.$valid && showCase.SubmitMarketing('save')" name="showCase.marketingForm" class="form-validate mb-lg modelform-share modelform" enctype="multipart/form-data"> -->
+              <legend>Marketing</legend>
+
+              <div class="row">
+	            <div class="col-md-12">
+                    <label>Campaign Name *</label>
+		            <div class="form-group has-feedback">
+		               <input type="text" name="campaign_name" placeholder="Campaign Name" autocomplete="off" ng-model="showCase.marketing.campaign_name" class="form-control" required />
+		               <span ng-show="showCase.marketingForm.campaign_name.$dirty &amp;&amp; showCase.marketingForm.campaign_name.$error.required" class="text-danger">This field is required</span>
+		            </div>
+	          	</div>
+	          </div>
+
+              <div class="row">
+	            <div class="col-md-12">
+                    <label>Title * (500 char) (Notification title, SMS msg)</label>
+		            <div class="form-group has-feedback">
+		               <input type="text" name="campaign_text" placeholder="Title" autocomplete="off" ng-model="showCase.marketing.campaign_text" class="form-control" required/>
+		               <span ng-show="showCase.marketingForm.campaign_text.$dirty &amp;&amp; showCase.marketingForm.campaign_text.$error.required" class="text-danger">This field is required</span>
+		            </div>
+	          	</div>
+	          </div>
+
+              <div class="row">
+	            <div class="col-md-12">
+                    <label>Message * (Notification msg, Facebook msg)</label>
+		            <div class="form-group has-feedback">
+		               <textarea type="text" name="campaign_html" placeholder="Message" autocomplete="off" ng-model="showCase.marketing.campaign_html" class="form-control" required></textarea>
+		               <span ng-show="showCase.marketingForm.campaign_html.$dirty &amp;&amp; showCase.marketingForm.campaign_html.$error.required" class="text-danger">This field is required</span>
+		            </div>
+	          	</div>
+	          </div>
+
+                <div class="row">
+                   <div class="col-md-12">
+                      <div class="form-group">
+                    <label>To *</label>
+                     <div class="controls">
+                        <label class="radio-inline c-radio">
+                           <input id="inlineradio1" type="radio" name="to" ng-model="showCase.marketing.to" value="All"  class="form-control" required="required" />
+                           <span class="fa fa-circle"></span>All (all companies & users)
+                        </label>
+                        <label class="radio-inline c-radio">
+                           <input id="inlineradio2" type="radio" name="to" ng-model="showCase.marketing.to" value="Location"  class="form-control" required="required" />
+                           <span class="fa fa-circle"></span>Location Wise
+                        </label>
+                        <label class="radio-inline c-radio">
+                           <input id="inlineradio2" type="radio" name="to" ng-model="showCase.marketing.to" value="Specific Numbers"  class="form-control" required="required" />
+                           <span class="fa fa-circle"></span>Specific Numbers (CSV)
+                        </label>
+
+                        <span ng-show="showCase.marketingForm.to.$dirty &amp;&amp; showCase.marketingForm.to.$error.required" class="text-danger">This field is required</span>
+
+                     </div>
+                      </div>
+                   </div>
+                  </div>
+
+                <div class="row" ng-if="showCase.marketing.to=='Location'">
+                     <div class="col-md-12">
+                    <div class="form-group">
+                            <label>State (You can select multiple)</label>
+                           <div class="controls">
+                          <ui-select multiple="" ng-model="showCase.marketing.state" theme="bootstrap" ng-change="GetCity(showCase.marketing.state)">
+                           <ui-select-match placeholder="Select/All State">{{$item.state_name}} </ui-select-match>
+                           <ui-select-choices repeat="b.id as b in states | propsFilter: {state_name: $select.search}">
+                              <div ng-bind-html="b.state_name | highlight: $select.search"></div>
+                           </ui-select-choices>
+                          </ui-select>
+
+                          <!--span ng-show="showCase.marketingForm.state.$dirty &amp;&amp; showCase.marketingForm.state.$error.required" class="text-danger">This field is required</span-->
+
+                           </div>
+                    </div>
+                     </div>
+                </div>
+
+                <div class="row" ng-if="showCase.marketing.to=='Location'">
+				  <div class="col-sm-12">
+					<div class="text-center">
+					  <button type="button" class="btn btn-primary" ng-click="showCase.SelectAllCity()">Select All City</button>
+					</div>
+				  </div>
+				</div>
+
+                <div class="row" ng-if="showCase.marketing.to=='Location'">
+                     <div class="col-md-12">
+                    <div class="form-group">
+                            <label>City (You can select multiple)</label>
+                           <div class="controls">
+                              <!--select name="city" chosen="" ng-model="group.city" ng-options="st.id as st.city_name for st in cities" width="'100%'" class="chosen-select input-md form-control" >
+                                     <option value="">Select/All City</option>
+                              </select-->
+                          <ui-select multiple="" ng-model="showCase.marketing.city" theme="bootstrap" >
+                           <ui-select-match placeholder="Select/All City">{{$item.city_name}} </ui-select-match>
+                           <ui-select-choices repeat="b.id as b in cities | propsFilter: {city_name: $select.search}">
+                              <div ng-bind-html="b.city_name | highlight: $select.search"></div>
+                           </ui-select-choices>
+                          </ui-select>
+                           </div>
+                    </div>
+                     </div>
+                </div>
+
+                <div class="row" ng-if="showCase.marketing.to=='Specific Numbers'">
+                    <a class="btn btn-link" href="app/csv/specific_numbers.csv">Download Sample CSV File</a>
+
+                     <div class="col-md-12">
+                    <div class="form-group">
+                       <label>Upload CSV *</label>
+                       <div class="controls">
+                        <input type="file" ngf-select="uploadFiles($files)" ng-model="showCase.file.specific_numbers_csv" name="specific_numbers_csv" accept=".csv" ng-required="showCase.form_action=='Add'">
+                        <span ng-show="showCase.marketingForm.specific_numbers_csv.$dirty &amp;&amp; showCase.marketingForm.specific_numbers_csv.$error.required" class="text-danger">This field is required</span>
+
+                        <!--input type="file" ngf-select="uploadFiles(showCase.marketing, $files)" ng-model="showCase.marketing.specific_no_file" name="specific_no_file" required accept=".csv">
+                        <span ng-show="showCase.marketing.specific_no_file.$dirty &amp;&amp; showCase.marketing.specific_no_file.$error.required" class="text-danger">This field is required</span-->
+
+                       </div>
+                    </div>
+                     </div>
+                </div>
+
+              <div class="row" ng-if="showCase.marketing.to!='Specific Numbers'">
+	            <div class="col-md-12">
+		          <div class="form-group">
+                     <label>Company/Number Type *</label>
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="all" ng-model="showCase.marketing.company_number_type_all" disabled=""/>
+                           <span class="fa fa-check"></span>All (default : All, unless you select below options)</label>
+                        </div>
+                     </div>
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="retailers" ng-model="showCase.marketing.company_number_type_retailers"/>
+                           <span class="fa fa-check"></span>Retailers </label>
+                        </div>
+                     </div>
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="retailers" ng-model="showCase.marketing.company_number_type_wholesalers_agents"/>
+                           <span class="fa fa-check"></span>Wholesalers / Agents</label>
+                        </div>
+                     </div>
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="retailers" ng-model="showCase.marketing.company_number_type_manufactures"/>
+                           <span class="fa fa-check"></span>Manufactures</label>
+                        </div>
+                     </div>
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="retailers" ng-model="showCase.marketing.company_number_type_online_retailer_reseller"/>
+                           <span class="fa fa-check"></span>Reseller</label>
+                        </div>
+                     </div>
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="retailers" ng-model="showCase.marketing.company_number_type_broker"/>
+                           <span class="fa fa-check"></span>Broker</label>
+                        </div>
+                     </div>
+
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="retailers" ng-model="showCase.marketing.company_number_type_guestusers"/>
+                           <span class="fa fa-check"></span>Guest Users</label>
+                        </div>
+                     </div>
+                     <!--div class="controls" ng-if="showCase.marketing.to=='All'">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="retailers" ng-model="showCase.marketing.company_number_type_inphonebook"/>
+                           <span class="fa fa-check"></span>In Phone Book</label>
+                        </div>
+                     </div-->
+                  </div>
+	          	</div>
+	          </div>
+
+
+              <div class="row">
+	            <div class="col-md-12">
+		          <div class="form-group">
+                     <label>By *</label>
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="all" ng-model="showCase.marketing.by_sms"/>
+                           <span class="fa fa-check"></span>SMS </label>
+                        </div>
+                     </div>
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="all" ng-model="showCase.marketing.by_flash_sms"/>
+                           <span class="fa fa-check"></span>Flash SMS </label>
+                        </div>
+                     </div>
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="all" ng-model="showCase.marketing.by_in_app_notifications"/>
+                           <span class="fa fa-check"></span>In App Notifications </label>
+                        </div>
+                     </div>
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="all" ng-model="showCase.marketing.by_facebook_notifications" disabled=""/>
+                           <span class="fa fa-check"></span>Facebook Notifications </label>
+                        </div>
+                     </div>
+                     <div class="controls">
+                        <div class="checkbox c-checkbox">
+                        <label>
+                           <input type="checkbox" name="all" ng-model="showCase.marketing.by_audio_call" disabled=""/>
+                           <span class="fa fa-check"></span>Audio Call </label>
+                        </div>
+                     </div>
+                  </div>
+	          	</div>
+	          </div>
+
+            <div class="row">
+            <div class="col-md-12">
+            <div class="form-group">
+                   <label>Other options:</label>
+                   <div class="controls">
+                      <div class="checkbox c-checkbox">
+                      <label>
+                         <input type="checkbox" name = 'link_option' ng-model="showCase.marketing.login_url_in_sms" />
+                         <span class="fa fa-check"></span>Include User Login Url in SMS</label>
+                      </div>
+
+                      <label>Category(You can select multiple)</label>
+                      <ui-select multiple="" ng-model="showCase.marketing.categories" theme="bootstrap">
+                       <ui-select-match placeholder="Select/All Categories">{{$item.category_name}} </ui-select-match>
+                       <ui-select-choices repeat="b.id as b in categories| propsFilter: {category_name: $select.search}">
+                          <div ng-bind-html="b.category_name | highlight: $select.search"></div>
+                       </ui-select-choices>
+                      </ui-select>
+                   </div>
+                   
+                </div>
+            </div>
+          </div>
+
+          <div class="row" ng-show="showCase.marketing.categories.length > 0">
+             <div class="col-md-12">
+               <div class="form-group">
+          <label>Minimum views:</label>
+          <div class="controls">
+             <input type="number" autocomplete="on" name="views" ng-model="showCase.marketing.minimum_category_views" placeholder="Minimum number of views (Positive Number)" class="form-control" ng-required ="showCase.marketing.categories.length > 0" min=0 />
+               <span ng-show="showCase.marketing.minimum_category_views == null" class="text-danger">This field is required</span>
+               <span ng-show="showCase.marketing.minimum_category_views < 0" class="text-danger">The value must be 0 or greater than 0</span>
+             </div>
+             </div>
+           </div>
+          </div>
+
+
+              <div class="row">
+                     <div class="col-md-12">
+                    <div class="form-group">
+                       <label>Upload Image (For Notification)</label>
+                       <div class="controls">
+                        <input type="file" ngf-select name="image" ng-model="showCase.marketing.image"  class="form-control" ngf-accept="'image/*'" >
+
+                        <!--input type="file" ngf-select="uploadFiles(showCase.marketing, $files)" ng-model="showCase.marketing.specific_no_file" name="specific_no_file" required accept=".csv">
+                        <span ng-show="showCase.marketing.specific_no_file.$dirty &amp;&amp; showCase.marketing.specific_no_file.$error.required" class="text-danger">This field is required</span-->
+
+                       </div>
+                    </div>
+                     </div>
+              </div>
+
+              <div class="row">
+	            <div class="col-md-12">
+                    <label>App Version</label>
+		            <div class="form-group has-feedback">
+		               <input type="text" name="app_version" placeholder="App Version" autocomplete="off" ng-model="showCase.marketing.app_version" class="form-control" />
+		               <span ng-show="showCase.marketingForm.app_version.$dirty &amp;&amp; showCase.marketingForm.app_version.$error.required" class="text-danger">This field is required</span>
+		            </div>
+	          	</div>
+	          </div>
+
+              <div class="row">
+	            <div class="col-md-12">
+                    <label>Last Login Platform</label>
+		            <div class="form-group has-feedback">
+                        <select name="last_login_platform" ng-model="showCase.marketing.last_login_platform" class="form-control" >
+                           <option value="Lite" >Lite</option>
+                           <option value="Android" >Android</option>
+                           <option value="iOS" >iOS</option>
+                           <option value="Webapp" >Webapp</option>
+                        </select>
+		            </div>
+	          	</div>
+	          </div>
+
+              <div class="row">
+	            <div class="col-md-12">
+                    <label>Deep Link</label></label>
+		            <div class="form-group has-feedback">
+		               <input type="text" name="deep_link" placeholder="Deep link" autocomplete="off" ng-model="showCase.marketing.deep_link" class="form-control" />
+		               <span ng-show="showCase.marketingForm.deep_link.$dirty &amp;&amp; showCase.marketingForm.deep_link.$error.required" class="text-danger">This field is required</span>
+
+		            </div>
+	          	</div>
+	          </div>
+
+              <div class="row">
+	            <div class="col-md-12">
+                    <label>Test Users (Only defined test users will get msg)</label></label>
+		            <div class="form-group has-feedback">
+		               <input type="text" name="test_users_ids" placeholder="Ex- 4,11,23" autocomplete="off" ng-model="showCase.marketing.test_users_ids" class="form-control" />
+
+		            </div>
+	          	</div>
+	          </div>
+
+                <div class="row" ng-if="total_receiver.total_notification_users.length > 0 || total_receiver.total_sms_phone_numbers >= 0">
+                  <div class="col-md-12">
+                  <div class="panel panel-default">
+                     <div class="panel-body">
+                    <div class="table-responsive">
+                       <table class="table table-hover">
+                          <tbody>
+                         <tr ng-if="total_receiver.total_notification_users.length > 0">
+                            <td>Total Notification Users:</td>
+                            <td>{{total_receiver.total_notification_users}}</td>
+                         </tr>
+                         <tr ng-if="total_receiver.total_sms_phone_numbers >= 0">
+                            <td>Total SMS Phone Number:</td>
+                            <td>{{total_receiver.total_sms_phone_numbers}}</td>
+                         </tr>
+                          </tbody>
+                       </table>
+                    </div>
+                     </div>
+                  </div>
+                  </div>
+                </div>
+
+              <div class="row">
+		            <div style="float:right;" class="col-md-2">
+		              <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+		            </div>
+		            <div style="float:right;" class="col-md-2">
+		              <button type="submit" class="btn btn-block btn-primary mt-lg">Save</button>
+		            </div>
+		            <div style="float:right;" class="col-md-2">
+		              <button type="button" ng-click="showCase.SubmitMarketing('count')" class="btn btn-block btn-primary mt-lg">Total Receiver</button>
+		            </div>
+		            <div style="float:right;" class="col-md-2">
+		              <button type="button" ng-click="showCase.SubmitMarketing('csvdownload')" class="btn btn-block btn-primary mt-lg">Download CSV</button>
+		            </div>
+	          </div>
+
+            </form>
+        </script>
+
+      </div>
+   </div>
+</div>

@@ -1,0 +1,276 @@
+<style>
+  .full button span {
+    background-color: limegreen;
+    border-radius: 32px;
+    color: black;
+  }
+  .partially button span {
+    background-color: orange;
+    border-radius: 32px;
+    color: black;
+  }
+</style>
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Purchase Orders</h3>
+<div class="panel panel-default modelform6">
+   <div class="panel-body" >
+  	<div ng-controller="PurchaseorderslistController as showCase">
+      	
+		<table id="purchaseorders-datatables" datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+		</table>
+		<script type="text/ng-template" id="addorders">
+	        <form role="form" ng-submit="showCase.AddOrder()" name="showCase.orderForm" novalidate="" class="form-validate mb-lg modelform">
+	 
+	          <legend>Order Details</legend>
+	          <div class="row">
+                 <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Company</label>
+                       <div class="controls">
+                          <select name="company" chosen="" ng-model="showCase.order.company" ng-options="b.id as b.buying_company.name for b in showCase.buyers" width="'100%'" class="chosen-select input-md form-control" required="required">
+                             <option value=""></option>
+                          </select>
+                           <span ng-show="showCase.orderForm.company.$dirty &amp;&amp; showCase.orderForm.company.$error.required" class="text-danger">This field is required</span>
+                       </div>
+                    </div>
+                 </div>
+            </div>
+
+	          <div class="row">
+	            <div class="col-md-12"> 
+		            <div class="form-group has-feedback">
+		               <input type="text" name="order_number" placeholder="Order ID " autocomplete="off" ng-model="showCase.order.order_number" required="" class="form-control" />
+		               <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+		               <span ng-show="showCase.orderForm.order_number.$dirty &amp;&amp; showCase.orderForm.order_number.$error.required" class="text-danger">This field is required</span>
+		            </div>
+	          	</div>
+	          </div>
+
+            <div class="row">
+               <div class="col-md-6">
+                  <div class="form-group">
+                     <label>Add Products</label>
+                     <div class="controls">
+	                  <label class="radio-inline c-radio">
+	                     <input id="inlineradio1" type="radio" name="cat_sel" ng-model="showCase.order.cat_sel" value="catalog" required="required" class="form-control" checked="checked" />
+	                     <span class="fa fa-circle"></span>Catalog</label>
+	                  <label class="radio-inline c-radio">
+	                     <input id="inlineradio2" type="radio" name="cat_sel" ng-model="showCase.order.cat_sel" value="selection" required="required" class="form-control" />
+	                     <span class="fa fa-circle"></span>Selection</label>
+                     </div>
+                  </div>
+                  <span ng-show="showCase.orderForm.push_downstream.$dirty &amp;&amp; showCase.orderForm.push_downstream.$error.required" class="text-danger">This field is required</span>
+               </div>
+            </div>
+
+            <div class="row">
+            <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Catalog</label>
+                     <div class="controls">
+                        <select chosen="" name="catalog" ng-model="showCase.order.catalog" ng-options="c.id as c.title for c in showCase.catalogs" ng-change="showCase.GetProducts(showCase.order.catalog)" data-placeholder="" class="chosen-select form-control" required="required">
+                       <option value=""></option>
+                      </select>
+                         <span ng-show="showCase.orderForm.catalog.$dirty &amp;&amp; showCase.orderForm.catalog.$error.required" class="text-danger">This field is required</span>
+                     </div>
+                  </div>
+            </div>
+            </div>
+
+            <div class="row">   
+                  <div ng-repeat="product in showCase.products">
+                      <div class="col-md-4">
+                        <div class="form-group" style="text-align: center;">
+
+                           <img ng-src="{{product.image.full_size}}"  style="width: 33%; height: 80px;" class="thumb" >
+                           <!--input type="text" name="title" ng-value="product.sku" ng-model="product.title" /-->
+                           <div class="checkbox c-checkbox">
+                              <label>
+                                 <input type="checkbox" id="{{product.id}}"  name="items" ng-value="product.sku" ng-model="showCase.order.items.product[product.id]" ng-change="showCase.getChecked(product.id)"/>
+                                 <span class="fa fa-check"></span></label>
+                           </div>
+                           <input type="number" name="quantity" value="1" ng-model="showCase.order.items.quantity[product.id]" class="form-control" />
+
+                           <input type="text" name="sku" readonly="readonly" ng-value="product.sku" ng-model="product.sku" class="form-control" style="height: 25px;" />
+                           
+                           <input type="text" name="price" readonly="readonly"  ng-value="product.price" ng-model="showCase.order.items.rate[product.id]" class="form-control" style="height: 25px;"/>
+
+                        </div>
+                      </div>
+                  </div>
+            </div>
+
+
+	          <div class="row">
+		            <div style="float:right;" class="col-md-2"> 
+		              <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+		            </div>
+		            <div style="float:right;" class="col-md-2"> 
+		              <button type="submit" class="btn btn-block btn-primary mt-lg">Add</button>
+		            </div>
+	          </div>
+         </form>
+	    </script>
+
+      <script type="text/ng-template" id="updatestatus">
+        <form role="form" ng-submit="UpdateStatus()" name="showCase.updateStatusForm" novalidate="" class="form-validate mb-lg modelform2">
+   
+        <legend>Edit Status</legend>
+            <!--div class="row">
+                <div class="col-md-12">  
+                <div class="form-group has-feedback">
+                  <label>Processing Status</label>
+                      <select name="processing_status" chosen="" ng-model="order.processing_status" ng-options="s.value as s.display_name for s in proc_statuses"  width="'100%'" class="chosen-select input-md form-control" required="">
+                         <option value="">Select</option>
+                      </select>
+                       <span ng-show="showCase.updateStatusForm.processing_status.$dirty &amp;&amp; showCase.updateStatusForm.processing_status.$error.required" class="text-danger">This field is required</span>
+                   </div>
+                </div>
+            </div-->
+
+            <div class="row">
+                <div class="col-md-12">  
+                <div class="form-group has-feedback">
+                  <label>Order Status *</label>
+                      <select name="customer_status" chosen="" ng-model="order.customer_status" ng-options="s.value as s.display_name for s in order_statuses"   width="'100%'" class="chosen-select input-md form-control" required="">
+                         <option value=""></option>
+                         
+                      </select>
+                       <span ng-show="showCase.updateStatusForm.customer_status.$dirty &amp;&amp; showCase.updateStatusForm.customer_status.$error.required" class="text-danger">This field is required</span>
+                   </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Update</button>
+                </div>
+            </div>
+        </form>
+    </script>
+
+    <!--script type="text/ng-template" id="cancelorder">
+        <form role="form" ng-submit="showCase.CancelOrder()" name="showCase.cancelOrderForm" novalidate="" class="form-validate mb-lg modelform4">
+   
+        <legend>Cancel Order</legend>
+             
+            <div class="row">
+              <div class="col-md-12"> 
+                <div class="form-group has-feedback">
+                  <input type="hidden" name="id" ng-model="order.id" />
+                   <textarea name="buyer_cancel" placeholder="Enter cancel note" autocomplete="off" ng-model="order.buyer_cancel" required="" class="form-control" ></textarea>
+                   <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+                   <span ng-show="showCase.verifyPaymentForm.buyer_cancel.$dirty &amp;&amp; showCase.verifyPaymentForm.buyer_cancel.$error.required" class="text-danger">This field is required</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+                <div  class="col-md-4"> 
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Yes</button>
+                </div>
+                <div class="col-md-4"> 
+                  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">No</button>
+                </div>
+            </div>
+        </form>
+    </script-->
+
+     <!--script type="text/ng-template" id="pay">
+        <form role="form" editable-form="" ng-submit="showCase.Pay()" name="showCase.paymentForm" novalidate="" class="form-validate mb-lg modelform4">
+   
+        <legend>Payment information</legend>
+            
+              <label class="col-md-3 control-label">Payment Date</label>
+              <div class="col-md-6">
+                 <p class="input-group">
+                    <input type="text" name="payment_date" required="" uib-datepicker-popup="{{showCase.format}}" ng-model="order.payment_date" is-open="showCase.opened" max-date="showCase.dt" uib-datepicker-options="showCase.dateOptions" 
+                    close-text="Close" class="form-control" />
+                    <span class="input-group-btn">
+                       <button type="button" ng-click="showCase.open($event)" class="btn btn-default">
+                          <em class="fa fa-calendar"></em>
+                       </button>
+                    </span>
+                 </p>
+                 <span ng-show="showCase.paymentForm.payment_date.$dirty &amp;&amp; showCase.paymentForm.payment_date.$error.required" class="text-danger">This field is required</span>
+              
+              </div>
+            
+            
+            <div class="row">
+              <div class="col-md-12"> 
+                <div class="form-group has-feedback">
+                  <input type="hidden" name="id" ng-model="order.id" />
+                   <textarea name="payment_details" placeholder="Enter Payment Details" autocomplete="off" ng-model="order.payment_details" required="" class="form-control" ></textarea>
+                   <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+                   <span ng-show="showCase.paymentForm.payment_details.$dirty &amp;&amp; showCase.paymentForm.payment_details.$error.required" class="text-danger">This field is required</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Save</button>
+                </div>
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </script-->
+    
+    <!--script type="text/ng-template" id="supplierdetails">
+        <legend>Supplier Details</legend>
+        <div class="row">
+          <div class="col-md-12"> 
+              <div class="panel panel-default">
+                 <div class="panel-body">
+                    <div class="table-responsive">
+                       <table class="table table-hover">
+                          <tbody>
+                             <tr>
+                                <td>Name:</td>
+                                <td>{{buyer.selling_company.name}}</td>
+                             </tr>
+                             <tr>
+                                <td>Phone Number:</td>
+                                <td>{{buyer.selling_company.phone_number}}</td>
+                             </tr>
+                             <tr>
+                                <td>State:</td>
+                                <td>{{buyer.selling_company.branches[0].state.state_name}}</td>
+                             </tr>
+                             <tr>
+                                <td>City:</td>
+                                <td>{{buyer.selling_company.branches[0].city.city_name}}</td>
+                             </tr>
+                             <tr>
+                                <td>Address:</td>
+                                <td>{{buyer.selling_company.branches[0].street_address}}</td>
+                             </tr>
+                             <tr>
+                                <td>Pincode:</td>
+                                <td>{{buyer.selling_company.branches[0].pincode}}</td>
+                             </tr>
+                             <tr>
+                                <td>Type:</td>
+                                <td>{{buyer.group_type.name}}</td>
+                             </tr>
+                          </tbody>
+                       </table>
+                    </div>
+                 </div>
+              </div>
+          </div>
+        </div>
+    </script-->
+    
+    <div ng-include="'app/views/common/orderstatus.html'"></div>
+    <div ng-include="'app/views/common/purchase_order_modal.html'"></div>
+    <div ng-include="'wishbook_libs/views/shippingpayment/shipping_payment.html'"></div>
+ 	</div>
+   </div>
+</div>

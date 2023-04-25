@@ -1,0 +1,916 @@
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+<style>
+.cropArea {
+    background: #E4E4E4;
+    overflow: hidden;
+    height:350px;
+}
+form .progress {
+    line-height: 15px;
+}
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+}
+.slidelink {
+  height: 100px !important;
+}
+
+</style>
+
+
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+
+<h3>
+
+<span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span>
+Catalogs
+</h3>
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+      <div ng-controller="CatalogController as showCase">
+
+    <table id="catalogs-datatables" datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+    </table>
+
+    <!--script type="text/ng-template" id="openenablemodal">
+      <div class="ngdialog-message">
+
+        <div class="panel-heading"></div>
+          <div class="panel-body">
+            <form name="showCase.enableCatalogForm" ng-submit="" class="form-validate modelform-enablecatalog">
+                <legend>Catalog Enable Duration</legend>
+                <div class="row" >
+                   <div class="col-md-6">
+                      <div class="form-group">
+                         <label>Enter Duration (in Days)</label>
+                         <div class="controls">
+                            <input type="number" autocomplete="off" name="enable_duration" ng-model="showCase.enable_duration" data-parsley-group="step1" placeholder="Enter Duration"  class="form-control" min="10" required/>
+                            <span ng-show="showCase.enableCatalogForm.enable_duration.$error.min" class="text-danger">Duration should be minimum 10 Days</span>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+
+                <div class="row" >
+                   <div class="col-md-6">
+                      <div class="form-group">
+                         <button type="submit" ng-click="showCase.EnableCatalog()" class="btn btn-primary mt-lg">Submit</button>
+                      </div>
+                   </div>
+                </div>
+            </form>
+          </div>
+      </div>
+    </script-->
+
+
+    <script type="text/ng-template" id="openenablemodal">
+      <div class="ngdialog-message">
+        <div class="panel-heading"></div>
+          <div class="panel-body">
+            <form name="showCase.enableCatalogForm" ng-submit="showCase.EnableCatalog()" class="form-validate modelform-enablecatalog">
+                <legend>Enable Catalog</legend>
+                <table class="table table-hover">
+                  <thead>
+                        <th>Company</th>
+                        <th>Current Status</th>
+                        <th>Enter Duration</th>
+                        <th>Select</th>
+
+                  </thead>
+
+                  <tbody ng-repeat="sellerdata in to_enable">
+                    <tr>
+                        <td>{{sellerdata.company_name}}</td>
+                        <td>{{sellerdata.status}}</td>
+                        <td><input type="number" name="duration" ng-model="sellerdata.duration" placeholder="Enter Duration"  class="form-control"  min="10" max="90" required />
+                          <span ng-show="showCase.enableCatalogForm.duration.$error.min" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                          <span ng-show="showCase.enableCatalogForm.duration.$error.max" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                        </td>
+                        <td><input class="needsclick" type="checkbox" value="" ng-model="sellerdata.is_select"/><!--button ng-click="showCase.removeProduct($index)">Remove</button--></td>
+                    </tr>
+
+                  </tbody>
+                </table>
+
+                <div class="row" align="center">
+                 <div class="col-md-12">
+                    <div class="form-group">
+                       <button type="submit" class="btn btn-primary mt-lg">Submit</button>
+                    </div>
+                 </div>
+                </div>
+            </form>
+          </div>
+      </div>
+    </script>
+
+
+    <script type="text/ng-template" id="opendisablemodal">
+      <div class="ngdialog-message">
+        <div class="panel-heading"></div>
+          <div class="panel-body">
+            <form name="showCase.disableCatalogForm" ng-submit="" class="form-validate modelform-disablecatalog">
+                <legend>Disable Catalog</legend>
+                <table class="table table-hover">
+                  <thead>
+                        <th>Company</th>
+                        <th>Current Status</th>
+                        <th>Select</th>
+
+                  </thead>
+
+                  <tbody ng-repeat="sellerdata in to_disable">
+                    <tr>
+                        <td>{{sellerdata.company_name}}</td>
+                        <td>{{sellerdata.status}}</td>
+                        <td><input class="needsclick" type="checkbox" value="" ng-model="sellerdata.is_select"/><!--button ng-click="showCase.removeProduct($index)">Remove</button--></td>
+                    </tr>
+
+                  </tbody>
+                </table>
+
+                <div class="row" align="center">
+                 <div class="col-md-12">
+                    <div class="form-group">
+                       <button type="submit" ng-click="showCase.DisableCatalog()" class="btn btn-primary mt-lg">Submit</button>
+                    </div>
+                 </div>
+                </div>
+            </form>
+          </div>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="sort_order_dialog">
+      <div class="ngdialog-message">
+        <div class="panel-heading"></div>
+          <div class="panel-body">
+            <form name="showCase.SortOrderForm" ng-submit="showCase.submitSortOrder()" class="form-validate modelform-sortorder">
+                <legend>Change Catalog Sort Order</legend>
+                <div class="col-md-6">
+                    <div class="form-group">
+                       <label>Sort Order</label>
+                       <div class="controls">
+                          <input type="number" autocomplete="off" name="sort_order" ng-model="showCase.catalog.sort_order" placeholder="Enter price"  class="form-control" required/>
+                       </div>
+                    </div>
+                 </div>
+
+                <div class="row" align="center">
+                 <div class="col-md-12">
+                    <div class="form-group">
+                       <button type="submit" class="btn btn-primary mt-lg">Submit</button>
+                    </div>
+                 </div>
+                </div>
+            </form>
+          </div>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="catalogbulkuploadcsv">
+        <form role="form" ng-submit="showCase.UploadBulkCatalogCsv()" name="showCase.uploadcsv" novalidate="" class="form-validate mb-lg modelform3">
+
+        <legend>Upload Catalogs CSV</legend>
+            <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                               <label>Select CSV from your computer</label>
+                                <input type="file" ngf-select="uploadCSVFiles($files)" ng-model="showCase.file.catalog_csv" name="catalog_csv" required accept=".csv">
+                                <span ng-show="showCase.uploadcsv.catalog_csv.$dirty &amp;&amp; showCase.uploadcsv.catalog_csv.$error.required" class="text-danger">This field is required</span>
+
+                            </div>
+                         </div>
+            </div>
+            <div class="row">
+                <div style="float:right;" class="col-md-2">
+                  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+                <div style="float:right;" class="col-md-4">
+                  <a style="text-decoration: none;" href="app/csv/Catalogbulk.csv"><button type="button" class="btn btn-block btn-primary mt-lg">Download Sample</button></a>
+                </div>
+                <div style="float:right;" class="col-md-2">
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Upload</button>
+                </div>
+            </div>
+        </form>
+    </script>
+
+      <script type="text/ng-template" id="addcatalog">
+      <div class="ngdialog-message">
+
+        <div class="panel-heading"></div>
+        <div class="panel-body">
+          <form name="showCase.addcatalogform" ng-submit="" form-wizard="" validate-steps="true" novalidate="" steps="3" enctype="multipart/form-data" class="form-validate modelform">
+             <div class="form-wizard wizard-horizontal">
+                <!-- START wizard steps indicator-->
+                <ol class="row">
+                   <li ng-class="{'active':wizard.active(1)}" ng-click="wizard.go(1)" class="col-md-4">
+                      <h4>Catalog Details</h4>
+
+                   </li>
+                   <li ng-class="{'active':wizard.active(2)}" ng-click="wizard.go(2)" class="col-md-4">
+                      <h4>Upload Image</h4>
+
+                   </li>
+                   <li ng-class="{'active':wizard.active(3)}" ng-click="wizard.go(3)" class="col-md-4">
+                      <h4>Add Products</h4>
+                   </li>
+                </ol>
+                <!-- END wizard steps indicator-->
+                <!-- START Wizard Step inputs -->
+                <div id="step1" ng-show="wizard.active(1)">
+                   <fieldset>
+                      <!--legend>Catalog Details</legend-->
+                      <!-- START row -->
+                      <div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Title *</label>
+                               <div class="controls">
+                                  <input type="text" autocomplete="off" name="title" ng-model="showCase.catalog.title" data-parsley-group="step1" placeholder="Enter Title"  class="form-control" pattern=".{0,40}" required/>
+                                  <span ng-show="showCase.addcatalogform.title.$dirty &amp;&amp; showCase.addcatalogform.title.$error.required" class="text-danger">This field is required</span>
+                                  <span ng-show="showCase.addcatalogform.title.$error.pattern" class="text-danger">This field has character limit of 40</span>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+
+                      <!--div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Processing Status</label>
+                                <select name="view_permission" chosen="push" ng-model="order.view_permission" width="'100%'" class="chosen-select input-md form-control" required="">
+                                 <option value="push" selected>Private</option>
+                                 <option value="public">Public</option>
+                                </select>
+                                <span ng-show="showCase.addcatalogform.view_permission.$dirty &amp;&amp; showCase.addcatalogform.view_permission.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                         </div>
+                      </div-->
+
+                      <div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <label>View Permission *</label>
+                               <div class="controls">
+                                   <label class="radio-inline c-radio">
+                                     <input id="inlineradio1" type="radio" name="view_permission" ng-model="showCase.catalog.view_permission" data-parsley-group="step1" value="push" required="required" class="form-control"  />
+                                     <span class="fa fa-circle"></span>Private</label>
+                                  <label class="radio-inline c-radio">
+                                     <input id="inlineradio2" type="radio" name="view_permission" ng-model="showCase.catalog.view_permission" data-parsley-group="step1" value="public" required="required" class="form-control" />
+                                     <span class="fa fa-circle"></span>Public</label>
+                                </div>
+                            </div>
+                         </div>
+                      </div>
+                      <div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                               <label>Catalog Enable Duration</label>
+                               <div class="controls">
+                                  <input type="number" autocomplete="off" name="enable_duration" ng-model="showCase.catalog.enable_duration" data-parsley-group="step1" placeholder="Enter Duration (in Days)"  class="form-control"  min="10" max="90" required/>
+                                  <span ng-show="showCase.addcatalogform.enable_duration.$error.min" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                                  <span ng-show="showCase.addcatalogform.enable_duration.$error.max" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                      <div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                               <label>Dispatch Date</label>
+                               <div class="controls">
+                                     <p class="input-group">
+                                      <input type="text" name="dispatch_date" required="" uib-datepicker-popup="{{format}}" ng-model="showCase.catalog.dispatch_date" is-open="opened" min-date="dt" uib-datepicker-options="dateOptions"
+                                      close-text="Close" class="form-control" />
+                                      <span class="input-group-btn">
+                                         <button type="button" ng-click="open($event)" class="btn btn-default">
+                                      <em class="fa fa-calendar"></em>
+                                         </button>
+                                      </span>
+                                     </p>
+                              </div>
+                            </div>
+                         </div>
+                      </div>
+                      <div class="row" ng-if="!update_flag">
+                            <div class="form-group">
+                                <label class="col-sm-12 control-label">Select Price Type</label>
+                               <div class="col-sm-10">
+                                  <!--label class="radio-inline c-radio">
+                                     <input id="inlineradio1" type="radio" name="price_type" ng-model="product.price_type"  value="withoutprice" required="required" class="form-control" ng-click="withoutprice()" checked="checked" />
+                                     <span class="fa fa-circle"></span>Without Price</label-->
+                                  <label class="radio-inline c-radio">
+                                     <input id="inlineradio1" type="radio" name="price_type" ng-model="product.price_type"  value="single" required="required" class="form-control" ng-click="single()" checked="checked" />
+                                     <span class="fa fa-circle"></span>Single Price</label>
+                                  <label class="radio-inline c-radio">
+                                     <input id="inlineradio2" type="radio" name="price_type" ng-model="product.price_type"  value="individual" required="required" ng-click="individual()" class="form-control" />
+                                     <span class="fa fa-circle"></span>Individual Price</label>
+                                  <span ng-show="showCase.addcatalogform.price_type.$dirty &amp;&amp; showCase.addcatalogform.price_type.$error.required" class="text-danger">This field is required</span>
+                               </div>
+                            </div>
+                      </div>
+                      <div class="row" ng-if="product_price_type=='single' && !update_flag">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                               <label>Price</label>
+                               <div class="controls">
+                                  <input type="number" autocomplete="off" autocomplete="off" name="price" ng-model="showCase.catalog.price" data-parsley-group="step1" placeholder="Enter price"  class="form-control" min="101" required/>
+                                  <span ng-show="showCase.addcatalogform.price.$error.min" class="text-danger">Price should be minimum 101</span>
+                               </div>
+                            </div>
+                          </div>
+                         <!-- Commented because public price not asking to user and make it same as price -->
+                         <!--div class="col-md-6" ng-if="showCase.catalog.view_permission=='public'">
+                            <div class="form-group">
+                               <label>Public Price</label>
+                               <div class="controls">
+                                  <input type="number" autocomplete="off" autocomplete="off" name="public_price" ng-model="showCase.catalog.public_price" data-parsley-group="step1" placeholder="Enter public price"  class="form-control" min="101" required/>
+                                  <span ng-show="showCase.addcatalogform.public_price.$error.min" class="text-danger">Public Price should be minimum 101</span>
+                               </div>
+                            </div>
+                         </div-->
+                      </div>
+
+                      <!--div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group has-feedback">
+                              <label>Sell full Catalog only</label>
+                               <div class="controls">
+                                  <div class="checkbox c-checkbox" style="margin: 0px;">
+                                  <label>
+                                     <input type="checkbox" id="sell_full_catalog"  name="sell_full_catalog" ng-value="showCase.catalog.sell_full_catalog" ng-model="showCase.catalog.sell_full_catalog" />
+                                     <span class="fa fa-check"></span> Sell full Catalog </label>
+                                  </div>
+                               </div>
+                            </div>
+                         </div>
+                      </div-->
+                      <div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group has-feedback">
+                              <label>How would you like to sell catalog?</label>
+                               <div class="controls">
+                                  <div style="margin: 0px;">
+                                  <label class="radio-inline c-radio">
+                                     <input type="radio" id="sell_full_catalog"  name="sell_full_catalog" ng-value="true" ng-model="showCase.catalog.sell_full_catalog" />
+                                     <span class="fa fa-circle"></span> Full Catalog only</label> <br>
+                                  <label class="radio-inline c-radio">
+                                     <input type="radio" id="sell_full_catalog"  name="sell_full_catalog" ng-value="false" ng-model="showCase.catalog.sell_full_catalog" />
+                                     <span class="fa fa-circle"></span> Single pieces and full catalog both </label>
+                                  </div>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                      <div class="row" ng-if="showCase.catalog.sell_full_catalog == false">
+                         <div class="col-md-5">
+                            <div class="form-group has-feedback">
+                              <label>Add margin/Pc. for single pieces</label>
+                               <div class="controls">
+                                  <div style="margin: 0px;">
+                                  <label class="radio-inline c-radio">
+                                     <input type="radio" id="is_percentage" name="is_percentage" ng-value="true" ng-model="showCase.catalog.is_percentage" />
+                                     <span class="fa fa-circle"></span> Add margin in percentage %</label> <br>
+                                     <div class="controls" ng-if="showCase.catalog.is_percentage == true">
+                                        <input type="number" autocomplete="off" autocomplete="off" name="single_piece_price_percentage" ng-model="showCase.catalog.single_piece_price_percentage" data-parsley-group="step1" placeholder="Enter percentage"  class="form-control" max="100" required/>
+                                      </div>
+                                  <label class="radio-inline c-radio">
+                                     <input type="radio" id="is_percentage"  name="is_percentage" ng-value="false" ng-model="showCase.catalog.is_percentage" />
+                                     <span class="fa fa-circle"></span> Add margin in Rs. </label>
+                                     <div class="controls" ng-if="showCase.catalog.is_percentage == false">
+                                        <input type="number" autocomplete="off" autocomplete="off" name="single_piece_price" ng-model="showCase.catalog.single_piece_price" data-parsley-group="step1" placeholder="Enter Price (Rs.)"  class="form-control" required/>
+                                      </div>
+                                  </div>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                      <div ng-if="update_flag">
+                      <div class="row">
+                            <div class="form-group">
+                                <label class="col-sm-12 control-label">Select Price Type</label>
+                               <div class="col-sm-10">
+                                  <label class="radio-inline c-radio">
+                                     <input id="inlineradio1" type="radio" name="price_type" ng-model="product.price_type"  value="single" required="required" class="form-control" ng-click="single()" checked="checked" />
+                                     <span class="fa fa-circle"></span>Single Price</label>
+                                  <label class="radio-inline c-radio">
+                                     <input id="inlineradio2" type="radio" name="price_type" ng-model="product.price_type"  value="individual" required="required" ng-click="individual()" class="form-control" />
+                                     <span class="fa fa-circle"></span>Individual Price</label>
+
+                               </div>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="product.price_type == 'single'">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                 <label>Price</label>
+                                 <div class="controls">
+                                    <input type="number" autocomplete="off" autocomplete="off" name="price" ng-model="showCase.catalog.price" placeholder="Enter price"  class="form-control" min="101" required/>
+                                    <span ng-show="showCase.addcatalogform.price.$error.min" class="text-danger">Price should be minimum 101</span>
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- Commented because public price not asking to user and make it same as price -->
+                           <!--div class="col-md-6" ng-if="showCase.catalog.view_permission=='public'">
+                              <div class="form-group">
+                                 <label>Public Price</label>
+                                 <div class="controls">
+                                    <input type="number" autocomplete="off" autocomplete="off" name="public_price" ng-model="showCase.catalog.public_price" placeholder="Enter public price"  class="form-control" min="101" required />
+                                    <span ng-show="showCase.addcatalogform.public_price.$error.min" class="text-danger">Price should be minimum 101</span>
+                                 </div>
+                              </div>
+                           </div-->
+                        </div>
+
+                        <!--div class="row" ng-if="product.price_type != 'single' && product.price_type != 'withoutprice' && showCase.catalog_products.length > 0"  -->
+                      <div class="row" ng-if="product.price_type != 'single' && showCase.catalog_products.length > 0">
+                        <div class="col-md-12">
+                          <!-- Commented because public price not asking to user and make it same as price -->
+                          <!--div ng-if="showCase.catalog.view_permission == 'push'"-->
+                          <div>
+                            <table class="table table-hover">
+                              <thead>
+                                    <th>Image</th>
+                                    <th>SKU</th>
+                                    <th>Price</th>
+                              </thead>
+
+                              <tbody ng-repeat="productupdate in showCase.catalog_products">
+                                <tr>
+                                    <td ><img class="loading" ng-src="{{productupdate.thumbimage}}" style="width: 100px; height: 100px"></td>
+                                    <td>{{product.sku}}</td>
+                                    <td>
+                                        <input type="number" name="{{productupdate.price}}" ng-model="productupdate.price" placeholder="Enter price" autocomplete="off"  class="form-control" min="101" required/>
+                                        <span ng-show="showCase.addcatalogform.price.$error.min" class="text-danger">Price should be minimum 101</span>
+                                    </td>
+
+                                </tr>
+
+                              </tbody>
+                            </table>
+                          </div>
+                          <!-- Commented because public price not asking to user and make it same as price -->
+                          <!--div ng-if="showCase.catalog.view_permission == 'public' && showCase.catalog_products.length > 0" >
+                          <table class="table table-hover">
+                            <thead>
+                                  <th>Image</th>
+                                  <th>SKU</th>
+                                  <th>Price</th>
+                                  <th>Public Price</th>
+                            </thead>
+
+                            <tbody ng-repeat="productupdate in showCase.catalog_products">
+                              <tr>
+                                  <td><img class="loading" ng-src="{{productupdate.thumbimage}}" style="width: 100px; height: 100px"></td>
+                                  <td>{{product.sku}}</td>
+                                  <td>
+                                      <input type="number" name="{{productupdate.price}}" ng-model="productupdate.price" placeholder="Enter price" autocomplete="off"  class="form-control" min="101"  required/>
+                                      <span ng-show="showCase.addcatalogform.price.$error.min" class="text-danger">Price should be minimum 101</span>
+                                  </td>
+                                  <td>
+                                      <input type="number" name="{{productupdate.public_price}}" ng-model="productupdate.public_price" placeholder="Enter public price" autocomplete="off"  class="form-control" min="101"  required/>
+                                      <span ng-show="showCase.addcatalogform.public_price.$error.min" class="text-danger">Public Price should be minimum 101</span>
+                                  </td>
+                              </tr>
+
+                            </tbody>
+                         </table>
+                          </div-->
+                       </div>
+                      </div>
+                    </div>
+
+                      <!--div class="row" ng-if="!update_flag"-->
+                      <div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Brand *</label>
+                               <div class="controls">
+                                  <!--input type="text" autocomplete="off" name="brand" ng-model="entry.brand" data-parsley-group="step1" placeholder="Brand"  class="form-control" /-->
+                                  <select name="brand" chosen="" ng-model="showCase.catalog.brand" ng-options="b.id as b.name for b in brands" width="'100%'" data-parsley-group="step1" class="chosen-select input-md form-control" required="required">
+                                     <option value="">Select Brand</option>
+                                  </select>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+
+                      <!--div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Category *</label>
+                               <div class="controls">
+                                 <div id="tree_2" js-tree="showCase.treeConfig" should-apply="showCase.applyModelChanges()" ng-model="showCase.treeData" name="category" data-parsley-group="step1" tree="treeInstance" tree-events="" required></div>
+                                 <span ng-show="showCase.addcatalogform.category.$dirty &amp;&amp; showCase.addcatalogform.category.$error.required" class="text-danger">This field is required</span>
+                                 </div>
+                            </div>
+                         </div>
+                      </div-->
+                      <div class="row" ng-if="!update_flag">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Category *</label>
+                               <div class="controls">
+                                  <!--input type="text" autocomplete="off" name="brand" ng-model="entry.brand" data-parsley-group="step1" placeholder="Brand"  class="form-control" /-->
+                                  <select name="category" chosen="categories" ng-model="showCase.catalog.category" ng-options="b.id as b.category_name for b in categories" width="'100%'" data-parsley-group="step1" class="chosen-select input-md form-control" ng-change="CategoryChanged(showCase.catalog.category)" required="required" >
+                                     <option value="">Select Category</option>
+                                  </select>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                      <!-- END row -->
+
+
+                   </fieldset>
+                   <ul class="pager">
+                      <li class="next" ng-if="!update_flag" ><a ng-click="wizard.go(2)">Next <span>&rarr;</span></a>
+                      </li>
+                      <li class="next" ng-if="update_flag" ><a ng-click="showCase.UpdateCatalog(); wizard.go(2); ">Save and Continue <span>&rarr;</span></a>
+                      </li>
+
+                   </ul>
+                </div>
+                <!-- END Wizard Step inputs -->
+                <!-- START Wizard Step inputs -->
+
+                <div id="step2" ng-show="wizard.active(2)">
+                   <fieldset>
+                      <!--legend>Upload Image</legend-->
+                      <!-- START row -->
+                      <div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                               <label>Work</label>
+                               <div class="controls">
+                                  <ui-select multiple="" ng-model="showCase.catalog.work" theme="bootstrap" required="required" >
+                                   <ui-select-match placeholder="Select Work">{{$item.value}} </ui-select-match>
+                                   <ui-select-choices repeat="b.value as b in works | propsFilter: {value: $select.search}">
+                                      <div ng-bind-html="b.value | highlight: $select.search"></div>
+                                   </ui-select-choices>
+                                  </ui-select>
+                               </div>
+                            </div>
+                         </div>
+                         <div class="col-md-6">
+                            <div class="form-group">
+                               <label>Fabric</label>
+                               <div class="controls">
+                                  <ui-select multiple="" ng-model="showCase.catalog.fabric" theme="bootstrap" required="required">
+                                   <ui-select-match placeholder="Select fabric">{{$item.value}} </ui-select-match>
+                                   <ui-select-choices repeat="b.value as b in fabrics | propsFilter: {value: $select.search}">
+                                      <div ng-bind-html="b.value | highlight: $select.search"></div>
+                                   </ui-select-choices>
+                                  </ui-select>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+
+                      <!--div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="checkbox c-checkbox needsclick">
+                                     <label class="needsclick">
+                                     <input class="needsclick" type="checkbox" value="" ng-model="showCase.catalog.dont_allow_crop" ng-change="allowCatalogCrop(showCase.catalog.dont_allow_crop)"/>
+                                     <span class="fa fa-check"></span>Keep Original Images (Do Not Crop)</label>
+                                </div>
+                            </div>
+                         </div>
+                      </div-->
+
+                      <div class="row">
+                          <div class="col-md-6">
+                          <label>Select Photo from your computer *</label>
+                            <div class="form-group" style="text-align: center;">
+                               <!--label>Select Photo from your computer *</label-->
+                               <div ng-if="!update_flag">
+                                        <!--input type="file" ngf-accept="'image/*'" id="thumbnail" required>
+                                        <div class="cropArea">
+                                            <img-crop image="showCase.catalog.thumbnail" result-image="showCase.croppedDataUrl">
+                                            </img-crop>
+                                        </div-->
+                                        <input type="file" ngf-select="uploadCatalogImage($file)" ng-model="showCase.catalog.thumbnail" name="thumbnail" ngf-accept="'image/*'" id="thumbnail" required>
+                                        <div ngf-drop style="height: 300px;" ng-model="showCase.catalog.thumbnail" ngf-pattern="image/*" class="cropArea">
+                                            <!--this-is-final--img-crop ng-show= "showCase.catalog.cropallow" image="showCase.catalog.thumbnail  | ngfDataUrl" result-image="showCase.croppedDataUrl" ng-init="showCase.croppedDataUrl=''" area-type="rectangle" aspect-ratio="0.714" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                            </img-crop-->
+                                            <ui-cropper ng-show= "showCase.catalog.cropallow" image="showCase.catalog.thumbnail  | ngfDataUrl" result-image="showCase.croppedDataUrl" ng-init="showCase.croppedDataUrl=''" area-type="rectangle" aspect-ratio="0.714" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                            </ui-cropper>
+                                            <img ng-hide= "showCase.catalog.cropallow"  ng-src="{{showCase.catalog.uncropped}}" style="max-width: 100%; max-height: 100%;"/>
+                                        </div>
+                               </div>
+
+                               <div ng-if="update_flag">
+                                    <input type="file" ngf-select="uploadCatalogImage($file)" ng-model="showCase.catalog.thumbnail" name="thumbnail" ngf-accept="'image/*'" id="thumbnail">
+                                    <div  ng-if="!showCase.catalog.thumbnail" class="text-align: center;">
+                                      <img ng-src="{{catalogImage}}" style="width: 213px;" />
+                                    </div>
+                                    <div ng-if="showCase.catalog.thumbnail" class="text-align: center;">
+                                        <div ngf-drop style="height: 300px;" ng-model="showCase.catalog.thumbnail" ngf-pattern="image/*" class="cropArea">
+                                            <!--img-crop ng-show= "showCase.catalog.cropallow" image="showCase.catalog.thumbnail  | ngfDataUrl" result-image="showCase.croppedDataUrl" ng-init="showCase.croppedDataUrl=''" area-type="rectangle" aspect-ratio="0.714" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                            </img-crop-->
+                                            <ui-cropper ng-show= "showCase.catalog.cropallow" image="showCase.catalog.thumbnail  | ngfDataUrl" result-image="showCase.croppedDataUrl" ng-init="showCase.croppedDataUrl=''" area-type="rectangle" aspect-ratio="0.714" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                            </ui-cropper>
+                                            <img ng-hide= "showCase.catalog.cropallow"  ng-src="{{showCase.catalog.uncropped}}" style="max-width: 100%; max-height: 100%;"/>
+                                        </div>
+                                    </div>
+                               </div>
+                            </div>
+                          </div>
+
+
+                            <div class="col-md-6">
+                                <div class="form-group" ng-if="show_numberpcs_flag">
+                                   <label>Pieces/Design</label>
+                                   <div class="controls">
+                                      <input type="number" name="number_pcs_design_per_set" ng-model="showCase.catalog.number_pcs_design_per_set" placeholder="Enter number of pieces" autocomplete="off"  class="form-control" min="1" required="required" />
+                                   </div>
+                                </div>
+                                <div class="form-group" ng-if="show_size_flag">
+                                   <label>Size</label>
+                                   <div class="controls">
+                                      <ui-select multiple="" ng-model="showCase.catalog.size" theme="bootstrap" ng-required="true" >
+                                       <ui-select-match placeholder="Select size">{{$item.value}} </ui-select-match>
+                                       <ui-select-choices repeat="b.value as b in sizes | propsFilter: {value: $select.search}">
+                                          <div ng-bind-html="b.value | highlight: $select.search"></div>
+                                       </ui-select-choices>
+                                      </ui-select>
+                                   </div>
+                                </div>
+                                <div class="form-group">
+                                     <label>Style </label>
+                                     <div class="controls">
+                                        <select name="style" chosen="styles" ng-model="showCase.catalog.style" ng-options="s.value as s.value for s in styles" width="'100%'" data-parsley-group="step2" class="chosen-select input-md form-control" >
+                                           <option value="">Select Style</option>
+                                        </select>
+                                     </div>
+                                </div>
+                                <div class="form-group" ng-if="show_stitching_flag">
+                                   <label>Stitching Details</label>
+                                   <div class="controls">
+
+                                      <label class="radio-inline c-radio" ng-repeat="opt in stitching_types">
+                                       <input id="radio-{{opt.id}}" type="radio" name="stitching_type" ng-model="showCase.catalog.stitching_type"  value="{{opt.value}}" required="required" class="form-control"  />
+                                       <span class="fa fa-circle"></span>{{opt.value}}
+                                      </label>
+                                   </div>
+                                </div>
+
+                                 <div class="form-group">
+                                   <label>Other Details</label>
+                                   <div class="controls">
+                                      <input type="text" name="other" ng-model="showCase.catalog.other" placeholder="Enter other details" autocomplete="off"  class="form-control" />
+                                   </div>
+                                </div>
+                            </div>
+                      </div>
+
+
+                      <div class="row" align="center">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <!--button type="submit" ng-show="update_flag" ng-click="showCase.UpdateCatalog()" class="btn btn-primary mt-lg">Update</button-->
+                               <button type="submit" ng-show="!update_flag" ng-click="showCase.AddCatalog()" class="btn btn-primary mt-lg">Add Catalog</button>
+                            </div>
+                         </div>
+                      </div>
+                  </form>
+                      <!-- END row -->
+                   </fieldset>
+                   <ul class="pager">
+                      <li class="previous">
+                         <a ng-click="wizard.go(1)">
+                            <span>&larr; Previous</span>
+                         </a>
+                      </li>
+                      <li class="next" ng-show="catalogId != null && update_flag==false"><a class="nexttoproduct" ng-click="wizard.go(3);">Next <span>&rarr;</span></a>
+
+                      <li class="next" ng-if="update_flag"><a class="nexttoproduct" ng-click="wizard.go(3); showCase.UpdateCatalog();">Save and Continue <span>&rarr;</span></a>
+                      </li>
+                   </ul>
+                </div>
+                <!-- END Wizard Step inputs -->
+
+                <!-- START Wizard Step inputs -->
+                <div id="step3" ng-show="wizard.active(3)">
+                  <form editable-form name="showCase.addproduct" ng-submit="" form-wizard="" validate-steps="true" validate-form="" class="form-validate modelform2">
+
+                      <!--div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="checkbox c-checkbox needsclick">
+                                     <label class="needsclick">
+                                     <input class="needsclick" type="checkbox" value="" ng-model="product.dont_allow_crop" ng-change="allowCrop(product.dont_allow_crop)"/>
+                                     <span class="fa fa-check"></span>Keep Original Images (Do Not Crop)</label>
+                                </div>
+                            </div>
+                         </div>
+                      </div-->
+
+                      <div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="checkbox c-checkbox needsclick">
+                                     <label class="needsclick">
+                                     <input class="needsclick" type="checkbox" value="" ng-model="without_sku" ng-change="withoutSku(without_sku)"/>
+                                     <span class="fa fa-check"></span>Upload Without SKU</label>
+                                </div>
+                            </div>
+                         </div>
+                      </div>
+
+                      <!--div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="checkbox c-checkbox needsclick">
+                                     <label class="needsclick">
+                                     <input class="needsclick" type="checkbox" value="" ng-model="without_price" ng-change="withoutPrice(without_price)"/>
+                                     <span class="fa fa-check"></span>Upload Without Price</label>
+                                </div>
+                            </div>
+                         </div>
+                      </div-->
+
+                      <!--div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                               <label>Work</label>
+                               <div class="controls">
+                                  <input type="text" autocomplete="off" name="work" ng-model="showCase.catalog.work" data-parsley-group="step1" placeholder="Enter Work"  class="form-control" pattern=".{0,50}" />
+                                  <span ng-show="showCase.addproduct.work.$error.pattern" class="text-danger">This field has character limit of 50</span>
+
+                               </div>
+                            </div>
+                         </div>
+                         <div class="col-md-6">
+                            <div class="form-group">
+                               <label>Fabric</label>
+                               <div class="controls">
+                                  <input type="text" autocomplete="off" name="fabric" ng-model="showCase.catalog.fabric" data-parsley-group="step1" placeholder="Enter Fabric"  class="form-control" pattern=".{0,50}" />
+                                  <span ng-show="showCase.addproduct.fabric.$error.pattern" class="text-danger">This field has character limit of 50</span>
+                               </div>
+                            </div>
+                         </div>
+                      </div-->
+
+                      <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Select Photos from your computer</label>
+
+
+                                <input type="file" ngf-select="uploadFiles($files)" multiple  ng-model="showCase.thumbnails" name="thumbnails"  data-parsley-group="step3" ngf-accept="'image/*'" >
+                                <!--input type="file" ngf-select  ng-model="showCase.thumbnails" name="thumbnails"  data-parsley-group="step3" ngf-accept="'image/*'" >
+
+                                <div ngf-drop ng-model="showCase.thumbnails" ngf-pattern="image/*" class="cropArea">
+                                    <img-crop image="showCase.thumbnails  | ngfDataUrl" result-image="showCase.thumbnailsCroppedDataUrl" ng-init="showCase.thumbnailsCroppedDataUrl=''" area-type="square">
+                                    </img-crop>
+                                </div-->
+
+                                <!--div>
+                                    <img ng-src="{{showCase.thumbnailsCroppedDataUrl}}" />
+                                </div-->
+
+
+
+
+                                <!--div class="container-fluid">
+                                    <div>
+                                     <div class="mb">
+                                        <button ng-click="showCase.addSlide('head')" class="btn btn-default">Add at beginning</button>
+                                        <button ng-click="showCase.addSlide('tail')" class="btn btn-default">Add at end</button>
+                                     </div>
+                                     <ul rn-carousel="" rn-carousel-index="showCase.carouselIndex6" rn-carousel-deep-watch="" rn-carousel-buffered="" class="list-unstyled carousel5">
+                                        <li ng-repeat="slide in showCase.slides6 track by slide.id">
+                                           <div ng-click="showcrop=true" ng-hide="showcrop" ng-style="{'background-image': 'url(' + slide.img + ')'}" class="bgimage"># {{ slide.id }}</div>
+
+                                           <div ng-if="showcrop">
+                                                 <div ngf-drop ng-model="slide.img" ngf-pattern="image/*" style="height: 100px;" class="cropArea bgimage">
+                                                    <img-crop image="slide.img  | ngfDataUrl" result-image="slide.imageCroped" ng-init="slide.imageCroped='';alrt();" area-type="square">
+                                                    </img-crop>
+                                                </div>
+                                                <div>
+                                                    <img ng-src="{{slide.imageCroped}}" style="height: 100px;" class="thumb" />
+                                                </div>
+                                            </div>
+
+                                        </li>
+
+                                     </ul>
+                                     <div rn-carousel-indicators="" ng-if="showCase.slides6.length &gt; 1" slides="showCase.slides6" rn-carousel-index="showCase.carouselIndex6"></div>
+                                    </div>
+                                </div-->
+
+                               <!--h2>{{product.thumbnails}}</h2-->
+                               <!--img ngf-src="product.thumbnails" style="height: 50px;" class="thumb" -->
+
+                            </div>
+                         </div>
+                      </div>
+                     <div class="row ">
+                        <div ng-repeat="product in products"><!-- | orderBy:orderByFunction -->
+                            <div class="col-md-6">
+                              <div class="form-group" style="text-align: center;">
+                                 <!--img ngf-src="product.image"  style="height: 100px;" class="thumb">
+                                 <p ng-click="showme=true">show</p>
+                                 <p ng-click="showme=false">hide</p>
+
+                                 <div ng-if="showme"-->
+                                <div ngf-drop ng-model="product.image" ngf-pattern="image/*" style="height: 200px;" class="thumb">
+                                    <!--img-crop ng-show= "product.cropallow" image="product.image | ngfDataUrl" result-image="product.imageCroped" ng-init="product.imageCroped='';" area-type="rectangle" aspect-ratio="0.714" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                    </img-crop-->
+                                    <ui-cropper ng-show= "product.cropallow" image="product.image | ngfDataUrl" result-image="product.imageCroped" ng-init="product.imageCroped='';" area-type="rectangle" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                    </ui-cropper>
+
+
+                                    <img ng-hide= "product.cropallow"  ng-src="{{product.uncropped}}" style="max-width: 100%; max-height: 100%;"/>
+                                </div>
+                                    <!--div>
+                                        <img ng-src="{{product.imageCroped}}" style="height: 100px;" class="thumb" />
+                                    </div>
+                                 </div-->
+
+                                 <!--input type="text" name="title" ng-value="product.sku" ng-model="product.title" /-->
+                                 <input type="text" name="sku" ng-value="product.sku" ng-model="product.sku" class="form-control" placeholder="SKU" style="height: 25px;" ng-hide="without_sku" pattern=".{0,30}" />
+                                  <span ng-show="showCase.addproduct.sku.$error.pattern && without_sku == false" class="text-danger">This field has character limit of 30</span>
+
+
+                                 <input type="number" name="price"  ng-value="product.price" ng-model="product.price" placeholder="Price" class="form-control" style="height: 30px;" min="101" required="required" />
+                                 <span ng-show="showCase.addproduct.price.$error.min" class="text-danger">Price should be minimum 101</span>
+                                 <span ng-if="showCase.catalog.is_percentage ==  false && showCase.catalog.sell_full_catalog == false">Single pc. price: Rs. {{product.price + showCase.catalog.single_piece_price }}/Pc.</span>
+                                 <span ng-if="showCase.catalog.is_percentage ==  true && showCase.catalog.sell_full_catalog == false">Single pc. price: Rs. {{product.price + product.price * showCase.catalog.single_piece_price_percentage/100 }}/Pc.</span>
+                                 <span ng-if="showCase.catalog.sell_full_catalog == true">Single pc. price: NA</span><br>
+
+                                 <!-- Commented because public price not asking to user and make it same as price -->
+                                 <!--input type="number" name="public_price"  ng-value="product.public_price" ng-model="product.public_price" placeholder="Public Price" class="form-control" style="height: 30px;" ng-if="showCase.catalog.view_permission=='public'" min="101" ng-required="showCase.catalog.view_permission=='public'" />
+                                 <span ng-show="showCase.addproduct.public_price.$error.min && showCase.catalog.view_permission=='public' " class="text-danger">Public Price should be minimum 101</span-->
+
+                                 <!--<a ng-click="allowCropProduct(product)">{{product.cropallow==true? "Original" : "Crop"}}  </a>
+                                 &emsp;-->
+                                 <a ng-click="remove(product)">Remove</a>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="row" align="center">
+                         <div class="col-md-12">
+                            <div ng-show="show_progress_text == true" style="z-index: 2; background: black; color: white; width: 50%; border-radius: 5px;">
+                              <h3 >{{completedproducts}} out of  {{totalproducts}} products uploaded.</h3>
+                            </div>
+                          </div>
+                      </div>
+                      <!--div style="" class="progress progress-xs">
+                        <div role="progressbar" ng-style="{ 'width': products.progress + '%' }" class="progress-bar"></div>
+                     </div-->
+
+                      <div class="row" align="center">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <button type="submit" ng-click="AddProducts()" class="btn btn-primary mt-lg">Add Product</button>
+                            </div>
+                         </div>
+                      </div>
+                  </form>
+
+
+                   <ul class="pager">
+                      <li class="previous">
+                         <a ng-click="wizard.go(2)">
+                            <span>&larr; Previous</span>
+                         </a>
+                      </li>
+                   </ul>
+
+                </div>
+                <!-- END Wizard Step inputs -->
+             </div>
+
+         </div><!-- END panel -->
+    </div> <!-- End ng dialog -->
+   </script>
+
+    <div ng-include="'app/views/common/notification.html'"></div>
+    <div ng-include="'app/views/common/order_modal.html'"></div>
+    <div ng-include="'app/views/shares/share_form.html'"></div>
+    <div ng-include="'app/views/common/company_detail.html'"></div>
+    <div ng-include="'app/views/common/company_detail_edit.html'"></div>
+    </div>
+   </div>
+</div>

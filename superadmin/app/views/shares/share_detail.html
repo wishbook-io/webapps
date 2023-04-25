@@ -1,0 +1,65 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> 
+Share Detail </h3>
+<div ng-controller="ShareDetailController as showCase">
+    <div class="panel panel-default modelforoderdetail">
+	<div class="panel-body" >
+	    <div class="row">
+		<div class="col-md-2"> 
+		    <div style="text-align: center;">
+			<img class="loading" src="{{sharedetail.image}}" style="height: 100px; width: 100px;">
+		    </div>
+		</div>
+		<div class="col-md-10"> 
+		  <!--div class="panel panel-default">
+		     <div class="panel-body"-->
+			<div class="table-responsive">
+			   <table class="table table-hover">
+			      <tbody>
+				 <tr>
+				    <td>Catalog Name : {{sharedetail.title}} </td>
+				    <!--td>Message : {{sharedetail.message}} </td-->
+				    <td>Direct Shares <small>(No. of Buyers you shared the catalogwith)</small>: {{sharedetail.direct_users}} </td>
+				 </tr>
+				 <tr>
+				    <td>No. of Designs : {{sharedetail.total_products}} </td>
+				    <td>Total Shares <small>(includes catalog shared with buyers' contacts)</small>: {{sharedetail.total_users}} </td>
+				 </tr>
+				 <tr>
+				    <td>Shared Date : {{sharedetail.date}}</td>
+				    <td>Total Catalog Views: {{sharedetail.total_viewed}} </td>
+				 </tr>
+				 <tr>
+				    <td ng-if="sharedetail.buyer_segmentation_name != null">Shared With : {{sharedetail.buyer_segmentation_name}}</td>
+				    <td ng-if="sharedetail.single_company_push_name != null">Shared With : {{sharedetail.single_company_push_name}}</td>
+				    <td>Total Product Views : {{sharedetail.total_products_viewed}} </td>
+				 </tr>
+				 
+			      </tbody>
+			   </table>
+			</div>
+		     <!--/div>
+		  </div-->
+		</div>
+	    </div>
+	</div>
+    </div>
+    
+    <h3 style="color:#929292;">Buyers Detail</h3>
+    <div class="panel panel-default modelform3">
+	<div class="panel-body" >
+	    <table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover " width="100%">
+	    </table>
+	</div>
+    </div>
+
+</div>
+
+
+

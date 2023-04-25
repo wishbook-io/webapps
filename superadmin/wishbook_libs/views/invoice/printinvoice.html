@@ -1,0 +1,551 @@
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+
+}
+</style>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Wishbook</title>
+  </head>
+  <body>
+	  <div class="maindiv" style="width:90%; margin:0 auto;" ng-controller="PrintInvoiceController as showCase">
+      <div ng-show="showCase.invoice.reseller_order == false">
+		  <div class="row">
+			  <div class="col-md-3"><img align="float:left" style="width: 125px;" src="app/img/wishbook.png"></div>
+			  <div class="col-md-6"><h4 align="center">Tax Invoice</h4></div>
+			  <div class="col-md-3"></div>
+		  </div>
+
+		  <table style="width:100%;">
+			  <tr>
+				<td rowspan="2" class="col-md-4">Sender
+				<!--br>
+				{{showCase.invoice.order.seller_company_name}}
+				<br> {{showCase.invoice.order.seller_company_address}} <br> {{showCase.invoice.order.seller_company_state_city}} <br> {{showCase.invoice.order.seller_company_number}} <br> <b>GSTIN:{{showCase.invoice.kyc.seller_kyc.gstin}}</b> </td-->
+				<br>
+				Wishbook Infoservices Pvt Ltd<br>
+				604, 21st Century Business Center, <br>
+				Ring Road, Surat - 395002<br>
+				<!-- Phone: +91 95375 18989<br> -->
+				GSTIN: 24AABCW8280C1ZF<br>
+
+				<td class="col-md-4" ng-if="showCase.invoice.uniware_invoice_id == null" >Invoice No.: <br> {{showCase.invoice.invoice_number}}</td>
+				<td class="col-md-4" ng-if="showCase.invoice.uniware_invoice_id != null" >Invoice No.: <br> {{showCase.invoice.uniware_invoice_id}}</td>
+				<td class="col-md-4">Invoice Date: <br> {{showCase.invoice.datetime}}</td>
+			  </tr>
+			  <tr>
+
+				<td class="col-md-4">Order No.: <br> {{showCase.invoice.order.order_number}}</td>
+				<!-- <td class="col-md-4">Payment Mode: <br> {{showCase.invoice.payment_status}}<br> </td> -->
+				<td class="col-md-4">Payment Mode: <br>
+				<!-- <span ng-if="showCase.invoice.payments.length > 0"> {{showCase.invoice.payments[0].mode}}<br></span>  -->
+				<span ng-if="showCase.invoice.payment_status == 'Paid'"> Prepaid<br></span>
+				<span ng-if="showCase.invoice.payment_status != 'Paid'"> COD<br></span>
+				</td>
+			  </tr>
+
+			  <!-- <tr>
+				<td rowspan="2" class="col-md-4">Bill To: <br> {{showCase.invoice.order.company_name}} <br> {{showCase.invoice.order.company_address}} <br> {{showCase.invoice.order.company_state_city}} <br>
+				{{showCase.invoice.order.company_number}}
+				<br> <b>GSTIN:{{showCase.invoice.kyc.buyer_kyc.gstin}}</b></td>
+				<td rowspan="2" class="col-md-4">Ship To: <br> {{showCase.invoice.order.company_name}} <br> {{showCase.invoice.order.company_address}} <br> {{showCase.invoice.order.company_state_city}} <br>
+				{{showCase.invoice.order.company_number}}
+				</td>
+				<td class="col-md-4">Transporter courier: <br> {{showCase.invoice.shipments[0].transporter_courier}}</td>
+			  </tr> -->
+			  <tr>
+				<!-- <td rowspan="2" class="col-md-4">Bill To: <br> {{showCase.invoice.order.company_name}} <br>
+				<span ng-if="showCase.invoice.order.ship_to != null"> {{showCase.invoice.order.ship_to.street_address}} <br>
+				{{showCase.invoice.order.ship_to.city.city_name}}, {{showCase.invoice.order.ship_to.state.state_name}}, {{showCase.invoice.order.ship_to.pincode}}<br> </span>
+
+				<br> <b>GSTIN:{{showCase.invoice.kyc.buyer_kyc.gstin}}</b></td> -->
+				<td rowspan="2" class="col-md-4">Bill To: <br>
+				<span ng-if="showCase.invoice.order.company_name">{{showCase.invoice.order.company_name}} <br> </span>
+				<!-- <span ng-if="showCase.invoice.order.company_address">{{showCase.invoice.order.company_address}} <br></span> -->
+				<span ng-if="showCase.invoice.order.company_state_city">{{showCase.invoice.order.company_state_city}} </span>
+				<span ng-if="showCase.invoice.order.company_pincode"> - {{showCase.invoice.order.company_pincode}} </span>
+				<!-- <span ng-if="showCase.invoice.order.company_number"><br>Phone: {{showCase.invoice.order.company_number}}</span> -->
+				 <br> <b ng-if="showCase.invoice.kyc.buyer_kyc.gstin != null && showCase.invoice.kyc.buyer_kyc.gstin != ''">GSTIN:{{showCase.invoice.kyc.buyer_kyc.gstin}}</b></td>
+
+				<!-- <td rowspan="2" class="col-md-4">Ship To: <br> {{showCase.invoice.order.company_name}} <br>
+				<span ng-if="showCase.invoice.order.ship_to != null"> {{showCase.invoice.order.ship_to.street_address}} <br>
+				{{showCase.invoice.order.ship_to.city.city_name}}, {{showCase.invoice.order.ship_to.state.state_name}}, {{showCase.invoice.order.ship_to.pincode}}<br> </span>
+				</td> -->
+
+				<td rowspan="2" class="col-md-4">Ship To: <br> {{showCase.invoice.order.ship_to_name}}
+				<!-- <span ng-if="showCase.invoice.order.ship_to_street_address"> <br>{{showCase.invoice.order.ship_to_street_address}}</span> -->
+				 <span ng-if="showCase.invoice.order.ship_to_city_name"> <br>
+				{{showCase.invoice.order.ship_to_city_name}}</span>
+				<span ng-if="showCase.invoice.order.ship_to_state_name">, {{showCase.invoice.order.ship_to_state_name}} </span>
+				<span ng-if="showCase.invoice.order.ship_to_pincode"> - {{showCase.invoice.order.ship_to_pincode}}<br> </span>
+				<!-- <span ng-if="showCase.invoice.order.ship_to_phone_number"><br>Phone: {{showCase.invoice.order.ship_to_phone_number}}</span> -->
+				</td>
+				<td class="col-md-4">Transporter courier: <br> {{showCase.invoice.shipments[0].transporter_courier}}</td>
+			  </tr>
+			  <tr>
+				<td class="col-md-4">AWB/LR No: <br>
+					<span ng-show="showCase.invoice.shipments.length > 0">
+						<span ng-show="awbavail">
+							<svg id="awb-barcode"></svg>
+						</span>
+					</span>
+				</td>
+			  </tr>
+
+
+		  </table>
+
+		  <table style="width:100%;">
+			  <tr>
+				<th>SI <br>No</th>
+				<th>Description <br>of Goods </th>
+				<th>HSN</th>
+				<th>QTY</th>
+				<th>Rate</th>
+				<th>Discount</th>
+				<!--th>Taxable <br>Value</th-->
+				<th ng-show="showCase.SGST.length > 0">SGST</th>
+				<th ng-show="showCase.CGST.length > 0">CGST</th>
+				<th ng-show="showCase.IGST.length > 0">IGST</th>
+				<th ng-show="showCase.UTGST.length > 0">UTGST</th>
+				<!--th>CESS</th-->
+				<th>Amount</th>
+			  </tr>
+			  <tr ng-repeat="item in showCase.products track by $index">
+				<td>{{item.no}}</td>
+				<td>{{item.title}}</td>
+				<td>{{item.hsn}}</td>
+				<td>{{item.quantity}}</td>
+				<td>{{item.rate}}</td>
+				<td>{{item.discount}}</td>
+				<!--td>{{item.tax}}</td-->
+				<td ng-show="showCase.SGST.length > 0">{{showCase.SGST[$index]}}</td>
+				<td ng-show="showCase.CGST.length > 0">{{showCase.CGST[$index]}}</td>
+				<td ng-show="showCase.IGST.length > 0">{{showCase.IGST[$index]}}</td>
+				<td ng-show="showCase.UTGST.length > 0">{{showCase.UTGST[$index]}}</td>
+				<!--td>0.0</td-->
+				<td>{{item.total_amount}}</td>
+			  </tr>
+
+			  <tr>
+				<td></td>
+				<td>Total</td>
+				<td></td>
+				<td>{{showCase.totalqty}}</td>
+				<td></td>
+				<td></td>
+				<!--td></td-->
+				<td ng-show="showCase.SGST.length > 0"></td>
+				<td ng-show="showCase.CGST.length > 0"></td>
+				<td ng-show="showCase.IGST.length > 0"></td>
+				<td ng-show="showCase.UTGST.length > 0"></td>
+				<!--td></td-->
+				<td>{{showCase.subtotal}}</td>
+			  </tr>
+			  <tr ng-show="showCase.invoice.shipping_charges > 0">
+				<td></td>
+				<td>Shipping Charges</td>
+				<td>996812</td>
+				<td></td>
+				<td>{{(showCase.invoice.shipping_charges*100/118).toFixed( 2 )}}</td>
+				<td></td>
+				<!--td></td-->
+				<td ng-show="showCase.SGST.length > 0">{{(showCase.invoice.shipping_charges*9/118).toFixed( 2 )}}</td>
+				<td ng-show="showCase.CGST.length > 0">{{(showCase.invoice.shipping_charges*9/118).toFixed( 2 )}}</td>
+				<td ng-show="showCase.IGST.length > 0">{{(showCase.invoice.shipping_charges*18/118).toFixed( 2 )}}</td>
+				<td ng-show="showCase.UTGST.length > 0">{{(showCase.invoice.shipping_charges*9/118).toFixed( 2 )}}</td>
+				<!--td></td-->
+				<td>{{showCase.invoice.shipping_charges}}</td>
+			  </tr>
+			  <tr>
+				<td></td>
+				<td>Payable Amount</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<!--td></td-->
+				<td ng-show="showCase.SGST.length > 0"></td>
+				<td ng-show="showCase.CGST.length > 0"></td>
+				<td ng-show="showCase.IGST.length > 0"></td>
+				<td ng-show="showCase.UTGST.length > 0"></td>
+				<!--td></td-->
+				<td>{{showCase.payableamt}}</td>
+			  </tr>
+			  <tr>
+				<td></td>
+				<td>WB Money Used</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<!--td></td-->
+				<td ng-show="showCase.SGST.length > 0"></td>
+				<td ng-show="showCase.CGST.length > 0"></td>
+				<td ng-show="showCase.IGST.length > 0"></td>
+				<td ng-show="showCase.UTGST.length > 0"></td>
+				<!--td></td-->
+				<td>{{showCase.invoice.wbmoney_redeem_amt}}</td>
+			  </tr>
+			  <tr>
+				<td></td>
+				<td>Paid Amount</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<!--td></td-->
+				<td ng-show="showCase.SGST.length > 0"></td>
+				<td ng-show="showCase.CGST.length > 0"></td>
+				<td ng-show="showCase.IGST.length > 0"></td>
+				<td ng-show="showCase.UTGST.length > 0"></td>
+				<!--td></td-->
+				<td>{{showCase.invoice.paid_amount}}</td>
+			  </tr>
+			  <tr>
+				<td></td>
+				<td>Pending Amount</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<!--td></td-->
+				<td ng-show="showCase.SGST.length > 0"></td>
+				<td ng-show="showCase.CGST.length > 0"></td>
+				<td ng-show="showCase.IGST.length > 0"></td>
+				<td ng-show="showCase.UTGST.length > 0"></td>
+				<!--td></td-->
+				<td>{{showCase.invoice.pending_amount}}</td>
+			  </tr>
+		  </table>
+
+		  <table style="width:100%;">
+			  <tr>
+				<td width="50%" class="col-md-6">
+				  <p style="font-weight:bold;">
+					Amount Chargeable (in words)<br>
+					INR {{showCase.payableamtinword}} Only<br>
+					Tax is payable on reverse charge basis: No<br>
+					<u>Declaration</u><br>
+					We declare that this invoice shows the actual price of
+					the goods described and that all particulars are true
+					and correct.<br>
+					Non-hazardous Declaration: This is to certify that
+					items inside do not contain any prohibited or
+					hazardous material.
+				  </p>
+				</td>
+				<td width="50%" align="center" class="col-md-6">
+					<!--span style="font-weight:bold;">For {{showCase.invoice.order.seller_company_name}}</span-->
+					<span style="font-weight:bold;">For Wishbook Infoservices Pvt Ltd </span>
+					<br><br><br><br>
+					<br><br><br><br>
+
+
+					<span style="font-weight:bold;">Authorised Signatory</span>
+
+				</td>
+			  </tr>
+		  </table>
+
+		  <!--span style="font-weight:bold;">Prepared By : {{showCase.invoice.order.seller_company_name}}</span-->
+		  <span style="font-weight:bold;">Prepared By : Wishbook Infoservices Pvt Ltd </span>
+		  <p style="font-weight:bold;" align="center">This is an Computer Generated Invoice, hence does not require Signature</p>
+		</div>
+
+    <!-------------------------------- Reseller order invoice --------------------------------->
+    <div ng-show="showCase.invoice.reseller_order == true">
+          <div class="row">
+           <!-- <div class="col-md-3"><img align="float:left" style="width: 125px;" src="app/img/wishbook.png"></div> -->
+           <div class="col-md-12"><h4 align="center">Invoice</h4></div>
+           <!-- <div class="col-md-3"></div> -->
+         </div>
+
+         <table style="width:100%;">
+           <tr>
+           <td rowspan="2" class="col-md-4">Sender
+           <!--br>
+           {{showCase.invoice.order.seller_company_name}}
+           <br> {{showCase.invoice.order.seller_company_address}} <br> {{showCase.invoice.order.seller_company_state_city}} <br> {{showCase.invoice.order.seller_company_number}} <br> <b>GSTIN:{{showCase.invoice.kyc.seller_kyc.gstin}}</b> </td-->
+           <br>
+           {{showCase.invoice.order.buying_company_name}}
+           <!-- <br> {{showCase.invoice.order.company_address}}  -->
+           <br> {{showCase.invoice.order.company_state_city}}
+           <!-- <br> {{showCase.invoice.order.company_number}}  -->
+           <br> <b ng-if="showCase.invoice.kyc.buyer_kyc.gstin != null && showCase.invoice.kyc.buyer_kyc.gstin != ''">GSTIN:{{showCase.invoice.kyc.buyer_kyc.gstin}}</b>
+           <!-- <br>
+           Wishbook Infoservices Pvt Ltd<br>
+           604, 21st Century Business Center, <br>
+           Ring Road, Surat - 395002<br>
+           Phone: +91 95375 18989<br>
+           GSTIN: 24AABCW8280C1ZF<br> -->
+           </td>
+           <!-- <td class="col-md-4" ng-if="showCase.invoice.uniware_invoice_id == null" >Invoice No.: <br> {{showCase.invoice.invoice_number}}</td>
+           <td class="col-md-4" ng-if="showCase.invoice.uniware_invoice_id != null" >Invoice No.: <br> {{showCase.invoice.uniware_invoice_id}}</td> -->
+           <td class="col-md-4">Invoice No.: <br> {{showCase.invoice.order.order_number}}_{{showCase.invoice.invoice_number}}</td>
+           <td class="col-md-4">Invoice Date: <br> {{showCase.invoice.datetime}}</td>
+           </tr>
+           <tr>
+
+           <td class="col-md-4">Order No.: <br> {{showCase.invoice.order.order_number}}</td>
+           <!-- <td class="col-md-4">Payment Mode: <br> {{showCase.invoice.payment_status}}<br> </td> -->
+           <td class="col-md-4">Payment Mode: <br>
+           <!-- <span ng-if="showCase.invoice.payments.length > 0"> {{showCase.invoice.payments[0].mode}}<br></span>  -->
+           <span ng-if="showCase.invoice.payment_status == 'Paid'"> Prepaid<br></span>
+           <span ng-if="showCase.invoice.payment_status != 'Paid'"> COD<br></span>
+           </td>
+           </tr>
+
+           <!-- <tr>
+           <td rowspan="2" class="col-md-4">Bill To: <br> {{showCase.invoice.order.company_name}} <br> {{showCase.invoice.order.company_address}} <br> {{showCase.invoice.order.company_state_city}} <br>
+           {{showCase.invoice.order.company_number}}
+           <br> <b>GSTIN:{{showCase.invoice.kyc.buyer_kyc.gstin}}</b></td>
+           <td rowspan="2" class="col-md-4">Ship To: <br> {{showCase.invoice.order.company_name}} <br> {{showCase.invoice.order.company_address}} <br> {{showCase.invoice.order.company_state_city}} <br>
+           {{showCase.invoice.order.company_number}}
+           </td>
+           <td class="col-md-4">Transporter courier: <br> {{showCase.invoice.shipments[0].transporter_courier}}</td>
+           </tr> -->
+           <!-- <tr>
+           <td rowspan="2" class="col-md-4">Bill To: <br> {{showCase.invoice.order.company_name}} <br>
+           <span ng-if="showCase.invoice.order.ship_to != null"> {{showCase.invoice.order.ship_to.street_address}} <br>
+           {{showCase.invoice.order.ship_to.city.city_name}}, {{showCase.invoice.order.ship_to.state.state_name}}, {{showCase.invoice.order.ship_to.pincode}}<br> </span>
+
+           <br> <b>GSTIN:{{showCase.invoice.kyc.buyer_kyc.gstin}}</b></td>
+           <td rowspan="2" class="col-md-4">Ship To: <br> {{showCase.invoice.order.company_name}} <br>
+           <span ng-if="showCase.invoice.order.ship_to != null"> {{showCase.invoice.order.ship_to.street_address}} <br>
+           {{showCase.invoice.order.ship_to.city.city_name}}, {{showCase.invoice.order.ship_to.state.state_name}}, {{showCase.invoice.order.ship_to.pincode}}<br> </span>
+
+           </td>
+           <td class="col-md-4">Transporter courier: <br> {{showCase.invoice.shipments[0].transporter_courier}}</td>
+           </tr> -->
+           <tr>
+           <td rowspan="2" class="col-md-4">Bill To: <br>
+           <span ng-if="showCase.invoice.order.ship_to != null">
+           {{showCase.invoice.order.ship_to.name}} <br>
+           <!-- {{showCase.invoice.order.ship_to.street_address}} <br> -->
+           {{showCase.invoice.order.ship_to.city.city_name}}, {{showCase.invoice.order.ship_to.state.state_name}}, {{showCase.invoice.order.ship_to.pincode}}<br>
+           <!-- <span ng-if="showCase.invoice.order.ship_to.phone_number">Phone: {{showCase.invoice.order.ship_to.phone_number}}</span> -->
+           </span>
+
+           </td>
+           <td rowspan="2" class="col-md-4">Ship To: <br>
+           <span ng-if="showCase.invoice.order.ship_to != null">
+           {{showCase.invoice.order.ship_to.name}} <br>
+           <!-- {{showCase.invoice.order.ship_to.street_address}} <br> -->
+           {{showCase.invoice.order.ship_to.city.city_name}}, {{showCase.invoice.order.ship_to.state.state_name}}, {{showCase.invoice.order.ship_to.pincode}}<br>
+           <!-- <span ng-if="showCase.invoice.order.ship_to.phone_number">Phone: {{showCase.invoice.order.ship_to.phone_number}}</span> -->
+           </span>
+
+           </td>
+           <td class="col-md-4">Transporter courier: <br> {{showCase.invoice.shipments[0].transporter_courier}}</td>
+           </tr>
+           <tr>
+           <td class="col-md-4">AWB/LR No: <br>
+             <span ng-show="showCase.invoice.shipments.length > 0">
+               <span ng-show="awbavail">
+                 <svg id="awb-barcode"></svg>
+               </span>
+             </span>
+           </td>
+           </tr>
+
+
+         </table>
+
+         <table style="width:100%;">
+           <tr>
+           <th>SI <br>No</th>
+           <th>Description <br>of Goods </th>
+           <th>HSN</th>
+           <th>QTY</th>
+           <th>Rate</th>
+           <th ng-show="showCase.Taxes.length > 0">Taxes</th>
+           <!-- <th>Discount</th>
+
+           <th ng-show="showCase.SGST.length > 0">SGST</th>
+           <th ng-show="showCase.CGST.length > 0">CGST</th>
+           <th ng-show="showCase.IGST.length > 0">IGST</th>
+           <th ng-show="showCase.UTGST.length > 0">UTGST</th> -->
+           <!--th>CESS</th-->
+           <th>Amount</th>
+           </tr>
+           <tr ng-repeat="item in showCase.products track by $index">
+           <td>{{item.no}}</td>
+           <td>{{item.title}}</td>
+           <td>{{item.hsn}}</td>
+           <td>{{item.quantity}}</td>
+           <td>{{item.rate}}</td>
+           <td ng-show="showCase.Taxes.length > 0">{{showCase.Taxes[$index]}}</td>
+           <!-- <td>{{item.discount}}</td>
+
+           <td ng-show="showCase.SGST.length > 0">{{showCase.SGST[$index]}}</td>
+           <td ng-show="showCase.CGST.length > 0">{{showCase.CGST[$index]}}</td>
+           <td ng-show="showCase.IGST.length > 0">{{showCase.IGST[$index]}}</td>
+           <td ng-show="showCase.UTGST.length > 0">{{showCase.UTGST[$index]}}</td> -->
+           <!--td>0.0</td-->
+           <!-- <td>{{item.total_amount}}</td> -->
+           <td>{{item.display_amount}}</td>
+
+           </tr>
+
+           <tr>
+           <td></td>
+           <td>Total</td>
+           <td></td>
+           <td>{{showCase.totalqty}}</td>
+           <td></td>
+           <td ng-show="showCase.Taxes.length > 0"></td>
+           <!-- <td></td>
+
+           <td ng-show="showCase.SGST.length > 0"></td>
+           <td ng-show="showCase.CGST.length > 0"></td>
+           <td ng-show="showCase.IGST.length > 0"></td>
+           <td ng-show="showCase.UTGST.length > 0"></td> -->
+           <!--td></td-->
+           <td>{{showCase.subtotal}}</td>
+           </tr>
+
+           <tr ng-show="showCase.invoice.payment_status == 'Partially Paid'">
+           <td></td>
+           <td>Payable Amount</td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td ng-show="showCase.Taxes.length > 0"></td>
+           <!-- <td></td>
+
+           <td ng-show="showCase.SGST.length > 0"></td>
+           <td ng-show="showCase.CGST.length > 0"></td>
+           <td ng-show="showCase.IGST.length > 0"></td>
+           <td ng-show="showCase.UTGST.length > 0"></td> -->
+           <!--td></td-->
+           <td>{{showCase.subtotal}}</td>
+           </tr>
+       <!-- 	  <tr>
+           <td></td>
+           <td>WB Money Used</td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+
+           <td ng-show="showCase.SGST.length > 0"></td>
+           <td ng-show="showCase.CGST.length > 0"></td>
+           <td ng-show="showCase.IGST.length > 0"></td>
+           <td ng-show="showCase.UTGST.length > 0"></td>
+
+           <td>{{showCase.invoice.wbmoney_redeem_amt}}</td>
+           </tr> -->
+           <tr ng-show="showCase.invoice.payment_status == 'Paid'">
+           <td></td>
+           <td>Paid Amount</td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td ng-show="showCase.Taxes.length > 0"></td>
+           <!-- <td></td>
+
+           <td ng-show="showCase.SGST.length > 0"></td>
+           <td ng-show="showCase.CGST.length > 0"></td>
+           <td ng-show="showCase.IGST.length > 0"></td>
+           <td ng-show="showCase.UTGST.length > 0"></td> -->
+           <!--td></td-->
+           <td>{{showCase.subtotal}}</td>
+           </tr>
+           <!-- <tr>
+           <td></td>
+           <td>Pending Amount</td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+
+           <td ng-show="showCase.SGST.length > 0"></td>
+           <td ng-show="showCase.CGST.length > 0"></td>
+           <td ng-show="showCase.IGST.length > 0"></td>
+           <td ng-show="showCase.UTGST.length > 0"></td>
+           <td></td>
+           <td>{{showCase.invoice.pending_amount}}</td>
+           </tr> -->
+         </table>
+
+         <table style="width:100%;">
+           <tr>
+           <td width="50%" class="col-md-6">
+             <p style="font-weight:bold;">
+             Amount Chargeable (in words)<br>
+             INR {{showCase.payableamtinword}} Only<br>
+             Tax is payable on reverse charge basis: No<br>
+             <u>Declaration</u><br>
+             We declare that this invoice shows the actual price of
+             the goods described and that all particulars are true
+             and correct.<br>
+             Non-hazardous Declaration: This is to certify that
+             items inside do not contain any prohibited or
+             hazardous material.
+             </p>
+           </td>
+           <td width="50%" align="center" class="col-md-6">
+             <!--span style="font-weight:bold;">For {{showCase.invoice.order.seller_company_name}}</span-->
+             <!-- <span style="font-weight:bold;">For Wishbook Infoservices Pvt Ltd </span> -->
+             <br><br><br><br>
+             <br><br><br><br>
+
+
+             <span style="font-weight:bold;">Authorised Signatory</span>
+
+           </td>
+           </tr>
+         </table>
+
+         <!--span style="font-weight:bold;">Prepared By : {{showCase.invoice.order.seller_company_name}}</span-->
+       <!--   <span style="font-weight:bold;">Prepared By : Wishbook Infoservices Pvt Ltd </span> -->
+         <p style="font-weight:bold;" align="center">This is an Computer Generated Invoice, hence does not require Signature</p>
+    </div>
+	  </div>
+
+		<style type="text/css" media="print">
+		@page{size:auto; margin:5mm;}
+		#printbutton{
+			display: none;
+		}
+		#mck-sidebox-launcher{
+			display: none;
+		}
+		.d_hotline_frame{
+			display: none;
+		}
+		.d_hotline_push_frame{
+			display: none;
+		}
+		.chat-content{
+			display: none;
+		}
+		.icon-ic_chat{
+			display: none;
+		}
+
+		</style>
+		<script>
+		function printOrder() {
+			/*var printButton = document.getElementById("printbutton");
+			printButton.style.visibility = 'hidden';*/
+			//$(".maindiv").width = 100%;
+			window.print()
+			//printButton.style.visibility = 'visible';
+		}
+		</script>
+		<div align="center"><button id="printbutton" onclick="printOrder()">Print</button></div>
+
+		</div>
+
+  </body>
+</html>

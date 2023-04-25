@@ -1,0 +1,96 @@
+<script type="text/ng-template" id="addbrand">
+  <div class="panel panel-default">
+     <div class="panel-body" >
+        <div ng-controller="BrandsController as showCase1">
+
+	      <legend>Add Brand</legend>
+			  <div class="row">
+             <div class="col-md-12">
+                <div class="form-group"> 
+		            	<label class="radio-inline c-radio">
+                         <input id="inlineradio1" type="radio" name="brand_type" ng-model="brand.brand_type"  value="iown" required="required" class="form-control" ng-click="brandiown()" checked="checked" />
+                         <span class="fa fa-circle"></span>Brand I Own</label>
+                </div>
+              </div>
+         </div>
+
+          <div ng-show="brand_type=='iown'">
+              <form role="form" ng-submit="showCase1.AddBrandIown()" name="showCase1.brandiownForm"  class="form-validate mb-lg modelform">
+  			     	  <div class="row">
+  	                         <div class="col-md-6">
+  	                            <div class="form-group"> 
+  	                               <label>Brand Name</label>
+  	                               <input type="text" class="form-control" name="name" ng-model="brand.name" autocomplete="off" placeholder="Brand Name" required="" pattern=".{0,40}" />
+                             
+  	                               <span ng-show="showCase1.brandiownForm.name.$dirty &amp;&amp; showCase1.brandiownForm.name.$error.required" class="text-danger">This field is required</span>
+                                   <span ng-show="showCase1.brandiownForm.name.$error.pattern" class="text-danger">This field has character limit of 40</span>
+  	                            </div>
+  	                         </div>
+  	              </div>
+  	              <div class="row">
+  	                         <div class="col-md-6">
+  	                            <div class="form-group"> 
+  	                               <label>Brand Logo</label>
+                						<input type="file" ngf-select name="image" ng-model="brand.image_temp"  class="form-control" ngf-accept="'image/*'" required />
+                					</div>
+  	                         </div>
+  	              </div>
+
+  		            <div class="row">
+                            <div class="col-md-4">
+                               <div class="form-group">
+                                  <button type="submit" class="btn btn-primary mt-lg">Submit Brand I Own</button>
+                               </div>
+                            </div>
+                  </div> 
+				      </form>  
+          </div>
+          <div class="row">
+                     <div class="col-md-12">
+                        <div class="form-group"> 
+	  					              <label class="radio-inline c-radio">
+                                 <input id="inlineradio1" type="radio" name="brand_type" ng-model="brand.brand_type"  value="isell" required="required" class="form-control" ng-click="brandisell()" checked="checked" />
+                                 <span class="fa fa-circle"></span>Brand I Sell</label>
+                        </div>
+                      </div>
+           </div>
+
+           <div ng-show="brand_type=='isell'">
+             <form role="form" name="showCase1.brandForm" ng-submit="showCase1.submitBrandDistributor()" novalidate="" class="form-validate mb-lg modelform3">
+               <div class="row">
+                      <div class="col-md-12">
+                      <div class="form-group"> 
+                          <label>Brands I Sell</label>
+                          <select chosen="" multiple="multiple" name="brand" ng-model="company.brand" ng-options="b.id as b.name for b in brands" data-placeholder="Brands i Sell" class="chosen-select form-control" required="required">
+                             <option value="">Select Brands</option>
+                          </select>
+                          <!--ui-select multiple="" ng-model="company.brand" theme="bootstrap" tagging="tagHandler" >
+                               <ui-select-match placeholder="Brands i Sell">{{$item.name}} </ui-select-match>
+                               <ui-select-choices repeat="b.id as b in brands | propsFilter: {name: $select.search}">
+                                  <div ng-bind-html="b.name | highlight: $select.search"></div>
+                               </ui-select-choices>
+                          </ui-select-->
+                          <span ng-show="cmp.brandForm.brand.$dirty &amp;&amp; cmp.brandForm.brand.$error.required" class="text-danger">This field is required</span>
+                       </div>
+                      </div>
+            	</div>
+                       <div class="row">
+                          <div class="col-md-4">
+                             <div class="form-group">
+                                <button type="submit" class="btn btn-primary mt-lg">Submit Brand I Sell</button>
+                             </div>
+                          </div>
+                       </div>     
+              </form> 
+             </div>
+			  
+			  <div class="row">
+  				<div style="float:right;" class="col-md-2"> 
+  				  <button type="button" ng-click="showCase1.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+  				</div>
+        </div>
+
+  	  </div>
+     </div>
+  </div>
+</script>

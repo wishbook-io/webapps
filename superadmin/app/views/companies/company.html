@@ -1,0 +1,204 @@
+
+<h3>Company</h3>
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+      <div ng-controller="CompanyController as showCase">
+     
+		    <!--table datatable="" dt-options="cat.dtOptions" dt-columns="cat.dtColumns" class="row-border hover"></table-->
+         <toaster-container toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}"></toaster-container>  
+        <table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+        </table>
+        <script type="text/ng-template" id="updategst">
+	     	<form role="form" name="gstForm" ng-submit="submitGstDetails()" class="form-validate mb-lg modelform-gst">
+	     	<legend>Update GST Details</legend>
+                    <div class="row">
+                           <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>Enter GSTIN </label>
+                              <input type="text" name="gstin" ng-model="company.gstin" class="form-control" autocomplete="off" ng-minlength="15" ng-maxlength="15" />
+                              
+                              
+                              <span ng-show="!gstForm.gstin.$valid" class="text-danger">GST number should be of 15 digits.</span>
+                           </div>
+                          </div>
+                  </div>
+                  <div class="row">
+                           <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>Enter PAN </label>
+                              <input type="text" name="pan" ng-model="company.pan" class="form-control" autocomplete="off" ng-pattern="/^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/"  />
+                              
+                             
+                              <span ng-show="gstForm.gstin.$error.pattern" class="text-danger">Invalid PAN number.</span>
+                           </div>
+                          </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group">
+                           <button type="submit" class="btn btn-primary mt-lg">Submit</button>
+                        </div>
+                     </div>
+                  </div> 
+       		</form>
+       		<fieldset>
+                  <legend>Update Paytm Number</legend>
+                   <form role="form" name="paytmForm" ng-submit="SubmitPaytmNumber()" class="form-validate mb-lg modelform3">
+                     <div class="row">
+                        <div class="col-md-3" >
+                           <label>Paytm phone number</label>
+                        </div>
+                        <div class="col-md-5">
+                           <div class="form-group has-feedback">
+                              
+                              <div class="controls">
+                                 <input type="text" name="paytm_phone_number" ng-model="company.paytm_phone_number" placeholder="Enter Paytm number" ng-pattern="/^([0-9]){10}?$/" class="form-control"  autocomplete="off" required />   
+                                  <span ng-show="paytmForm.paytm_phone_number.$dirty &amp;&amp; paytmForm.pan.$error.required" class="text-danger">This field is required</span>
+                                  <span ng-show="paytmForm.paytm_phone_number.$error.pattern" class="text-danger">Invalid phone number.</span>
+                              </div>
+                           </div>
+                        </div>
+                        
+                
+
+                        <div class="col-md-3">
+                              <div class="form-group">
+                                 <input type="submit" class="btn btn-primary" value="Submit" />
+                              </div>
+                        </div>
+                     </div>  
+                     </form>
+            </fieldset>
+	    </script>
+
+	    <script type="text/ng-template" id="updatebankdetails">
+	   <!--   	<form role="form" name="bankForm" ng-submit="submitBankDetails()" class="form-validate mb-lg modelform-bank">
+	     	<legend>Update Bank Details</legend>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>Bank Name </label>
+                              <input type="text" name="bank_name" ng-model="bank_details.bank_name" class="form-control" autocomplete="off" placeholder="Enter bank name" required />
+                              <span ng-show="bankForm.bank_name.$dirty &amp;&amp; bankForm.bank_name.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>Account Number </label>
+                              <input type="text" name="account_number" ng-model="bank_details.account_number" class="form-control" autocomplete="off" placeholder="Enter A/C number" ng-pattern="/^([0-9]*)?$/" required />
+                              <span ng-show="bankForm.account_number.$dirty &amp;&amp; bankForm.account_number.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="bankForm.account_number.$error.pattern" class="text-danger">Invalid bank account number.</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>IFSC code</label>
+                              <input type="text" name="ifsc_code" ng-model="bank_details.ifsc_code" class="form-control" autocomplete="off" placeholder="Enter IFSC code" required />
+                              <span ng-show="bankForm.ifsc_code.$dirty &amp;&amp; bankForm.ifsc_code.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>Account Type </label>
+                              <select name="account_type" ng-model="bank_details.account_type" class="form-control" >
+	                               <option value="Savings" >Savings</option>
+	                               <option value="Current" >Current</option>
+                             </select>
+                              <span ng-show="bankForm.account_type.$dirty &amp;&amp; bankForm.account_type.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>Account Holder Name </label>
+                              <input type="text" name="account_name" ng-model="bank_details.account_name" class="form-control" autocomplete="off" placeholder="Enter Account Holder Name" required />
+                              <span ng-show="bankForm.account_name.$dirty &amp;&amp; bankForm.account_name.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group">
+                           <button type="submit" class="btn btn-primary mt-lg">Submit</button>
+                        </div>
+                     </div>
+                  </div> 
+       		</form> -->
+          <form role="form" name="showCase.bankForm" ng-submit="submitBankDetails()" class="form-validate mb-lg modelform-bank">
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>Bank Name </label>
+                              <input type="text" name="bank_name" ng-model="bank_details.bank_name" class="form-control" autocomplete="off" placeholder="Enter bank name" ng-pattern="/^[\A-Za-z ]*$/" required />
+                              <span ng-show="showCase.bankForm.bank_name.$error.required" class="text-danger">This field is required.</span>
+                              <span ng-show="showCase.bankForm.bank_name.$error.pattern" class="text-danger">This field should contain space and characters.</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>Account Number </label>
+                              <input type="text" name="account_number" ng-model="bank_details.account_number" class="form-control" autocomplete="off" placeholder="Enter A/C number" ng-pattern="/^([0-9]*)?$/" required />
+                              <span ng-show="showCase.bankForm.account_number.$dirty &amp;&amp; showCase.bankForm.account_number.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="showCase.bankForm.account_number.$error.pattern" class="text-danger">Invalid bank account number.</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>IFSC code</label>
+                              <input type="text" name="ifsc_code" ng-model="bank_details.ifsc_code" class="form-control" autocomplete="off" placeholder="Enter IFSC code" ng-pattern="/^[\A-Za-z0-9]*$/" required />
+                              <span ng-show="showCase.bankForm.ifsc_code.$dirty &amp;&amp; showCase.bankForm.ifsc_code.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="showCase.bankForm.ifsc_code.$error.pattern" class="text-danger">Invalid IFSC code. It should contain only alphanumeric characters.</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>Account Type </label>
+                              <select name="account_type" ng-model="bank_details.account_type" class="form-control" >
+                                 <option value="Savings" >Savings</option>
+                                 <option value="Current" >Current</option>
+                             </select>
+                              <span ng-show="showCase.bankForm.account_type.$dirty &amp;&amp; showCase.bankForm.account_type.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>Account Holder Name </label>
+                              <!-- <input type="text" name="account_name" ng-model="bank_details.account_name" class="form-control" autocomplete="off" placeholder="Enter Account Holder Name" required ng-pattern="/^[\A-Za-z ]*$/"  /> -->
+                              <!--Mavaji : Removed validation - As asked by jay patel verbally -->
+                              <input type="text" name="account_name" ng-model="bank_details.account_name" class="form-control" autocomplete="off" placeholder="Enter Account Holder Name" required  />
+
+                              <span ng-show="showCase.bankForm.account_name.$dirty &amp;&amp; showCase.bankForm.account_name.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="showCase.bankForm.account_name.$error.pattern" class="text-danger">Invalid Account name.</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group">
+                           <button type="submit" class="btn btn-primary mt-lg">Submit</button>
+                        </div>
+                     </div>
+                  </div> 
+          </form>
+
+	    </script>
+      <div ng-include="'wishbook_libs/views/brand/brand_action.html'"></div>
+      <div ng-include="'app/views/common/company_detail_edit.html'"></div>
+		</div>
+   </div>
+</div>

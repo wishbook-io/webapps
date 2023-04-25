@@ -1,0 +1,61 @@
+<h3>Assign catalog to another company</h3>
+<div class="panel panel-default">
+   <div class="panel-body" >
+		<div ng-controller="BuyerslistController as showCase">
+		
+		  <form role="form" ng-submit="showCase.AddBuyer()" name="showCase.addbuyerForm" novalidate="" class="form-validate mb-lg modelform">
+		
+		  <div class="row">
+		    <div class="col-md-12">  
+			<div class="form-group has-feedback">
+			  <label>Select Brand*</label>
+			    <div class="controls">  
+			      <select name="brand" chosen="" ng-model="buyer.brand" ng-options="s.id as s.name for s in brands" ng-change="GetCatalog(buyer.brand)" width="'100%'" class="chosen-select input-md form-control" required="">
+				 <option value="">Select Brand</option>
+			      </select>
+			       <span ng-show="showCase.addbuyerForm.brand.$dirty &amp;&amp; showCase.addbuyerForm.brand.$error.required" class="text-danger">This field is required</span>
+			    </div>
+			</div>
+		    </div>
+		  </div>
+		  
+		  <div class="row">
+		    <div class="col-md-12">  
+			<div class="form-group has-feedback">
+			  <label>Select Catalog*</label>
+			    <div class="controls">  
+			      <select name="catalog" chosen="" ng-model="buyer.catalog" ng-options="s.id as s.title for s in catalogs" width="'100%'" class="chosen-select input-md form-control" required="">
+				 <option value="">Select Catalog</option>
+			      </select>
+			       <span ng-show="showCase.addbuyerForm.catalog.$dirty &amp;&amp; showCase.addbuyerForm.catalog.$error.required" class="text-danger">This field is required</span>
+			    </div>
+			</div>
+		    </div>
+		  </div>
+		  
+		  <div class="row">
+		    <div class="col-md-12">  
+			<div class="form-group has-feedback">
+			  <!--label>Select Company*</label-->
+			  <label>Enter Company ID*</label>
+			    <div class="controls">  
+			      <!--select name="company" chosen="" ng-model="buyer.company" ng-options="s.id as s.name for s in companies" width="'100%'" class="chosen-select input-md form-control" required="">
+				 <option value="">Select Company</option>
+			      </select-->
+			      <input type="number" autocomplete="off" name="company" ng-model="buyer.company" placeholder="Enter Company ID"  class="form-control" min=0 required/>
+			      <span ng-show="showCase.addbuyerForm.company.$dirty &amp;&amp; showCase.addbuyerForm.company.$error.required" class="text-danger">This field is required</span>
+			    </div>
+			</div>
+		    </div>
+		  </div>
+			
+		  <div class="row">
+		    <div style="float:right;" class="col-md-2"> 
+		      <button type="submit" class="btn btn-block btn-primary mt-lg">Add</button>
+		    </div>
+		  </div>
+		  </form>
+		 
+		</div>
+   </div>
+</div>

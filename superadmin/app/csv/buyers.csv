@@ -1,0 +1,9 @@
+country_code,buyer_number,buyer_name,group_type,state,city,gst,pan
+91,2288998899,buyer name 1,Broker,gujarat,surat,,
+91,2288998900,buyer name 2,Distributor,maharastra,mumbai,,
+91,2288998901,buyer name 3,Online-Retailer,delhi,delhi,,
+94,2288998902,buyer name 4,Other,haryana,yamuna nagar,,
+94,2288998903,buyer name 5,Resellers,gujarat,ahmedabad,,
+1,2288998904,buyer name 6,Retailer,rajasthan,chittorgarh,,
+1,2288998905,buyer name 7,Semi-Wholesaler,,,,
+1,2288998906,buyer name 8,Wholesaler,,,,

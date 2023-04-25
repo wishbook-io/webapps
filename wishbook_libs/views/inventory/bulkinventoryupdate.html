@@ -1,0 +1,32 @@
+<script type="text/ng-template" id="uploadInventoryCsv">
+  <div ng-controller="bulkInventoryUpdateController" >
+   <form role="form" ng-submit="UploadInventoryCSV()" name="uploadInventoryCsvForm" novalidate="" class="form-validate mb-lg modelform3">
+
+   <legend>Upload Inventory details CSV</legend>
+      <div class="row" style="margin: 30px 0;">
+         <div class="col-md-5">
+            <div class="form-group">
+               <label>Select CSV from your computer</label>
+            </div>
+         </div>
+         <div class="col-md-7">
+            <div class="form-group">
+               <input type="file" ngf-select="loadCSV($files)" ng-model="inventory_csv" name="inventory_csv" required accept=".csv">
+               <!-- <span ng-show="!inventory_csv" class="text-danger">This field is required</span> -->
+            </div>
+         </div>
+         <span>Please give atleast 4 hours for your stock update to reflect.</span>
+      </div>
+      <div class="row">
+         <!-- <div  class="col-md-4">
+            <a style="text-decoration: none;" href="{{csvFileSource()}}"><button type="button" class="buttonPrimary" style="padding: 6px 8px !important;">Download Sample</button></a>
+         </div> -->
+         <div  class="col-md-6">
+            <button type="submit" ng-disabled="!inventory_csv" class="buttonPrimary">Upload</button>
+         </div>
+         <div  class="col-md-6">
+            <button type="button" ng-click="CloseDialog()" class="linkButton" style="padding:10px;">Cancel</button>
+         </div>
+      </div>
+   </form>
+</script>

@@ -1,0 +1,416 @@
+a.dt-button.red {color: #FF0053;}
+a.dt-button.orange {color: #FF7500;}
+a.dt-button.green {color: green;}
+a.dt-button.blue {color: #0095FF;}
+a.dt-button.purple {color: #7900FF;}
+
+.ngdialog.ngdialog-theme-default .ngdialog-content{width: 60% !important;}
+.ngdialog.ngdialog-theme-default {padding-top: 50px !important;}
+
+.ngdialog.ngdialog-theme-default.custom-width-30 .ngdialog-content{width: 30% !important;}
+.glyphicon.glyphicon-chevron-left:before, .glyphicon.glyphicon-chevron-right:before {
+    color: #41C0E8;
+}
+
+.orange-button {
+	background-color:  #EDEDED;
+    border: 1px solid gray;
+    color: #FF5B03;
+}
+
+.topnavbar {
+	background-image: linear-gradient(90deg,#012841 0,#51c6ea) !important;
+}
+.content-wrapper>h3 {
+    font-size: 17px;
+    font-weight: bold !important;
+ }
+ .input-md {
+  width: 100% !important;
+ }
+
+ .btn.btn-default {
+    border-color: #3D9FC0;
+}
+/* Previous Next button css */
+.pager .previous>a, .pager .next>a {
+    color: white !important;
+    background: #5d9cec !important;
+}
+
+/* left side bar */
+.wrapper>.aside {
+    width: 170px;
+}
+
+.wrapper>.aside .aside-inner{
+    width: 170px;
+}
+
+.wrapper>footer, .wrapper>section {
+    margin-left: 170px;
+}
+
+.sidebar>.nav>li>.nav-item, .sidebar>.nav>li>a {
+    padding: 12px 12px;
+}
+.sidebar-subnav>li>.nav-item, .sidebar-subnav>li>a {
+    padding-left: 32px;
+}
+
+/* Start: Checkbox toggle button css */
+#ck-button {
+    background-color:#EFEFEF;
+    border-radius:4px;
+    border:1px solid #D0D0D0;
+    overflow:auto;
+    float:left;
+}
+
+/*#ck-button:hover {
+    background:red;
+} */
+
+#ck-button label {
+    float:left;
+    width: 7em;
+    margin-bottom: 0 !important;
+}
+
+#ck-button label span {
+    text-align:center;
+    display:block;
+}
+
+#ck-button label input {
+   display: none;
+}
+
+#ck-button input:checked + span {
+    background-color:#32A0B7;
+    color:#fff;
+}
+/* End: Checkbox toggle button css */
+/* Start: Photoswipe custom css */
+.pswp__counter {
+	font-size: 30px !important;
+}
+
+ .pswp__img {
+  height: auto !important;
+} 
+ .pswp__button--arrow--right:before {
+	right: 10px !important;
+}
+
+.pswp__button--arrow--left:before, .pswp__button--arrow--right:before{
+	width: 34px !important;
+} 
+
+.pswp__ui--fit .pswp__top-bar, .pswp__ui--fit .pswp__caption {
+    background-color: rgba(0,0,0,0.7) !important;
+}
+/* End: Photoswipe custom css  */
+
+
+/* Start: Datatable custom css  */
+
+.dataTables_filter {
+	display: none;
+}
+
+.dataTables_length {
+	float: right !important;
+}
+
+/*table.dataTable thead th, table.dataTable thead td {
+	    padding: 5px 10px !important;
+} */
+
+.input-daterange, .input-numberrange{
+	display: inline-flex;
+}
+.content-wrapper>.content-heading, .content-wrapper>h3 {
+	padding: 5px 5px 5px 20px !important;
+}
+.content-wrapper>.content-heading, .content-wrapper>h3 {
+	margin-bottom: 5px !important;
+}
+.panel-body {
+	padding: 5px !important;
+}
+.content-wrapper {
+	padding: 20px 5px 1px 5px;
+}
+/* End: Datatable custom css  */
+
+/* Start: Datatable light column filter custom css  */
+.input-numberrange input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+.input-sm{
+	padding: 2px;
+}
+/* End : Datatable light column filter custom css  */
+
+/*for left side bar selected highlight */ 
+.sidebar-subnav>li.active>.nav-item, .sidebar-subnav>li.active>a {
+	background: #012841 !important;
+	color: white !important;
+}
+
+/* Hotline custom changes css */
+#d_hotline_frame {
+	left: 0px !important; 
+}
+
+/*.icon-ic_chat:before {
+    content: "Help" !important;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 14px;
+} */
+.d-hotline.h-btn {
+display: none !important;
+
+}
+.mck-sidebox-launcher {
+	right: 11% !important;
+	top: -7px !important;
+}
+.mck-sidebox-launcher .mck-button-launcher {
+	width: 137px !important;
+    height: 35px !important;
+    border-radius: 0 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    display: none !important; 
+}
+.mck-icon-chat {
+    width: 50px !important;
+    height: 20px !important;
+    top: 7px !important;
+    left: 12px !important;
+    color: white !important;
+    display: inline !important;
+    background: none !important;
+  }
+  .mck-sidebox-launcher a:hover {
+  	text-decoration: none;
+  }
+  .mck-sidebox-launcher a span:hover {
+  	color: #154F6A !important;
+  }
+  .mck-product-group .mck-caret {
+    display: none !important;
+  }
+
+/* UI improvements made by Dhiren
+
+old used classes
+btn btn-primary mt-lg
+table-striped table-bordered hover */
+
+.styledButtonblue
+{
+    line-height: 14px;
+    padding: 4px 2px;
+    border-radius: 7px;
+    color: #11a0d1;;
+    font-size: 12px !important;
+    text-decoration: none;
+    border: 1px solid #11a0d1;;
+    background: white;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 5px;
+    transition: 0.3s;
+}
+.styledButtonblue:hover
+{
+background-color:#11a0d1;
+color: white;
+}
+
+.styledButtongreen
+{
+    line-height: 14px;
+    padding: 4px 2px;
+    border-radius: 7px;
+    color: green;
+    font-size: 12px !important;
+    text-decoration: none;
+    border: 1px solid green;
+    background: white;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 5px;
+    transition: 0.3s;
+}
+.styledButtongreen:hover
+{
+background-color:green;
+color: white;
+}
+
+.styledButtonred
+{
+    line-height: 14px;
+    padding: 4px 2px;
+    border-radius: 7px;
+    color: red;
+    font-size: 12px !important;
+    text-decoration: none;
+    border: 1px solid red;
+    background: white;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 5px;
+    transition: 0.3s;
+}
+.styledButtonred:hover
+{
+background-color : red;
+color: white;
+}
+
+
+
+.styledButtongreen:disabled
+{
+background-color: #edf1f2;
+color: green;
+}
+
+.styledButtonblue:disabled
+{
+background-color: #edf1f2;
+color: #11a0d1;
+}
+
+
+
+.panel-body
+{
+    margin-left: 10px !important;
+}
+
+td
+{
+    text-align: center
+}
+th
+{
+    text-align: center;
+}
+a.dt-button
+{
+    margin-right: 5px !important;
+    border-radius: 5px  !important;
+    padding: 0.5em 2em  !important;
+}
+
+div.dt-buttons
+{
+    margin: 5px!important;
+}
+
+.uk-notify-message
+{
+    background: linear-gradient(90deg,#012841 0,#51c6ea) !important;
+    color: white !important;
+    border-radius: 5px;
+    opacity: 1;
+}
+.uk-notify
+{
+    position: fixed;
+    top: 80% !important;
+    left: 80% !important;
+}
+
+.become_a_seller:hover
+{
+    color: white !important;
+}
+
+.dangerr
+{
+    background: #f0505030 !important;
+}
+
+/* New UI for Chekbox*/
+
+
+   /* Base for label styling */
+   [type="checkbox"]:not(:checked),
+   [type="checkbox"]:checked {
+   position: absolute;
+   left: -9999px;
+   }
+   [type="checkbox"]:not(:checked) + label,
+   [type="checkbox"]:checked + label {
+   position: relative;
+   padding-left: 1.95em;
+   cursor: pointer;
+   margin-bottom: 13px!important;
+   }
+
+   /* checkbox aspect */
+   [type="checkbox"]:not(:checked) + label:before,
+   [type="checkbox"]:checked + label:before {
+   content: '';
+   position: absolute;
+   left: 0; top: 0;
+   width: 1.25em; height: 1.25em;
+   border: 2px solid #ccc;
+   background: #fff;
+   border-radius: 4px;
+   box-shadow: inset 0 1px 3px rgba(0,0,0,.1);
+   }
+   /* checked mark aspect */
+   [type="checkbox"]:not(:checked) + label:after,
+   [type="checkbox"]:checked + label:after {
+   content: '\2713\0020';
+   position: absolute;
+   top: .15em; left: .1em;
+   font-size: 1.3em;
+   line-height: 0.8;
+   color: #09ad7e;
+   transition: all .2s;
+   font-family: 'Lucida Sans Unicode', 'Arial Unicode MS', Arial;
+   }
+   /* checked mark aspect changes */
+   [type="checkbox"]:not(:checked) + label:after {
+   opacity: 0;
+   transform: scale(0);
+   }
+   [type="checkbox"]:checked + label:after {
+   opacity: 1;
+   transform: scale(1);
+   }
+   /* disabled checkbox */
+   [type="checkbox"]:disabled:not(:checked) + label:before,
+   [type="checkbox"]:disabled:checked + label:before {
+   box-shadow: none;
+   border-color: #bbb;
+   background-color: #ddd;
+   }
+   [type="checkbox"]:disabled:checked + label:after {
+   color: #999;
+   }
+   [type="checkbox"]:disabled + label {
+   color: #aaa;
+   }
+
+   /* hover style just for information */
+   label:hover:before {
+   border: 2px solid #4778d9!important;
+   }
+
+ 

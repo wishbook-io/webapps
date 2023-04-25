@@ -1,0 +1,342 @@
+<style>
+   .item2
+   {
+      background: #eee;
+      border-radius: 15px;
+      padding: 2%; 
+      margin-right: 4px; margin: 2px;
+      line-height: 22px;
+      color: black !important;
+      font-weight: lighter !important;
+   }
+   
+   .panel
+   {
+      border-color: #cfdbe2;
+      box-shadow: 5px 5px 7px rgba(0, 0, 0, .05) !important;
+      border-radius: 20px;
+   }
+
+   .panel:hover
+   {
+      box-shadow: 10px 10px 14px rgba(0, 0, 0, .1) !important;
+   }
+
+   /* .form-group > label {
+    color: black;
+    font-weight: normal;
+   } label should be of lighter color
+   */
+   .row
+   {
+      margin-left: -8px;
+      margin-right: -8px;
+      width: 100%;
+   }
+
+   .panel-default {
+      border-top-width: 1px !important;
+   }
+   .listTitle
+   {
+      padding: 6px 15px !important;
+   }
+
+   /* input[type="checkbox"]:not(:checked), [type="checkbox"]:checked
+   {
+    position: relative;
+    left: 0px;
+    top: 1px;
+   } */
+   .list-group-item
+   {
+      padding: 6px 15px !important;
+   }
+
+</style>
+
+<div ><!-- ng-controller="brandwisediscountController" -->
+
+
+<script type="text/ng-template" id="AddDiscountRuledialog">
+   <form editable-form name="AddDiscountRuledialog" validate-form="" class="form-validate modelform2">
+         
+      
+      <legend class="left">
+         <span >{{dialogtitle}}</span>
+         <!-- <span ng-if="!ruleid" >{{dialogtitle}}</span> -->
+      </legend>
+
+      <div class="row">
+
+         <div class="col-md-4">
+
+            <div class="scrollerlist">
+              <div class="listTitle">
+                 <input type="checkbox" id="allbrands" ng-model="brandDictionary.allbrands" name="Allbrands" ng-click="addbranditemsAllbrands(item,$event);" >
+                  <label for="allbrands" >
+                     All brands
+                  </label>
+              </div>
+               
+               <input type="text" class="form-control" placeholder="Search brand you own"  ng-model="searchKeyword" style="width:100%;margin-bottom:5px">
+                  <div class="listTitle">
+                     <input type="checkbox" id="brandsyouown" ng-model="brandDictionary.brandsyouown" name="brandsIown" ng-click="addbranditemsbrandsyouown(item,$event);" ng-cheked="brandDictionary.allbrands">             
+                     <label for="brandsyouown" >
+                        Brands you own
+                     </label> 
+                  </div>
+               <div style="max-height: 250px !important;overflow: scroll;">
+                  <div ng-if="brandsiown.length <=0">You dont own any brands</div>
+                  <div ng-repeat="item in brandsiown | filter:searchKeyword" class="list-group-item" >
+
+                     <input type="checkbox" value="{{item.id}}" id="{{item.id}}" ng-disabled="item.disabled"
+                     ng-checked="{{discountRule.brandlist.indexOf(item.id) > -1}} || brandDictionary.brandsyouown || brandDictionary.allbrands" ng-click="addbranditems(item,$event);" name="brandsIown">              
+                     <label for="{{item.id}}" style="text-transform:capitalize;">
+                        {{item.name}}
+                     </label>
+                       
+                  </div>
+               </div>
+            </div>
+
+            
+            <div style="margin-top:15px;">
+               <input type="text" class="form-control" placeholder="Search brand you sell"  ng-model="searchKeyword2" style="width:100%;margin-bottom:5px">
+                  <div class="listTitle">
+                     <input type="checkbox" id="brandsyousell" ng-model="brandDictionary.brandsyousell" name="brandsIsell" ng-click="addbranditemsbrandsyousell(item,$event);"  ng-cheked="brandDictionary.allbrands">
+                     <label for="brandsyousell" style="text-transform:capitalize;">
+                        Brands you sell
+                     </label>
+                  </div>
+                 
+               <div style="max-height: 250px !important;overflow: scroll;">
+                  <div ng-if="brandsisell.length <=0">You dont sell any brands</div>
+                  <div ng-repeat="item in brandsisell | filter:searchKeyword2" class="list-group-item" >
+                     
+                     <input type="checkbox" value="{{item.id}}" id="{{item.id}}" ng-disabled="item.disabled"
+                     ng-checked="{{discountRule.brandlist.indexOf(item.id) > -1}} || brandDictionary.brandsyousell || brandDictionary.allbrands" ng-click="addbranditems(item,$event);" name="brandsIsell">
+            
+                     <label for="{{item.id}}" style="text-transform:capitalize;">
+                        {{item.name}}
+                     </label>
+                  </div>
+               </div>
+            </div>
+
+         </div>
+         <div class="col-md-8">
+
+            <div class="row" ng-if="!ruleid && is_staff=='true'">
+                  <div class="col-md-8">
+                     <div class="form-group has-feedback">
+                        <label>Enter Selling Company ID</label>
+                        <div class="controls">
+                        <input type="text" autocomplete="off" name="selling_company_id" ng-model="discountRule.selling_company_id"  placeholder="Enter selling company id" class="form-control" ng-change="sellingCompanyChanged()" pattern="^[0-9]*$" required/>
+                        <span ng-show="AddDiscountRuledialog.selling_company_id.$dirty &amp;&amp; AddDiscountRuledialog.selling_company_id.$error.required" class="text-danger">This field is required</span>   
+                        <span ng-show="AddDiscountRuledialog.selling_company_id.$error.pattern" class="text-danger">Only Numeric characters allowed</span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-md-4">
+                     <div class="form-group">
+                        <button type="button" ng-disabled="!discountRule.selling_company_id" ng-click="getDiscountRulelist(discountRule.selling_company_id)" class="btn btn-primary mt-lg" >Get BrandList</button>
+                     </div>
+                  </div>
+            </div>
+            <div class="row">
+               <div class="col-md-12 form-group ">
+
+                  <label style="text-transform:capitalize;">Add brands </label><br>
+
+                  <div class="form-group" ng-if="discountRule.brandlist.length < allbrandsDict.length ">
+                     <label ng-repeat="brnd in discountRule.brandlist" class="item2" >{{discountRule[brnd]}}</label>
+                  </div>
+
+                  <div class="form-group" ng-if="discountRule.brandlist.length == allbrandsDict.length && allbrandsDict.length > 1">
+                     <label style="background: #eee; border-radius: 15px; padding: 2%; margin-right: 4px; margin: 2px;line-height: 22px;" >All brands</label>
+                  </div>
+
+               </div>
+            </div>
+
+           
+            <div class="row">
+                  <div class="col-md-6">
+                     <div class="form-group has-feedback">
+                        <label>Enter Full Catalog Discount(%)</label>
+                        <div class="controls">
+                        <input type="number" autocomplete="off" name="fullcatdiscount" ng-model="discountRule.fullcatalogDiscount"  placeholder="Enter discount in %" min="{{discountRule.minfullcatalogDiscount || 5}}"  class="form-control" pattern="^[0-9]*$" required/>
+                        <span ng-show="AddDiscountRuledialog.fullcatdiscount.$dirty &amp;&amp; AddDiscountRuledialog.fullcatdiscount.$error.required" class="text-danger">This field is required</span>   
+                        <span ng-show="AddDiscountRuledialog.fullcatdiscount.$error.pattern" class="text-danger">Only Numeric characters allowed</span>
+                        <span ng-show="AddDiscountRuledialog.fullcatdiscount.$error.min" class="text-danger">Cannot be less than your previous Full Catalog Discount for this rule or 5% </span>
+                        </div>
+                     </div>
+                  </div>
+         
+                  <div class="col-md-6">
+                     <div class="form-group has-feedback">
+                        <label>Enter Single Piece Discount(%)</label>
+                        <div class="controls">
+                        <input type="number" autocomplete="off" name="singlepcdiscount" ng-model="discountRule.singlePcDiscount"  placeholder="Enter discount in %" min="{{discountRule.minsinglePcDiscount || 0}}"  class="form-control" pattern="^[0-9]*$" required/>
+                        <span ng-show="AddDiscountRuledialog.singlepcdiscount.$dirty &amp;&amp; AddDiscountRuledialog.singlepcdiscount.$error.required" class="text-danger">This field is required</span>   
+                        <span ng-show="AddDiscountRuledialog.singlepcdiscount.$error.pattern" class="text-danger">Only Numeric characters allowed</span>
+                         <span ng-show="AddDiscountRuledialog.singlepcdiscount.$error.min" class="text-danger">Cannot be less than your previous Single pc Discount for this rule </span>
+                        </div>
+                     </div>
+                  </div>
+            </div>
+
+            <div class="row" ng-if="!ruleid || ruleid == 'null'">
+                  <div class="col-md-12">
+                     <div class="form-group has-feedback">
+                        <label>Enter Name for this Discount Rule</label>
+                        <div class="controls">
+                        <input type="text" autocomplete="off" name="discountrulename" ng-model="discountRule.discountrulename"  placeholder="Discount rule name can have maximum 50 characters" max-length="50"  class="form-control"required/>
+                        <span ng-show="AddDiscountRuledialog.discountrulename.$dirty &amp;&amp;  AddDiscountRuledialog.discountrulename.$error.required" class="text-danger">This feild is required</span>
+                        <span ng-show="AddDiscountRuledialog.discountrulename.$error.maxlength" class="text-danger">Discount rule name can have maximum 50 characters</span>
+                        </div>
+                     </div>
+                  </div>
+            </div> 
+            
+            <div class="row">
+               <div class="col-md-6">
+                  <div class="form-group"> 
+                     <label>From Date</label>
+                     <div class="controls">
+                        <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-start-date="dt" data-date-autoclose="true" >
+                           <input type="text" class="form-control" ng-model="discountRule.from_date" name="from_date" placeholder="Select from date" autocomplete="off" />
+                           <div class="input-group-addon">
+                                 <span class="fa fa-calendar"></span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div> 
+
+            <div class="row">
+               <div class="col-md-6">
+                  <div class="form-group">
+                     <label class="col-sm-12 control-label">Selling all catalog</label>
+                     <div class="col-sm-10">
+                        <label class="radio-inline c-radio">
+                           <input id="inlineradio1" type="radio" name="selling_all_catalog" ng-model="discountRule.selling_all_catalog"  value="true"  class="form-control"  />
+                           <span class="fa fa-circle"></span>Yes</label>
+                        <label class="radio-inline c-radio">
+                           <input id="inlineradio2" type="radio" name="selling_all_catalog" ng-model="discountRule.selling_all_catalog"  value="false" class="form-control" />
+                           <span class="fa fa-circle"></span>No</label>
+                        <span ng-show="AddDiscountRuledialog.selling_all_catalog.$dirty &amp;&amp; AddDiscountRuledialog.selling_all_catalog.$error.required" class="text-danger">This field is required</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-6">
+                  <div class="form-group">
+                     <label class="col-sm-12 control-label">Selling all catalog as single</label>
+                     <div class="col-sm-10">
+                        <label class="radio-inline c-radio">
+                           <input id="inlineradio3" type="radio" name="selling_all_catalog_as_single" ng-model="discountRule.selling_all_catalog_as_single"  value="true"class="form-control" />
+                           <span class="fa fa-circle"></span>Yes</label>
+                        <label class="radio-inline c-radio">
+                           <input id="inlineradio4" type="radio" name="selling_all_catalog_as_single" ng-model="discountRule.selling_all_catalog_as_single"  value="false"  class="form-control" />
+                           <span class="fa fa-circle"></span>No</label>
+                        <span ng-show="AddDiscountRuledialog.selling_all_catalog_as_single.$dirty &amp;&amp; AddDiscountRuledialog.selling_all_catalog_as_single.$error.required" class="text-danger">This field is required</span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <div class="row" ng-if="ruleid && ruleid != 'null' && ruleid != 'undefined'">
+               <div class="col-md-12">
+                  <div class="form-group"> 
+                     <label>Note:</label>
+                     <ul>
+                        <li>There are {{discountRule.all_catalogs_count}} catalogs of {{discountRule[discountRule.brandlist[0]]}} Brand <button type="button" ng-click="OpenBrandspecificProducts()" class="linkButton" style="width:unset">View</button></li>
+                        <li>You are selling {{discountRule.single_catalogs_count}} out of {{discountRule.all_catalogs_count}} Catalogs of {{discountRule[discountRule.brandlist[0]]}} Brand as single Pcs <button type="button" ng-click="OpenBrandspecificProducts(true)" class="linkButton" style="width:unset">View</button></li>
+                     </ul>
+                  </div>
+               </div>
+            </div> 
+
+           
+
+         </div>
+
+
+      </div>
+      
+      <div class="row"  style="margin-top:15px;">
+         <div class="col-md-4">
+            <div class="form-group">
+
+            </div>
+         </div>
+         <div class="col-md-8" ng-if="is_staff!='true'">
+            <div class="row">
+               <div class="col-md-6">
+                  <div class="form-group right">
+                     <button type="submit" ng-disabled="!discountRule.from_date || !discountRule.discountrulename || AddDiscountRuledialog.singlepcdiscount.$error.min || AddDiscountRuledialog.fullcatdiscount.$error.min || discountRule.brandlist.length == 0" ng-click="SaveDiscountRule()" class="buttonPrimary" >Save</button>
+                  </div>
+               </div>
+               <div class="col-md-6">
+                  <div class="form-group  left">
+                     <button  type="button" ng-click="CloseDialog()" class="buttonSecondary" >Cancel</button>
+                  </div>
+               </div>
+               
+            </div>
+         </div>
+
+         <div class="col-md-8" ng-if="is_staff=='true'">
+            <div class="row">
+               <div class="col-md-6">
+                  <div class="form-group right">
+                     <button type="submit" ng-disabled="discountRule.brandlist.length == 0" ng-click="SaveDiscountRule()" class="btn btn-primary mt-lg" >Save</button><!-- AddDiscountRuledialog.$invalid || -->
+                  </div>
+               </div>
+               <div class="col-md-6">
+                  <div class="form-group  left">
+                     <button  type="button" ng-click="CloseDialog()" class="btn btn-primary mt-lg" >Cancel</button>
+                  </div>
+               </div>
+               
+            </div>
+         </div>
+        
+      </div>
+   </form>
+
+</script>
+
+
+
+
+
+
+
+<script type="text/ng-template" id="DeleteDiscountRuledialog">
+
+      <div class="row" align="center">
+         <div class="col-md-12">
+            <div class="form-group ">
+               <label>Are you sure you want to delete this Discount rule ?</label>
+            </div>
+         </div>
+      </div> 
+      <div class="row" align="center">
+         <div class="col-md-6">
+            <div class="form-group right">
+               <button type="submit" ng-click="DeleteDiscountRule()" class="buttonPrimary">Delete</button>
+            </div>
+         </div>
+         <div class="col-md-6">
+            <div class="form-group left">
+               <button  type="submit" ng-click="CloseDialog()" class="buttonSecondary" >Cancel</button>
+            </div>
+         </div>
+      </div>
+
+</script>
+
+</div>

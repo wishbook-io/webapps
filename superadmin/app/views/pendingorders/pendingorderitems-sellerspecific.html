@@ -1,0 +1,713 @@
+<style>
+    .cropArea {
+      background: #E4E4E4;
+      overflow: hidden;
+      height: 350px;
+   }
+
+   form .progress {
+      line-height: 15px;
+   }
+
+   .progress {
+      display: inline-block;
+      width: 100px;
+      border: 3px groove #CCC;
+   }
+
+   .progress div {
+      font-size: smaller;
+      background: orange;
+      width: 0;
+   }
+
+   .slidelink {
+      height: 100px !important;
+   }
+
+   .dataTables_scrollHeadInner {
+      padding-right: 0px !important;
+   }
+
+   td {
+      text-align: center
+   }
+
+   th {
+      text-align: center;
+   }
+   .loading {
+      background: transparent url('/media/logo-single.png') center no-repeat;
+      background-size: 100px 100px;
+   }
+   
+   .porlet
+   {
+      box-shadow: 3px 3px 6px rgba(0,0,0,0.2)!important;
+   }
+
+   label
+   {
+      margin-bottom: 13px!important;
+   }
+
+   .loading {
+   background: transparent url('/media/logo-single.png') center no-repeat;
+   background-size: 100px 100px;
+   }
+
+   .alert-danger
+   {
+      background-color: #f44336b8 !important;
+   }
+   .liveitem
+   {
+      width: 30%;
+      float: left;
+   }
+   .vertical
+   {
+      width: 5%;
+      float: left;
+   }
+    .ngdialog.ngdialog-theme-default .ngdialog-content
+   {
+    width: 40% !important;
+   }
+
+</style>
+
+<div ng-controller="pendingorderitemssellerspecificController as showCase" style="margin-top: -20px;">
+
+
+    <h4>
+        <span class="btn-label" style="margin-left: 2%; color: #51c6ea;background:none" onclick="goBack()" title="Go Back"><i
+                class="fa fa-arrow-left"></i></span>
+        Pending order items for {{sellerName}}
+    </h4>
+
+    <div class="panel panel-default modelform3" ng-hide="facility_type == 'dropship'">
+        <div class="panel-body">
+
+            <!--div style="flex-wrap: wrap; width: 100%;padding: 8px;text-align: center;line-height: 18px">
+                <div>
+                    <span style="font-size: 22px;line-height: 30px;color: #11a0d1;font-weight: bold;">Pending Order
+                        Items</span>
+                </div>
+            </div-->
+
+            <table id="catalogs-datatables" datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs"
+                dt-instance="showCase.dtInstance" class="row-border hover " width="100%">
+            </table>
+
+
+        </div>
+    </div>
+
+
+    <script type="text/ng-template" id="update_pending_order_items">
+      <form editable-form name="CreateShipmentdialog" validate-form="" class="form-validate modelform2">
+         
+         <legend>
+            <span  style="font-size: 22px;line-height: 30px;color: #11a0d1;font-weight: bold;">Edit availabilility for {{orderitem[5] || orderitem[6]}}</span>
+         </legend>
+
+
+         <!--div class="row">
+            <div class="col-md-5 col-sm-5 col-xs-5  col-lg-5 ">
+               <div style="text-align: center;"><a><img class="loading" img-cache src="{{orderitem[2]}}" style="height: 100px; width: 100px;"/></a></div>
+            </div>
+            <div class="col-md-7 col-sm-7 col-xs-7  col-xs-7 form-group">
+               <div> <label>Design No : {{orderitem[5]}}</label></div>
+               <div> <label>Product Code : {{orderitem[6]}}</label></div>
+               <div> <label>Pending Quantity : {{orderitem[8]}}</label></div>
+            </div>
+         </div>
+
+         <div class="row" > 
+            <div class="col-md-6">
+               <div style="padding:5px;">
+                  <label>Already marked as ready : {{orderitem[8]}}<label>
+               </div>
+            </div>
+            <div class="col-md-6">
+               <div style="padding:5px;">
+                  <label>Already marked as unavailable : {{orderitem[9]}}<label>
+               </div>
+            </div>
+         </div-->
+         
+         <div class="row" ng-if="actiontype != 'expected_date_update'" > 
+            <div class="col-md-6">
+               <div class="form-group has-feedback">
+                  <label>Additional ready Qty :</label>
+                     <div class="controls">
+                        <input type="number" autocomplete="off" name="readyQty" ng-model="orderitem.readyQty" ng-change="showErrorMessage()" placeholder="Enter quantity ready for pickup" required="required" class="form-control"  min="0" ng-disabled="orderitem.facility_type == 'dropship'"/>
+                           <span ng-show="CreateShipmentdialog.readyQty.$dirty &amp;&amp; showCase.CreateShipmentdialog.Length.$error.required" class="text-danger">This field is required</span>
+                           <span ng-show="CreateShipmentdialog.readyQty.$error.min" class="text-danger">Minimum ready fro pickup quantity should be 0</span>
+                     </div>
+                  </div>
+            </div>
+
+            <div class="col-md-6">
+               <div class="form-group has-feedback">
+                  <label>Additional unavailable Qty :</label>
+                     <div class="controls">
+                        <input type="number" autocomplete="off" name="cancelledQty" ng-model="orderitem.cancelledQty" ng-change="showErrorMessage()" placeholder="Enter quantity unavailable" required="required" class="form-control"  min="0" ng-disabled="orderitem.facility_type == 'dropship'"/>
+                           <span ng-show="CreateShipmentdialog.cancelledQty.$dirty &amp;&amp; showCase.CreateShipmentdialog.Length.$error.required" class="text-danger">This field is required</span>
+                           <span ng-show="CreateShipmentdialog.cancelledQty.$error.min" class="text-danger">Minimum ready fro pickup quantity can be 0</span>
+                     </div>
+                  </div>
+            </div>
+         </div>
+
+         <div class="row" ng-if="expepectedDateforNextitemRequired">
+
+            <div class="col-md-12">
+               <div class="form-group has-feedback">
+                  <label>Expected shipping date for remaining items :</label>
+                     <div class="controls">
+                        <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-start-date="dt" data-date-autoclose="true">
+                           <input type ="text" class="form-control" ng-model="orderitem.expectedDate" name = "dispatch_date" placeholder = "Select next availability date" />
+                              <div class="input-group-addon">
+                                 /<span class="glyphicon glyphicon-th"></span>
+                              </div>
+                        </div>
+                     </div>
+               </div>
+            </div>
+         </div>
+
+         <div class="row" ng-show="illegal">
+            <div class="col-md-12">
+                  <div class="alert alert-danger" role="alert">
+                      Out of {{orderitem.pending_quantity}} pending items, you have already marked {{orderitem.ready_Qty}} as ready, {{orderitem.cancelled_Qty}} as unavailable. You can only mark {{orderitem.unmarked}} items as either ready or unavailable.
+                  </div>
+            </div>
+         </div>
+
+         <div class="row" ng-show="isNotInPeicesMultiple">
+            <div class="col-md-12">
+                  <div class="alert alert-danger" role="alert">
+                    There are {{orderitem[9]}} number of pieces in this set. So, ready/unavailable qty must be a multiple of {{orderitem[9]}}.
+                  </div>
+            </div>
+         </div>
+
+
+
+         <div class="row" align="center">
+            <div class="col-md-6">
+               <div class="form-group">
+                  <button type="submit" ng-disabled="CreateShipmentdialog.$invalid || illegal || nochange || isNotInPeicesMultiple" ng-click="UpdateItemAvailability()" class="styledButtonblue" style="width: 40%;line-height: 20px;">Save</button>
+               </div>
+            </div>
+            <div class="col-md-6">
+               <div class="form-group">
+                  <button type="submit" ng-click="showCase.CloseDialog()" class="styledButtonblue" style="width: 40%;line-height: 20px;">Go Back</button>
+               </div>
+            </div>
+         </div>
+         
+      </form>
+   </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script type="text/ng-template" id="CreateShipmentdialog">
+        <form editable-form name="CreateShipmentdialog" validate-form="" class="form-validate modelform2">
+            
+            
+            <legend>
+            <span ng-if="actiontype == 'create_shipment'" style="font-size: 22px;line-height: 30px;color: #11a0d1;font-weight: bold;">Create Shipment for {{orderid}}</span>
+            <span ng-if="actiontype != 'create_shipment'" style="font-size: 20px;line-height: 30px;color: #11a0d1;font-weight: bold;">Manage "Ready for pickup" and "Unavailable" quantities of {{orderid}}</span>
+            </legend>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group has-feedback">
+                        <label>Please confirm the quantity in this shipment</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+            <div class="col-md-12 col-sm-6 col-xs-12 ">
+                <table class="table table-hover table-responsive table-striped">
+                <tr>
+                    <th>Image</th>
+                    <th style="min-width: 70px;" >Catalog</th>
+                    <th style="min-width: 70px;">Design</th>
+                    <th style="min-width: 70px;">Ordered Qnt</th>
+                    <th ng-if="actiontype == 'create_shipment'" style="min-width: 70px;">Already marked ready to ship</th>
+                    <th ng-if="actiontype != 'create_shipment'" style="min-width: 70px;">Already marked for pickup</th>
+                    <th style="min-width: 70px;">Already marked as unavailable</th>
+                    <th ng-if="actiontype == 'create_shipment'" style="min-width: 70px;">Ready to ship Qty</th>
+                    <th ng-if="actiontype != 'create_shipment'" style="min-width: 70px;">Ready for pickup Qty</th>
+                    <th style="min-width: 70px;">Unavailable Qty</th>
+                </tr>
+                <tr ng-repeat="x in pendingOrderItems">
+                    <td style="min-width: 70px;"><div style="text-align: center;"><a ><img class="loading" img-cache src="{{x.image_url || img/default.png }}" style="height: 100px; width: 100px;"/></a></div></td>
+                    <td style="min-width: 70px;">{{ x.product__catalog__title }}</td>
+                    <td style="min-width: 70px;">{{ x.product__sku }}</td>
+                    <td style="min-width: 70px;">{{ Divide(x) }}</td>
+                    <td style="min-width: 70px;">{{pendingOrderItems222[$index].ready_to_ship_qty}}</td>
+                    <td style="min-width: 70px;">{{pendingOrderItems222[$index].canceled_qty}}</td>
+                    <td style="min-width: 70px;"><input type="number" ng-model="x.ready_to_ship_qty" ng-change="showmessage(x,$index)" class="form-control" ng-disabled="actiontype == 'show_shipment' || x.disable == true || x.disable == 'true'"></td><!-- pendingOrderItems222[$index].quantity == (pendingOrderItems222[$index].ready_to_ship_qty + pendingOrderItems222[$index].canceled_qty) -->
+                    <td style="min-width: 70px;"><input type="number" min="0" ng-model="x.canceled_qty" ng-change="showmessage(x,$index)" class="form-control" ng-disabled="actiontype == 'show_shipment' ||  x.disable == true || x.disable == 'true'"></td>
+                </tr>
+                </table>
+                <div ng-if="bool" class="alert alert-danger" role="alert">Sum of Ready to ship & Unavailable Quantity should be <= Order Qty - Sum of already marked as unavailable & ready for pickup</div>
+                <!--div ng-if="minRTSerror" style="color:maroon;font-size: 12px;">Ready to ship Qnt cannot be less than your previous ready for pickup Qnt</div>
+                <div ng-if="maxUNVerror" style="color:maroon;font-size: 12px;">Uavailable Qnt cannot be more than your previous Unavailable Qnt</div-->
+
+            </div>
+            </div>
+            
+            <div ng-if="actiontype == 'create_shipment' && !dropship_markedUnavailable">
+            <div class="row"> 
+                <div class="col-md-12" style="padding-top:15px;font-size:18px">
+                    <div class="form-group">
+                        <label>Please confirm your shipment dimensions *</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                        <label>Weight(Kg)</label>
+                        <div class="controls">
+                        <input type="number" autocomplete="off" name="Weight" ng-model="dimensions.weight" data-parsley-group="step3" placeholder="Enter Weight in kg" min="0"  class="form-control" pattern="^[0-9]*$" required/>
+                        <span ng-show="CreateShipmentdialog.Weight.$dirty &amp;&amp; addcatalogform.title.$error.required" class="text-danger">This field is required</span>   
+                        <span ng-show="CreateShipmentdialog.Weight.$error.pattern" class="text-danger">Only Numeric characters allowed</span>
+                        </div>
+                        </div>
+                    </div>
+            </div> 
+                    
+            <div class="row">
+                <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                        <label>Length(cm)</label>
+                        <div class="controls">
+                            <input type="number" autocomplete="off" name="Length" ng-model="dimensions.length" placeholder="Enter Length in cm" required="required" class="form-control"  min="10" />
+                            <span ng-show="CreateShipmentdialog.Length.$dirty &amp;&amp; showCase.CreateShipmentdialog.Length.$error.required" class="text-danger">This field is required</span>
+                            <span ng-show="CreateShipmentdialog.Length.$error.min" class="text-danger">Minimum length should be 10 cm</span>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                        <label>Breadth(cm)</label>
+                        <div class="controls">
+                            <input type="number" autocomplete="off" name="Breadth" ng-model="dimensions.width" placeholder="Enter Breadth in cm" required="required" class="form-control"  min="10" />
+                            <span ng-show="CreateShipmentdialog.Breadth.$dirty &amp;&amp; showCase.CreateShipmentdialog.Breadth.$error.required" class="text-danger">This field is required</span>
+                            <span ng-show="CreateShipmentdialog.Breadth.$error.min" class="text-danger">Minimum Breadth should be 10 cm</span>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                        <label>Height(cm)</label>
+                        <div class="controls">
+                            <input type="number" autocomplete="off" name="Height" ng-model="dimensions.height" placeholder="Enter Height in cm" required="required" class="form-control"  min="5" />
+                            <span ng-show="CreateShipmentdialog.Height.$dirty &amp;&amp; showCase.CreateShipmentdialog.Height.$error.required" class="text-danger">This field is required</span>
+                            <span ng-show="CreateShipmentdialog.Height.$error.min" class="text-danger">Minimum Height should be 5 cm</span>
+                        </div>
+                        </div>
+                    </div>
+            </div>
+            </div>
+
+            <div class="row" ng-if="actiontype == 'create_shipment' && !dropship_markedUnavailable"> 
+                <div class="col-md-12">
+                    <div style="padding-top:15px;font-size:18px">
+                        <label>Attachments</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-if="actiontype == 'create_shipment' && !dropship_markedUnavailable">
+                <div class="col-md-6">
+                    <div style="margin-bottom: -10px;">
+                        <label for="thumbnail" >Upload seller Invoice</label>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <div class="controls">
+                        <input type="file" ngf-select="uploadInvoiceImage($file)" ng-model="invoiceImagethumbnail" name="thumbnail" id="thumbnail"  ngf-accept="'image/*,application/pdf'" style="padding:10px 0px;" >
+                        <!--div ng-if="invoiceImagethumbnail" ng-hide="invoicepdffile" ngf-drop style="height: 300px;" ng-model="invoiceImagethumbnail" ngf-pattern="image/*" class="cropArea">
+                            <ui-cropper ng-show= "cropallow" image="invoiceImagethumbnail  | ngfDataUrl" result-image="invoiceImagethumbnail" ng-init="invoiceImagethumbnail=''" area-type="rectangle" aspect-ratio="0.714" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                            </ui-cropper>
+                            <img ng-src="{{invoiceImage}}" style="max-width: 100%; max-height: 100%;"/> 
+                        </div>
+                        <label ng-if="invoicepdffile"> Invoice pdf selected</label-->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div style="margin-bottom: -10px;">
+                        <label for="shippinglabel" >Upload Shipping label</label>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <div class="controls">
+                        <input type="file" ngf-select="uploadShippinglable($file)" ng-model="labelImagethumbnail" name="thumbnail" id="shippinglabel" ngf-accept="'image/*,application/pdf'" style="padding:10px 0px;" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row" align="center">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <button ng-if="actiontype == 'create_shipment'" type="submit" ng-disabled="bool || minRTSerror || maxUNVerror || CreateShipmentdialog.$invalid || actiontype == 'show_shipment'" ng-click="CreateShipment()" class="styledButtonblue" style="width: 40%;line-height: 20px;">Create Shipment</button>
+                    <button ng-if="actiontype != 'create_shipment'" type="submit" ng-disabled="bool || minRTSerror || maxUNVerror || CreateShipmentdialog.$invalid || actiontype == 'show_shipment'" ng-click="CreateShipment()" class="styledButtonblue" style="width: 40%;line-height: 20px;">Update Shipment</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <button type="submit" ng-click="showCase.CloseDialog()" class="styledButtonblue" style="width: 40%;line-height: 20px;">Go Back</button>
+                </div>
+            </div>
+            </div>
+        </form>
+    
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script type="text/ng-template" id="view_created_shipment">
+        <form editable-form name="CreateShipmentdialog" validate-form="" class="form-validate modelform2">
+            
+            
+            <legend>
+            <span  style="font-size: 22px;line-height: 30px;color: #11a0d1;font-weight: bold;">Shipment for {{orderid}}</span>
+            </legend>
+
+
+            <div class="row">
+            <div class="col-md-12 col-sm-6 col-xs-12 ">
+                <table class="table table-hover table-responsive table-striped">
+                    <tr>
+                        <th >Catalog</th>
+                        <th >Design</th>
+                        <th >Ordered Qnt</th>
+                        <th>Ready to ship Qty</th>
+                        <th>Unavailable Qty</th>
+                        <th>Current Pending Qty</th>
+                    </tr>
+                    <tr ng-repeat="x in receivedpendingOrderItems">
+                        <td>{{ x.order_item__product__catalog__title }}</td>
+                        <td>{{ x.order_item__product__sku }}</td>
+                        <td>{{ x.order_item__quantity }}</td>
+                        <td >{{x.ready_to_ship_qty}}</td>
+                        <td >{{x.canceled_qty}}</td>
+                        <td >{{UnmarkedQty(x)}}</td>      
+                    </tr>
+                </table>
+            </div>
+            </div>
+            
+            <div>
+            <div class="row"> 
+                <div class="col-md-12">
+                    <div class="form-group" style="padding-top:15px;font-size:18px">
+                        <label>Shipment dimensions</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                        <label>Weight(Kg)</label>
+                        <div class="controls">
+                        <input type="number" autocomplete="off" name="Weight" ng-model="dimensions.weight" data-parsley-group="step3" placeholder="Enter Weight in kg" min="0"  class="form-control" pattern="^[0-9]*$" required ng-disabled="true"/>
+                        <span ng-show="CreateShipmentdialog.Weight.$dirty &amp;&amp; addcatalogform.title.$error.required" class="text-danger">This field is required</span>   
+                        <span ng-show="CreateShipmentdialog.Weight.$error.pattern" class="text-danger">Only Numeric characters allowed</span>
+                        </div>
+                        </div>
+                    </div>
+            </div> 
+                    
+            <div class="row">
+                <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                        <label>Length(cm)</label>
+                        <div class="controls">
+                            <input type="number" autocomplete="off" name="Length" ng-model="dimensions.length" placeholder="Enter Length in cm" required="required" class="form-control"  min="10" ng-disabled="true"/>
+                            <span ng-show="CreateShipmentdialog.Length.$dirty &amp;&amp; showCase.CreateShipmentdialog.Length.$error.required" class="text-danger">This field is required</span>
+                            <span ng-show="CreateShipmentdialog.Length.$error.min" class="text-danger">Minimum length should be 10 cm</span>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                        <label>Breadth(cm)</label>
+                        <div class="controls">
+                            <input type="number" autocomplete="off" name="Breadth" ng-model="dimensions.width" placeholder="Enter Breadth in cm" required="required" class="form-control"  min="10" ng-disabled="true"/>
+                            <span ng-show="CreateShipmentdialog.Breadth.$dirty &amp;&amp; showCase.CreateShipmentdialog.Breadth.$error.required" class="text-danger">This field is required</span>
+                            <span ng-show="CreateShipmentdialog.Breadth.$error.min" class="text-danger">Minimum Breadth should be 10 cm</span>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                        <label>Height(cm)</label>
+                        <div class="controls">
+                            <input type="number" autocomplete="off" name="Height" ng-model="dimensions.height" placeholder="Enter Height in cm" required="required" class="form-control"  min="5" ng-disabled="true"/>
+                            <span ng-show="CreateShipmentdialog.Height.$dirty &amp;&amp; showCase.CreateShipmentdialog.Height.$error.required" class="text-danger">This field is required</span>
+                            <span ng-show="CreateShipmentdialog.Height.$error.min" class="text-danger">Minimum Height should be 5 cm</span>
+                        </div>
+                        </div>
+                    </div>
+            </div>
+            </div>
+
+            <div class="row" > 
+            <div class="col-md-12">
+                <div style="padding-top:15px;font-size:18px">
+                    <label>Attachments<label>
+                </div>
+            </div>
+            </div>
+            <div class="row" ng-if="!sellerInvoice || !shipmentLabel">
+                <div class="col-md-6" ng-if="!sellerInvoice">
+                    <div style="margin-bottom: -10px;">
+                        <label for="thumbnail" >Upload seller Invoice</label>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <div class="controls">
+                        <input type="file" ngf-select="uploadInvoiceImage($file)" ng-model="invoiceImagethumbnail" name="thumbnail" id="thumbnail"  ngf-accept="'image/*,application/pdf'" style="padding:10px 0px;" >
+                        <!--div ng-if="invoiceImagethumbnail || invoiceImage" ngf-drop style="height: 300px;" ng-model="invoiceImagethumbnail" ngf-pattern="image/*" class="cropArea">
+                            <img ng-src="{{invoiceImage}}" style="max-width: 100%; max-height: 100%;"/> 
+                        </div>
+                        <div ng-if="invoicepdffile">
+                            <label> Invoice pdf already uploaded</label>
+                            <br> <a href="" ng-click="openInNewTab(invoicepdffile)" >{{invoicepdffile}}</a>
+                        </div-->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" ng-if="!shipmentLabel">
+                    <div style="margin-bottom: -10px;">
+                        <label for="shippinglabel" >Upload Shipping label</label>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <div class="controls">
+                        <input type="file" ngf-select="uploadShippinglable($file)" ng-model="labelImagethumbnail" name="thumbnail" id="shippinglabel" ngf-accept="'image/*,application/pdf'" style="padding:10px 0px;" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-if="sellerInvoice || shipmentLabel" style="margin-top: 15px;">
+            <div class="col-md-12 col-sm-6 col-xs-12 ">
+                <table class="table table-hover table-responsive table-striped">
+                <tr>
+                    <th style="width: 40% !important;" >File</th>
+                    <th style="width: 60% !important;">Actions</th>
+                </tr>
+                <tr ng-if="sellerInvoice">
+                    <td style="width: 40% !important;"> Seller Invoice </td>
+                    <td style="width: 60% !important;">
+                        <button ng-click="openInNewTab(sellerInvoice)" class="styledButtonblue" style="padding: 5px; margin: 5px;line-height: 20px;width:30%">View/print</button>
+                        <button ng-click="OpenDeleteAttachmentsDialog('sellerinvoice')" class="styledButtonred" style="padding: 5px; margin: 5px;line-height: 20px;width:30%">Delete</button>
+                    </td>
+                </tr>
+                <tr ng-if="shipmentLabel">
+                    <td style="width: 40% !important;"> Shipping Label </td>
+                    <td style="width: 60% !important;">
+                        <button ng-click="openInNewTab(shipmentLabel)" class="styledButtonblue" style="padding: 5px; margin: 5px;line-height: 20px;width:30%">View/print</button>
+                        <button ng-click="OpenDeleteAttachmentsDialog('shippinglabel')" class="styledButtonred" style="padding: 5px; margin: 5px;line-height: 20px;width:30%">Delete</button>
+                    </td>
+                </tr>
+                </table>
+            </div>
+            </div>
+            
+            
+            <div class="row" align="center">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <button type="submit" ng-disabled=" sellerInvoice && shipmentLabel" ng-click="UploadAttachments()" class="styledButtonblue" style="width: 40%;line-height: 20px;">Upload Attachments</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <button type="submit" ng-click="showCase.CloseDialog()" class="styledButtonblue" style="width: 40%;line-height: 20px;">Go Back</button>
+                </div>
+            </div>
+            </div>
+            
+        </form>
+        
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+    <script type="text/ng-template" id="DeleteattAchmentDialog">
+
+        <div class="row" align="center">
+            <div class="col-md-12">
+            <div class="form-group ">
+                <label>Are you sure you want to delete this attachment ?</label>
+            </div>
+            </div>
+        </div> 
+        <div class="row" align="center">
+            <div class="col-md-6">
+            <div class="form-group">
+                <button type="submit" ng-click="DeleteAttachments()" class="styledButtonblue" style="width: 40%;line-height: 20px;">Delete</button>
+            </div>
+            </div>
+            <div class="col-md-6">
+            <div class="form-group">
+                <button  type="submit" ng-click="showCase.CloseDialog()" class="styledButtonblue" style="width: 40%;line-height: 20px;">Cancel</button>
+            </div>
+            </div>
+        </div>
+    
+    </script>
+
+
+
+
+
+
+
+
+
+    <script type="text/ng-template" id="notifysellerdailog">
+    <form role="form" ng-submit="showCase.sendNotify()" name="showCase.NotifyForm" class="form-validate mb-lg modelform4">
+        <legend>Send Notification</legend>
+
+        
+        
+        <div ng-if="showCase.way.by_noti" class="row">
+        <div class="col-md-12">
+            <div class="form-group has-feedback">
+                <label>Title</label>
+                <div class="controls">
+                <input type="text"  name="notification_title" placeholder="Add Notification Title" class="form-control" ng-model="showCase.notification_title">
+                </div>
+                <span>In case of notification</span>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-12">
+            <div class="form-group has-feedback">
+            <label>Message</label>
+                <textarea name="notification_message" placeholder="Enter Notification Message here..." autocomplete="off" ng-model="showCase.notification_message" required="" class="form-control" ></textarea>
+                <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+                <span ng-show="NotifyForm.notification_message.$dirty &amp;&amp; NotifyForm.notification_message.$error.required" class="text-danger">This field is required</span>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-12">
+            <div class="form-group has-feedback">
+            <label>Reason</label>
+                <textarea name="notification_note" placeholder="Enter reason for Notification here..." autocomplete="off" ng-model="showCase.notification_note" class="form-control" ></textarea>
+            </div>
+        </div>
+        </div>
+
+        <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>By *</label>
+                <div class="controls">
+                <div class="checkbox c-checkbox">
+                    <label>
+                        <input type="checkbox" name="all" ng-model="showCase.way.by_sms"/>
+                        <span class="fa fa-check"></span>SMS </label>
+                </div>
+                </div>
+                <div class="controls">
+                    <div class="checkbox c-checkbox">
+                    <label>
+                        <input type="checkbox" name="all" ng-model="showCase.way.by_noti"/>
+                        <span class="fa fa-check"></span>In App Notifications </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+        <div class="row">
+            <div style="float:right;" class="col-md-2">
+            <button type="submit" class="styledButtonblue" style="line-height: 20px;" ng-disabled="!showCase.notification_message.length">Send</button>
+            </div>
+            <div style="float:right;" class="col-md-2">
+            <button type="button" ng-click="showCase.CloseDialog()" class="styledButtonblue" style="width: 80%;line-height: 20px;">Cancel</button>
+            </div>
+            
+        </div>
+
+
+    </form>
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+</div>

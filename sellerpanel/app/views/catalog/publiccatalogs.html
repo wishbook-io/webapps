@@ -1,0 +1,462 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+.radio-inline
+{
+   margin-bottom: 5px;
+}
+
+.BlackWhiteImage
+{
+   -webkit-filter: grayscale(100%);
+   filter: grayscale(100%);
+}
+
+.ngdialog.ngdialog-theme-default .ngdialog-content {
+    width: 65% !important;
+}
+
+.loading
+{
+   float: left !important;
+   border-radius: 50%!important;
+   width: 70px !important;
+   height: 70px !important;
+}
+
+  /* for inventory size buttons */
+  .ck-button
+  {
+      margin: 1px;
+      background-color: white;
+      border-radius: 1px;
+      border: 1px solid #FF7000/* #ffae2b;  */;
+      overflow: auto;
+      float: left;
+      color: #FF7000;
+   }
+
+   .ck-button input[type=checkbox]
+   {
+      position: absolute;
+      left: -9999px;
+   }
+      
+   .ck-button:hover {
+      background: #FF7000;
+      color: white;
+   }
+
+   .ck-button label {
+      float:left;
+      margin-bottom: 0px !important;
+   }
+
+   .ck-button label span {
+      text-align:center;
+      padding: 4px;
+      display:block;
+   }
+
+   .ck-button input:checked + span {
+      background-color: #FF7000 !important;
+      color:white!important;
+   }
+   .ck-button input + span:hover
+   {
+      cursor: pointer !important;
+   }
+</style>
+
+<!-- <h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;background-color: white" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> All Products</h3> -->
+<div class="panel panel-default modelform">
+   <div class="panel-body" >
+      <div ng-controller="PubliccatalogController as showCase">
+	<table id="publiccatalogs-datatables" datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="row-border hover " width="100%">
+	</table>
+	
+	
+	<!--div ng-include="'app/views/catalog/order_modal.html'"></div-->
+	<!--script type="text/ng-template" id="productimages">
+        <uib-carousel interval="showCase.myInterval">
+               <uib-slide ng-repeat="slide in showCase.slides" active="slide.active">
+                  <img class="loading" ng-src="{{slide.image}}" style="margin: auto; width: 50%; height: 50%;" alt="" />
+                  <div class="carousel-caption" style="color:black;">
+                     <p>SKU : {{slide.text}}</p>
+                  </div>
+               </uib-slide>
+            </uib-carousel>
+	</script-->
+	<!--div ng-include="'app/views/common/imageslider.html'"></div-->
+  <script type="text/ng-template" id="addenquiry">
+      <form role="form" ng-submit="showCase.CreateEnquiry()" name="showCase.addEnquiryForm" novalidate="" class="form-validate mb-lg modelform">
+   
+        <legend>Enquiry Details</legend>
+        <div class="row"> 
+         <div class="col-md-12">
+            <div class="form-group">
+        <label>Select Item Type *</label>
+         <div class="controls">
+            <label class="radio-inline c-radio">
+               <input id="inlineradio1" type="radio" name="enquiry_item_type" ng-model="showCase.enquiry.enquiry_item_type" value="Sets"  class="form-control" required="required" />
+               <span class="fa fa-circle"></span>Sets
+            </label>
+            <label class="radio-inline c-radio">
+               <input id="inlineradio2" type="radio" name="enquiry_item_type" ng-model="showCase.enquiry.enquiry_item_type" value="Pieces"  class="form-control" required="required" />
+               <span class="fa fa-circle"></span>Pieces
+            </label>
+            <span ng-show="showCase.addEnquiryForm.enquiry_item_type.$dirty &amp;&amp; showCase.addEnquiryForm.enquiry_item_type.$error.required" class="text-danger">This field is required</span>
+         </div>
+            </div>
+         </div>
+        </div>
+        
+        <div class="row">
+           <div class="col-md-12">
+        <div class="form-group">
+           <label>Enter Enquiry Quantity *</label>
+           <div class="controls">
+               <input type="number" autocomplete="off" autocomplete="off" name="enquiry_quantity" ng-model="showCase.enquiry.enquiry_quantity" placeholder="Enter Enquiry Quantity"  class="form-control" required="required" />
+               <span ng-show="showCase.addEnquiryForm.enquiry_quantity.$dirty &amp;&amp; showCase.addEnquiryForm.enquiry_quantity.$error.required" class="text-danger">This field is required</span>
+           </div>
+        </div>
+           </div>
+        </div>
+          
+          
+        <div class="row">
+        <div style="float:right;" class="col-md-2"> 
+          <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+        </div>
+
+        <div style="float:right;" class="col-md-2">
+          <button type="submit" class="btn btn-block btn-primary mt-lg">Send Enquiry</button>
+        </div>
+        </div>
+       </form>
+          
+    </script>
+
+
+    <script type="text/ng-template" id="brandisellconfirm">
+        <div class="row"> 
+           <div class="col-md-12">
+              <div class="form-group" style="font-size: 18px;">
+                {{brandconfirmtext}}
+              </div>
+           </div>
+        </div>
+        <div class="row">
+            <div style="float:right;" class="col-md-3"> 
+              <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">No</button>
+            </div>
+
+            <div style="float:right;" class="col-md-3">
+              <button ng-click="AddtoBrandIsell()" class="btn btn-block btn-primary mt-lg">Yes</button>
+            </div>
+        </div>
+    </script>
+
+
+   <script type="text/ng-template" id="enabledurationdialog">
+      <form role="form" ng-submit="submitBecomeSeller()" name="showCase.enableDurationForm" novalidate="" class="form-validate mb-lg modelform-ed">
+
+         <div class="row" ng-if="discountNotSet"> 
+            <div class="col-md-8">
+               <span  class="text-danger">
+                  <p >You have not set any discount for this brand. To become a seller for the catalog under this brand, please set discount first. <a href="javascript:;" ng-click="showCase.OpenDiscountSettings()">click here</a></p> 
+               </span>
+            </div>
+         </div>
+         
+         <div class="row"> 
+            <div class="col-md-6">
+               <div class="form-group">
+                     <h4>Catalog Enable Duration(days)</h4>
+                     <span>Your catalog will get disabled automatically after the period mentioned below.</span>
+                     <div class="controls">
+                        <input type="number" autocomplete="off" name="enable_duration" ng-model="showCase.enable_duration" placeholder="Enter Duration (in Days)"  class="form-control" min="10" required/>
+                        <span ng-show="showCase.enableDurationForm.enable_duration.$error.min" class="text-danger">Duration should be minimum 10 Days</span>
+                     </div>
+               </div>
+            </div>
+         </div>
+         <div class="row">
+             <div class="col-md-12">
+                <div class="form-group has-feedback">
+                  <h4>How would you like to sell catalog?</h4>
+                   <div class="controls">
+                      <div style="margin: 0px;">
+                      <label class="radio-inline c-radio">
+                         <input type="radio" id="sell_full_catalog"  name="sell_full_catalog" ng-value="true" ng-model="sell_full_catalog" ng-click="ToggleSell_full_catalog(true)"/>
+                         <span class="fa fa-circle"></span> Full Catalog only</label> <br>
+                      <label class="radio-inline c-radio">
+                         <input type="radio" id="sell_full_catalog"  name="sell_full_catalog" ng-value="false" ng-model="sell_full_catalog" ng-click="ToggleSell_full_catalog(false)"/>
+                         <span class="fa fa-circle"></span> Single pieces and full catalog both </label>
+                      </div>
+                   </div>
+                </div>
+             </div>
+         </div>
+
+    
+         <!-- text logg margin, ui, discount changes WB-4863 Dhiren -->
+         <div class="row" ng-if="sell_full_catalog == false ">
+            <div class="col-md-12 form-group has-feedback">
+
+               <div>
+                  <label>Full Catalog/pc billing price to Wishbook is calculated as : <span style="font-weight:bold;color:gray;">Wholesale price/pc - full catalog discount</span> </label>
+                  <label>Single Piece Billing Price to Wishbook is calculated as : <span style="font-weight:bold;color:gray;">(Wholesale Price/Pc + Margin) - Single Pc Discount</span> </label>
+               </div>
+
+               <ul>
+                  <li>
+                     <span style="font-weight:bold;">Wholesale price/pc:</span> {{showCase.current_price1}}<span ng-if="showCase.current_price2">-{{showCase.current_price2}}</span>/Pc.</span>
+                  </li>
+                  <li>
+                     <span style="font-weight:bold;">Your discount to wishbook for this brand:</span> <a href="javascript:;" ng-click="OpenDiscountSettings()">{{full_catalog_discount}}%</a>(Full) <a href="javascript:;" ng-click="OpenDiscountSettings()">{{single_pc_discount}}%</a>(Single pc)
+                  </li>
+                  <li>
+                     <span style="font-weight:bold;">Margin:</span> Add your margin for this catalog below
+                  </li>
+               </ul>
+
+               <label>Max margin allowed : 10% of Full catalog price</label>
+                  
+
+               <div class="controls">
+                  <div style="margin: 0px;" class="row">
+                     <label class="radio-inline c-radio col-md-4" >
+                        <input type="radio" id="is_percentage" name="is_percentage" ng-value="true" ng-model="showCase.is_percentage" />
+                        <span class="fa fa-circle"></span> Add margin in percentage %
+                     </label>
+                     <div class="controls col-md-4" ng-if="showCase.is_percentage == true">
+                        <input type="number" autocomplete="off" autocomplete="off" name="single_piece_price_percentage" ng-model="showCase.single_piece_price_percentage" ng-change="applyMarginToallDesigns()" placeholder="Enter percentage"  class="form-control" ng-max="showCase.max_margin_percentage" required="required" min="0" />
+                        <span ng-show="showCase.enableDurationForm.single_piece_price_percentage.$error.max" class="text-danger">You can not add margin more than {{showCase.max_margin_percentage}}%</span>
+                        <span ng-show="showCase.enableDurationForm.single_piece_price_percentage.$error.min" class="text-danger">You can not add margin in negative %</span>
+                     </div>
+                  </div>
+
+                  <div style="margin: 0px;" class="row">
+                     <label class="radio-inline c-radio col-md-4">
+                        <input type="radio" id="is_percentage"  name="is_percentage" ng-value="false" ng-model="showCase.is_percentage" />
+                        <span class="fa fa-circle"></span> Add margin in Rs.
+                     </label>
+                     <div class="controls col-md-4" ng-if="showCase.is_percentage == false">
+                        <input type="number" autocomplete="off" autocomplete="off" name="single_piece_price" ng-model="showCase.single_piece_price" ng-max="showCase.max_margin_rs" ng-change="applyMarginToallDesigns()" placeholder="Enter Price (Rs.)"  class="form-control" required="required" min="1" />
+                        <span ng-show="showCase.enableDurationForm.single_piece_price.$error.max" class="text-danger">You can not add margin more than {{showCase.max_margin_rs}}Rs</span>
+                        <span ng-show="showCase.enableDurationForm.single_piece_price.$error.min" class="text-danger">You can not add margin less than 1Rs</span>
+                     </div>
+                  </div>
+                  
+               </div>
+
+
+            </div>
+         </div>
+
+         <div class="row" ng-if="sell_full_catalog == true">
+            <div class="col-md-12 form-group has-feedback">
+
+               <div>
+                  <label>Full Catalog/ Piece Billing Price to Wishbook is calculated as: <span style="font-weight:bold;color:gray;">Wholesale Price/Pc - Full Catalog Discount </span> </label>
+               </div>
+
+               <ul>
+                  <li>
+                     <span style="font-weight:bold;">Wholesale price/pc:</span> {{showCase.current_price1}}<span ng-if="showCase.current_price2">-{{showCase.current_price2}}</span>/Pc.</span>
+                  </li>
+                  <li>
+                     <span style="font-weight:bold;">Your discount to wishbook for this brand:</span> <a href="javascript:;" ng-click="OpenDiscountSettings()">{{full_catalog_discount}}%</a>(Full)
+                  </li>
+               </ul>
+
+               <label>Max margin allowed : 10% of Full catalog price</label>
+
+            </div>
+         </div>
+
+        
+         <div class="row form-group">
+               <div class="col-md-2">
+                 <!--  <strong>Availability</strong>  -->
+                  <div style="max-width: 100%;text-align:center">
+                     <label>{{catalogDetails.title}}</label>
+                  </div>         
+               </div>
+               <div class="col-md-6" >
+                   <strong ng-if="catalog_with_size == true" style="padding-left:15px;">SKU & Size</strong>
+                   <strong ng-if="catalog_with_size != true" style="padding-left:15px;">SKU</strong>
+               </div>
+               <div class="col-md-1">
+                   <strong>Full catalog/ piece billing price</strong>
+               </div>
+               <div class="col-md-1" >
+                   <strong ng-if="!sell_full_catalog">Single piece billing price</strong>
+               </div>
+               <div class="col-md-2">
+                  <!-- <strong ng-hide="catalog_with_size == false && sell_full_catalog" style="float: right;">Enabled?</strong> -->
+                  <div ng-if="sell_full_catalog && catalog_with_size == true" style="float: right;font-weight:bold" class="customUI">
+                     Enabled? &nbsp;<input type="checkbox" value="" ng-click="showCase.checkAllCatalog(catalogDetails.selectAll)" ng-model="catalogDetails.selectAll" />
+                  </div>
+                  <div ng-if="!sell_full_catalog && catalog_with_size == false" style="float: right;font-weight:bold" class="customUI">
+                     Enabled? &nbsp; <input type="checkbox" value="" ng-click="showCase.checkAllCatalogWithoutSize(catalogDetails.selectAll)" ng-model="catalogDetails.selectAll"  />
+                  </div>
+               </div>
+         </div>
+
+         <div ng-if="catalog_with_size == true">
+          
+            <div ng-if="!sell_full_catalog"  style="padding-left: 3%; margin-bottom: 3%;" ng-repeat="product in catalogDetails.products track by $index">
+               
+                  <div class="row"> 
+
+                     <div class="col-md-2" style="text-align: center;">
+                        <a ng-click="OpenProductsImages(product.catalog.id, catalogDetails.products.length, product.id)">
+                           <img  ng-src="{{product.image.thumbnail_small}}" class="loading" >
+                        </a>                    
+                        <!-- <img ng-if="!product.selectAll" ng-src="{{product.image.thumbnail_small}}" class="loading BlackWhiteImage" > -->  
+                     </div>
+                     
+                     <div class="col-md-6">
+                        <div style="font-weight: bold;padding:4px">{{product.title}}</div>
+
+                        <div class="ck-button" ng-repeat="size in product.all_sizes">
+                           <label>
+                              <input type="checkbox" name={{size.value}}  ng-click="showCase.toggleCheckAllProduct($parent.$index)"  value="" ng-model="size.selected"><span>{{size.value}}</span>
+                           </label>
+                        </div>
+                     </div>
+                     <div class="col-md-1">
+                        <div style=";margin-top:10px;">
+                           {{ product.fullCatalog_billingprice}}
+                        </div>
+                     </div>
+                     <div class="col-md-1">
+                        <div style=";margin-top:10px;" >
+                           {{ product.singlePc_billingprice}}
+                        </div>
+                     </div>
+
+                     <div class="col-md-2">
+                        <div style="float: right;margin-top:10px;" class="customUI">
+                           <input type="checkbox" value="" ng-click="showCase.checkAllProduct(product.selectAll,$index)" ng-model="product.selectAll" />
+                        </div>
+                     </div>
+                     
+                  </div>
+            </div>
+
+            <div ng-if="sell_full_catalog" style="padding-left: 3%;">
+               <div class="row">
+                  <div class="col-md-2" >
+                     <a ng-click="OpenProductsImages(product.catalog.id, catalogDetails.products.length, product.id)">
+                        <img  ng-src="{{catalogDetails.image.thumbnail_small}}" class="loading"  >
+                     </a>
+                     
+                     <!-- <img ng-if="!catalogDetails.selectAll" ng-src="{{catalogDetails.image.thumbnail_small}}" class="loading BlackWhiteImage"  > -->  
+                  </div>
+
+                  <div class="col-md-6">
+                     <div class="ck-button" ng-repeat="size in all_sizes">
+                        <label>
+                           <input type="checkbox" name={{size.value}} ng-click="showCase.toggleCheckAllCatalog()" value="" ng-model="size.selected" /><span>{{size.value}}</span>
+                        </label>
+                     </div>
+                  </div>
+
+                  <div class="col-md-1">
+                     <div style="float: right;margin-top:10px;" class="customUI">
+                        {{ product.fullCatalog_billingprice}}
+                     </div>
+                  </div>
+
+               </div>
+            
+            </div>
+
+           </div><!-- end of catalog_with_size == true -->
+
+           <div ng-if="catalog_with_size == false">
+              <div ng-if="!sell_full_catalog">
+                 
+                  <div class="row" style="padding-left: 3%;margin-bottom: 3%;" ng-repeat="product in catalogDetails.products track by $index">
+                     
+                     <div class="col-md-2" >
+                        <a ng-click="OpenProductsImages(product.catalog.id, catalogDetails.products.length,product.id)">
+                           <img  ng-src="{{product.image.thumbnail_small}}" class="loading" >
+                        </a>
+                        <!--  <img ng-if="!product.selected" ng-src="{{product.image.thumbnail_small}}" class="loading BlackWhiteImage" > -->
+                     </div>
+                     <div class="col-md-6" style="height: 70px;padding-top: 17px;">
+                           <span style="font-weight: bold;">{{product.title}}</span>
+                     </div>
+                     <div class="col-md-1">
+                        <div style="margin-top:10px;" class="customUI">
+                           {{ product.fullCatalog_billingprice}}
+                        </div>
+                     </div>
+                     <div class="col-md-1">
+                        <div style="margin-top:10px;" >
+                           {{ product.singlePc_billingprice}}
+                        </div>
+                     </div>
+                      <div class="col-md-2">
+                        <label style="float: right;" class="customUI">
+                           <input type="checkbox" value="" ng-disabled="sell_full_catalog" ng-click="showCase.toggleCheckAllCatalogWithoutSize()" ng-model="product.selected" />
+                        </label>
+                     </div>
+
+                    
+                  </div>
+              </div>
+
+              <div ng-if="sell_full_catalog">
+                
+                  <div class="row" style="padding-left: 3%;margin-bottom: 3%;" ng-repeat="product in catalogDetails.products track by $index">
+                     
+                     <div class="col-md-2" >
+                        <a ng-click="OpenProductsImages(product.catalog.id, catalogDetails.products.length,product.id)">
+                           <img ng-src="{{product.image.thumbnail_small}}" class="loading" >
+                        </a>
+                        <!-- <div style="padding-top: 5px;">{{product.title}}</div> -->
+                     </div>
+                      <div class="col-md-6" style="height: 70px;padding-top: 17px;">
+                           <span style="font-weight: bold;">{{product.title}}</span>
+                     </div>
+                     <div class="col-md-1">
+                        <div style="margin-top:10px;" class="customUI">
+                           {{ product.fullCatalog_billingprice}}
+                        </div>
+                     </div>
+                     
+                  </div>
+              </div>
+               
+           </div>
+
+         <div class="row">
+            <div class="col-md-6">
+               <div class="form-group right">
+                  <button type="button" ng-click="showCase.CloseDialog()" class="buttonSecondary">Cancel</button>
+               </div>
+            </div>
+
+            <div class="col-md-6">
+               <div class="form-group left">
+                  <button type="submit" class="buttonPrimary" ng-disabled="discountNotSet">Save</button>
+               </div>
+            </div>
+         </div>
+
+       
+      </form>
+
+    </script>
+    <div ng-include="'app/views/common/purchase_order_modal.html'"></div>
+    <div ng-include="'wishbook_libs/views/shippingpayment/shipping_payment.html'"></div>
+      </div>
+   </div>
+</div>

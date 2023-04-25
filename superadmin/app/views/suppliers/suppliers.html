@@ -1,0 +1,166 @@
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Supplier List</h3>
+<div class="panel panel-default modelform4">
+   <div class="panel-body" >
+      <div ng-controller="SupplierslistController as showCase">
+	
+	<table id="suppliers-datatables" datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+	</table>
+
+      <script type="text/ng-template" id="addsupplier">
+          
+          <form role="form" ng-submit="showCase.AddSupplier()" name="showCase.addsupplierForm" novalidate="" class="form-validate mb-lg modelform">
+     
+          <legend>Supplier Details</legend>
+          <div class="row">
+            <div class="col-md-12"> 
+            <div class="form-group has-feedback">
+                <label>Supplier Name *</label>
+               <input type="text" name="suppliername" placeholder="Supplier Name" autocomplete="off" ng-model="supplier.supplier_name" required="" pattern="[a-zA-Z ]{0,40}" class="form-control" />
+               <span class="fa fa-user form-control-feedback text-muted"></span>
+               <span ng-show="showCase.addsupplierForm.suppliername.$dirty &amp;&amp; showCase.addsupplierForm.suppliername.$error.required" class="text-danger">This field is required</span>
+                <span ng-show="showCase.addsupplierForm.suppliername.$error.pattern" class="text-danger">This field accepts alphabets and space only and character limit is 40.</span>
+            </div>
+          </div>
+          </div>
+
+        <div class="row">
+            <div class="col-md-12">  
+            <div class="form-group has-feedback">
+              <label>Your relation with supplier *</label>
+                  <select name="grouptype" chosen="" ng-model="supplier.group_type" ng-options="s.id as s.name for s in groupType" width="'100%'" class="chosen-select input-md form-control" required="">
+                     <option value="">Select Type</option>
+                  </select>
+                   <span ng-show="showCase.addsupplierForm.grouptype.$dirty &amp;&amp; showCase.addsupplierForm.grouptype.$error.required" class="text-danger">This field is required</span>
+               </div>
+            </div>
+        </div>
+
+
+          <!--div class="row">
+            <div class="col-md-12">  
+            <div class="form-group has-feedback">
+               <input type="text" name="phonenumber" placeholder="Phone Number" autocomplete="off" ng-model="supplier.supplier_number" required="" class="form-control" />
+               <span class="fa fa-phone form-control-feedback text-muted"></span>
+               <span ng-show="showCase.addsupplierForm.phonenumber.$dirty &amp;&amp; showCase.addsupplierForm.phonenumber.$error.required" class="text-danger">This field is required</span>
+            </div>
+            </div>
+          </div-->
+          <div class="row">
+             <div class="col-md-4">
+                <div class="form-group has-feedback">
+                   <label>Phone Number</label>
+                   <div class="controls">
+                      <select name="country" chosen="" ng-model="supplier.country" ng-options="cd.id as cd.name for cd in countries"   width="'100%'" class="chosen-select input-md form-control" required="">
+                          <option value=""></option>
+                       </select>
+                      <span ng-show="showCase.addsupplierForm.country.$dirty &amp;&amp; showCase.addsupplierForm.country.$error.required" class="text-danger">This field is required</span>
+                   </div>
+                </div>
+             </div>
+             
+             <div class="col-md-5">
+                <div class="form-group has-feedback">
+                 <label>&nbsp;</label>
+                   <div class="controls">
+                      <input type="text" autocomplete="off" name="phone_number" ng-model="supplier.supplier_number" placeholder="Phone 1234567890" required="required" class="form-control" pattern="[0-9]{7,10}" />
+                      <span ng-show="showCase.addsupplierForm.phone_number.$dirty &amp;&amp; showCase.addsupplierForm.phone_number.$error.required" class="text-danger">This field is required</span>
+                      <span ng-show="showCase.addsupplierForm.phone_number.$error.pattern" class="text-danger">This field has character limit of 7 to 10</span>
+                   </div>
+                </div>
+             </div>
+          </div> 
+
+          <div class="row">
+            <div style="float:right;" class="col-md-2"> 
+              <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+            </div>
+
+            <div style="float:right;" class="col-md-2"> 
+              <button type="submit" class="btn btn-block btn-primary mt-lg">Add</button>
+            </div>
+          </div>
+         </form>
+          
+   </script>
+   <script type="text/ng-template" id="updatestatus">
+        <form role="form" ng-submit="UpdateStatus()" name="showCase.updateStatusForm" novalidate="" class="form-validate mb-lg modelform2">
+   
+        <legend>Supplier Status</legend>
+            <div class="row">
+              <div class="col-md-12">  
+                 <div class="form-group has-feedback">
+                    <label class="radio-inline c-radio" style="color: green;">
+                      <input id="inlineradio1" type="radio" ng-change="showCase.StatusChange(supplier.status)" name="status" ng-model="supplier.status" value="approved" required="required" class="form-control"  />
+                   <span class="fa fa-circle"></span>Approve</label>
+
+                  <label class="radio-inline c-radio" style="color: red;">
+                     <input id="inlineradio2" type="radio" ng-change="showCase.StatusChange(supplier.status)" name="status" ng-model="supplier.status" value="rejected" required="required" class="form-control" />
+                     <span class="fa fa-circle"></span>Reject</label>
+                    <span ng-show="showCase.updateStatusForm.status.$dirty &amp;&amp; showCase.updateStatusForm.status.$error.required" class="text-danger">This field is required</span>
+                 </div>
+              </div>
+            </div>
+
+          <div class="row" ng-show="statusflag">
+            <div class="col-md-8"> 
+            <legend>Price Pushing Rule</legend>
+              <div class="form-group has-feedback">
+                <label>Fixed Amount</label>
+                 <input type="text" name="fix_amount" autocomplete="off" value="0" ng-model="supplier.fix_amount" required="" class="form-control" />
+                 <span ng-show="showCase.updateStatusForm.fix_amount.$dirty &amp;&amp; showCase.updateStatusForm.fix_amount.$error.required" class="text-danger">This field is required</span>
+              </div>
+            </div>
+          </div>
+          
+           <div class="row" ng-show="statusflag">
+            <div class="col-md-8"> 
+              <div class="form-group has-feedback">
+                <label>Percentage Amount</label>
+                 <input type="text" name="percentage_amount" value="0" autocomplete="off" ng-model="supplier.percentage_amount" required="" class="form-control" />
+                 <span ng-show="showCase.updateStatusForm.percentage_amount.$dirty &amp;&amp; showCase.updateStatusForm.percentage_amount.$error.required" class="text-danger">This field is required</span>
+              </div>
+            </div>
+          </div>
+
+            <div class="row">
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Update</button>
+                </div>
+            </div>
+        </form>
+    </script>
+
+    <script type="text/ng-template" id="uploadcsv">
+        <form role="form" ng-submit="showCase.UploadSupplierCsv()" name="showCase.uploadcsv" novalidate="" class="form-validate mb-lg modelform3">
+   
+        <legend>Upload Supplier's CSV</legend>
+            <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                               <label>Select CSV from your computer</label>
+                                <input type="file" ngf-select="uploadFiles($files)" ng-model="showCase.file.supplier_csv" name="supplier_csv" required accept=".csv">
+                                <span ng-show="showCase.uploadcsv.supplier_csv.$dirty &amp;&amp; showCase.uploadcsv.supplier_csv.$error.required" class="text-danger">This field is required</span>   
+                            </div>
+                         </div>
+            </div>
+            <div class="row">
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+                <div style="float:right;" class="col-md-4"> 
+                  <a style="text-decoration: none;" href="app/csv/supplier_sample.csv"><button type="button" class="btn btn-block btn-primary mt-lg">Download Sample</button></a>
+                </div>
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Upload</button>
+                </div>
+            </div>
+        </form>
+    </script>
+
+		</div>
+   </div>
+</div>

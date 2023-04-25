@@ -1,0 +1,78 @@
+[
+  {
+    "text": "Menu",
+    "heading": "true",
+    "translate": "sidebar.heading.HEADER"
+  },
+  {
+    "text": "Browse",
+    "sref": "app.browse",
+    "icon": "icon-grid",
+    "label": "label label-success"
+    
+  },
+  {
+    "text": "Catalog",
+    "sref": "",
+    "icon": "icon-tag",
+    "label": "label label-info", 
+    "submenu": [
+      {"text": "My Brands",       "sref": "app.brands"},
+      {"text": "My Catalogs",       "sref": "app.catalog"},
+      {"text": "My Products",       "sref": "app.product"},
+      {"text": "Public Catalogs",       "sref": "app.publiccatalog" }
+    ]
+  },
+  {
+    "text": "Users",
+    "sref": "",
+    "icon": "icon-people",
+    "label": "label label-info", 
+    "submenu": [
+      {"text": "Buyers",       "sref": "app.buyers"},
+      {"text": "Buyer Groups",       "sref": "app.groups" },
+      {"text": "My Leads",       "sref": "app.myleads"},
+      {"text": "Administrator",       "sref": "app.administrators" },
+      {"text": "Salespersons",       "sref": "app.salespersons"}
+    ]
+  },
+  {
+    "text": "Shares",
+    "sref": "app.shares",
+    "icon": "icon-share-alt",
+    "label": "label label-success"
+    
+  },
+  {
+    "text": "Orders",
+    "sref": "",
+    "icon": "fa fa-shopping-cart",
+    "label": "label label-info", 
+    "submenu": [
+      {"text": "Sales Orders",       "sref": "app.salesorders"},
+      {"text": "Invoices (Seller)",       "sref": "app.salesordersinvoice" }
+    ]
+  },
+  {
+    "text": "Inventory",
+    "sref": "",
+    "icon": "fa fa-list",
+    "label": "label label-info", 
+    "submenu": [
+      {"text": "Stock",       "sref": "app.inventory"},
+      {"text": "Warehouse",       "sref": "app.warehouse"},
+      {"text": "Opening Stock",       "sref": "app.openingstock"},
+      {"text": "Adjustment",       "sref": "app.adjustment"}
+    ]
+  },
+  {
+    "text": "Integration",
+    "sref": "",
+    "icon": "fa fa-list",
+    "label": "label label-info", 
+    "submenu": [
+      {"text": "SKU Map",       "sref": "app.skumap"},
+      {"text": "Company Map",       "sref": "app.companyaccounts"}
+    ]
+  }
+]

@@ -1,0 +1,292 @@
+
+<!--script type="text/javascript" src="app/js/shares/share_form.js"></script-->
+
+
+	<script type="text/ng-template" id="share">
+	<div ng-controller="SharesController as showCase1">
+	        <form role="form" ng-submit="showCase1.DoShare()" name="showCase1.shareForm" novalidate="" class="form-validate mb-lg modelform-share">
+	 
+	          <legend>Share</legend>
+		  
+		  <div class="row"> 
+		   <div class="col-md-12">
+		      <div class="form-group">
+			<label>Select Share Type *</label>
+			 <div class="controls">
+			    <label class="radio-inline c-radio">
+			       <input id="inlineradio1" type="radio" name="share_type" ng-model="showCase1.share.share_type" value="groupwise"  class="form-control" ng-change="changeShareType(showCase1.share.share_type)" required="required" />
+			       <span class="fa fa-circle"></span>Group wise
+			    </label>
+			    <label class="radio-inline c-radio">
+			       <input id="inlineradio2" type="radio" name="share_type" ng-model="showCase1.share.share_type" value="buyerwise"  class="form-control" ng-change="changeShareType(showCase1.share.share_type)" required="required" />
+			       <span class="fa fa-circle"></span>Buyer wise
+			    </label>
+			 </div>
+		      </div>
+		   </div>
+		  </div>
+		
+	          <div class="row" ng-if="showCase1.share.share_type=='groupwise'">
+		     <div class="col-md-12">
+			<div class="form-group">
+			   <div class="controls">
+			      <select name="buyer_segmentation" chosen="" ng-model="showCase1.share.buyer_segmentation" ng-options="b.id as b.segmentation_name for b in showCase1.buyer_segments" width="'100%'" class="chosen-select input-md form-control" required="required">
+				 <option value="">Select Group</option>
+			      </select>
+			       <span ng-show="showCase1.shareForm.buyer_segmentation.$dirty &amp;&amp; showCase1.shareForm.buyer_segmentation.$error.required" class="text-danger">This field is required</span>
+			   </div>
+			</div>
+		     </div>
+		  </div>
+		  
+		  <div class="row" ng-if="showCase1.share.share_type=='buyerwise'">
+		     <div class="col-md-12">
+			<div class="form-group">
+			   <div class="controls">
+			      <select name="buyer_list" chosen="" ng-model="showCase1.share.buyer_list" ng-options="b.company_id as b.company_name for b in showCase1.buyer_lists" width="'100%'" class="chosen-select input-md form-control" required="required">
+				 <option value="">Select Buyer</option>
+			      </select>
+			       <span ng-show="showCase1.shareForm.buyer_list.$dirty &amp;&amp; showCase1.shareForm.buyer_list.$error.required" class="text-danger">This field is required</span>
+			   </div>
+			</div>
+		     </div>
+		  </div>
+
+	          <div class="row">
+	            <div class="col-md-12"> 
+		            <div class="form-group has-feedback">
+		               <input type="text" name="message" placeholder="Message" autocomplete="off" ng-model="showCase1.share.message" class="form-control" />
+		               <span class="fa fa-envelope form-control-feedback text-muted"></span>
+		               <!--span ng-show="showCase1.shareForm.message.$dirty &amp;&amp; showCase1.shareForm.message.$error.required" class="text-danger">This field is required</span-->
+		            </div>
+	          	</div>
+	          </div>
+		  
+		  <!--div class="row"> 
+		   <div class="col-md-12">
+		      <div class="form-group">
+			<label>Item Type *</label>
+			 <div class="controls">
+			    <label class="radio-inline c-radio">
+			       <input id="inlineradio1" type="radio" name="item_type" ng-model="share.item_type" value="catalog"  class="form-control" required="required" />
+			       <span class="fa fa-circle"></span>Catalog
+			    </label>
+			    <label class="radio-inline c-radio">
+			       <input id="inlineradio2" type="radio" name="item_type" ng-model="share.item_type" value="selection"  class="form-control" required="required" />
+			       <span class="fa fa-circle"></span>Selection
+			    </label>
+			 </div>
+		      </div>
+		   </div>
+		  </div -->
+
+		<!--div class="row" ng-if="share.item_type=='catalog'"-->
+		<div class="row">
+		     <div class="col-md-12">
+			<div class="form-group">
+			   <label>Catalog *</label>
+			   <div class="controls">
+			    <!--select chosen="" multiple="multiple" name="catalog" ng-model="showCase1.share.catalog" ng-options="c.id as c.title for c in showCase1.catalogs" data-placeholder="" class="chosen-select form-control" required="required"-->
+			    <select chosen="" name="catalog" ng-model="share.catalog" ng-options="c.id as c.title for c in showCase1.catalogs" data-placeholder="" class="chosen-select form-control" required="required" ng-change="showCase1.CheckFullCatalogFlag(share.catalog)">
+			     <option value=""></option>
+			    </select>
+			    <span ng-show="showCase1.shareForm.catalog.$dirty &amp;&amp; showCase1.shareForm.catalog.$error.required" class="text-danger">This field is required</span>
+			   </div>
+			</div>
+		     </div>
+		</div>
+		
+		<!--div class="row" ng-if="share.item_type=='selection'">
+		     <div class="col-md-12">
+			<div class="form-group">
+			   <label>Selection *</label>
+			   <div class="controls">
+			    <select chosen="" name="selection" ng-model="showCase1.share.selection" ng-options="c.id as c.name for c in showCase1.selections" data-placeholder="" class="chosen-select form-control" required="required" ng-change="showCase1.CheckFullSelectionFlag(showCase1.share.selection)">
+			     <option value=""></option>
+			    </select>
+			    <span ng-show="showCase1.shareForm.selection.$dirty &amp;&amp; showCase1.shareForm.selection.$error.required" class="text-danger">This field is required</span>
+			   </div>
+			</div>
+		     </div>
+		</div-->
+
+            <div class="row"> 
+                 <div class="col-md-12">
+                    <div class="form-group has-feedback">
+                       <div class="controls">
+                          <div class="checkbox c-checkbox" style="margin: 0px;">
+                          <label>
+                             <input type="checkbox" id="full_catalog_orders_only"  name="full_catalog_orders_only" ng-value="showCase1.share.full_catalog_orders_only" ng-model="showCase1.share.full_catalog_orders_only" />
+                             <span class="fa fa-check"></span> Full Catalog orders only</label>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+            </div>
+	    
+	    <div class="row">
+		<div class="col-md-12">
+		 <label>Expected Dispatch Date</label>
+		 <p class="input-group">
+		    <input type="text" name="dispatch_date" required="" uib-datepicker-popup="{{showCase1.format}}" ng-model="showCase1.share.dispatch_date" is-open="showCase1.opened" uib-datepicker-options="showCase1.dateOptions" 
+		    close-text="Close" class="form-control" />
+		    <span class="input-group-btn">
+		       <button type="button" ng-click="showCase1.open($event)" class="btn btn-default">
+			  <em class="fa fa-calendar"></em>
+		       </button>
+		    </span>
+		 </p>
+		 <span ng-show="showCase1.shareForm.dispatch_date.$dirty &amp;&amp; showCase1.shareForm.dispatch_date.$error.required" class="text-danger">This field is required</span>
+		</div>
+	    </div>
+	  
+
+            <!--div class="row"> 
+               <div class="col-md-12">
+                  <div class="form-group has-feedback">
+                    <label>Change Price</label>
+                     <div class="controls">
+                             <div class="col-sm-10">
+                        <label class="radio-inline c-radio">
+                           <input id="inlineradio1" type="radio" name="change_price_type" ng-model="change_price_type"  value="price"  class="form-control" checked="checked" ng-change="showCase1.ChangePricetype(change_price_type)" />
+                           <span class="fa fa-circle"></span>Share at fixed Price</label>
+                        <label class="radio-inline c-radio">
+                           <input id="inlineradio2" type="radio" name="change_price_type" ng-model="change_price_type" value="percentage"  class="form-control"  ng-change="showCase1.ChangePricetype(change_price_type)" />
+                           <span class="fa fa-circle"></span>Add Percentage</label>
+                     </div>
+                         </div>
+                  </div>
+               </div>
+            </div-->
+
+            <div class="row"> 
+               <div class="col-md-12">
+                  <div class="form-group has-feedback">
+                    <label>Existing Price : &nbsp; </label>{{showCase1.price_range}} 
+
+                     <!--label>Change Price: </label-->
+                     <div class="controls">
+                        <div class="col-sm-10">
+	                        <label class="radio-inline c-radio">
+	                           <input id="inlineradio1" type="radio" name="change_price_type" ng-model="change_price_type"  value="newprice"  class="form-control" checked="checked" ng-change="showCase1.ChangePricetype(change_price_type)" />
+	                           <span class="fa fa-circle"></span>Share at a different price</label><br>
+	                           <div ng-if="newpriceflag" style="padding: 2%;" >
+		                        <input type="number" min=101  autocomplete="off" autocomplete="off" name="change_price_fix" ng-model="showCase1.share.change_price_fix" data-parsley-group="step3" placeholder="Enter New price"  class="form-control" ng-change="showCase1.updateNewPrice(showCase1.share.change_price_fix,'newprice')" />
+		                        <span ng-show="showCase1.shareForm.change_price_fix.$error.min" class="text-danger">Price should be minimum 101</span>
+		                      </div>
+	                        
+
+	                        <label class="radio-inline c-radio">
+	                           <input id="inlineradio2" type="radio" name="change_price_type" ng-model="change_price_type" value="margin" class="form-control"  ng-change="showCase1.ChangePricetype(change_price_type)" />
+	                           <span class="fa fa-circle"></span>Share after adding margin</label><br>
+	                           		
+	                           	  <div ng-if="addmarginflag" style="padding: 2%;">
+	                           	  	
+	                           	  <div class="col-md-12">
+	                           	  	<div class="col-md-3">
+	                           		<label class="radio-inline c-radio">
+	                           		<input id="inlineradio3" type="radio" name="change_margin_type" ng-model="change_margin_type"  value="addperchantage"  class="form-control" checked="checked" ng-change="showCase1.ChangeMargintype(change_margin_type)" />
+	                           		<span class="fa fa-circle"></span>Add %</label>
+	                           		</div>
+
+	                           		<div class="col-md-6" ng-if="marginpercentageflag" >
+	                           			<input type="number" autocomplete="off" autocomplete="off" name="change_price_add" ng-model="showCase1.share.change_price_add" data-parsley-group="step3" placeholder="Enter percentage"  class="form-control" ng-change="showCase1.updateNewPrice(showCase1.share.change_price_add,'addperchantage')" />
+	                           		</div>
+	                           	  </div>
+
+	                           	  <div class="col-md-12">
+	                           		<div class="col-md-3">
+	                           			<label class="radio-inline c-radio">
+	                           			<input id="inlineradio4" type="radio" name="change_margin_type" ng-model="change_margin_type"  value="addamount"  class="form-control" checked="checked" ng-change="showCase1.ChangeMargintype(change_margin_type)" />
+	                           			<span class="fa fa-circle"></span>Add Fixed ₹</label>
+	                           		</div>
+
+	                           		<div class="col-md-6" ng-if="marginamountflag" >
+	                           			<input type="number" autocomplete="off" autocomplete="off" name="change_price_add_amount" ng-model="showCase1.share.change_price_add_amount" data-parsley-group="step3" placeholder="Enter Amount"  class="form-control" ng-change="showCase1.updateNewPrice(showCase1.share.change_price_add_amount,'addamount')" />
+	                           	  	</div>
+	                           	   </div>
+	                           	  </div>
+	                           
+                     	</div>
+                     </div>
+                    
+                  </div>
+               </div>
+            </div>
+
+            <div class="row"> 
+               <div class="col-md-12">
+                  <div class="form-group has-feedback">
+            		<label>New Price : &nbsp; </label>{{showCase1.new_price}} 
+            	   </div>
+            	</div>
+            </div>
+
+            <!--div class="row" ng-show="priceinfixflag"> 
+               <div class="col-md-6">
+                  <div class="form-group has-feedback">
+                     <div class="controls">
+                        <input type="number" autocomplete="off" autocomplete="off" name="change_price_fix" ng-model="showCase1.share.change_price_fix" data-parsley-group="step3" placeholder="Enter New price"  class="form-control" />
+                      </div>
+                  </div>
+               </div>
+            </div-->
+	    
+	  
+	  
+
+            <!--div class="row" ng-show="priceinpercentageflag"> 
+               <div class="col-md-6">
+                  <div class="form-group has-feedback">
+                    <label>Percentage</label>
+                     <div class="controls">
+                        <input type="number" oninput="this.value=this.value.replace(/[^0-9]/g,'');" autocomplete="off" autocomplete="off" name="change_price_add" ng-model="showCase1.share.change_price_add" data-parsley-group="step3" placeholder="Enter percentage"  class="form-control" />
+                      </div>
+                  </div>
+               </div>
+            </div-->
+
+            <!--div class="row">
+               <div class="col-md-12">
+                  <div class="form-group">
+                     <label>Receivers will automatically share the catalogs with their own buyers? *</label>
+                     <div class="controls">
+	                  <label class="radio-inline c-radio">
+	                     <input id="inlineradio1" type="radio" name="push_downstream" ng-model="showCase1.share.push_downstream" value="no" required="required" class="form-control"  />
+	                     <span class="fa fa-circle"></span>No</label>
+	                  <label class="radio-inline c-radio">
+	                     <input id="inlineradio2" type="radio" name="push_downstream" ng-model="showCase1.share.push_downstream" value="yes" required="required" class="form-control" />
+	                     <span class="fa fa-circle"></span>Yes</label>
+                     </div>
+                  </div>
+                  <span ng-show="showCase1.shareForm.push_downstream.$dirty &amp;&amp; showCase1.shareForm.push_downstream.$error.required" class="text-danger">This field is required</span>
+               </div>
+            </div-->
+
+            <!--div class="row">
+                 <div class="col-md-6">
+                    <div class="form-group">
+                       <label>Want to notify via SMS ? *</label>
+                       <div class="controls">
+                      <label class="radio-inline c-radio">
+                         <input id="inlineradio1" type="radio" name="sms" ng-model="showCase1.share.sms" value="no" required="required" class="form-control"  />
+                         <span class="fa fa-circle"></span>No</label>
+                      <label class="radio-inline c-radio">
+                         <input id="inlineradio2" type="radio" name="sms" ng-model="showCase1.share.sms" value="yes" required="required" class="form-control" />
+                         <span class="fa fa-circle"></span>Yes</label>
+                       </div>
+                    </div>
+                    <span ng-show="showCase1.shareForm.sms.$dirty &amp;&amp; showCase1.shareForm.sms.$error.required" class="text-danger">This field is required</span>
+                 </div>
+            </div-->
+	          <div class="row">
+		            <div style="float:right;" class="col-md-2"> 
+		              <button type="button" ng-click="showCase1.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+		            </div>
+		            <div style="float:right;" class="col-md-2"> 
+		              <button type="submit" class="btn btn-block btn-primary mt-lg">Share</button>
+		            </div>
+	          </div>
+         </form>
+         </div>
+	    </script>

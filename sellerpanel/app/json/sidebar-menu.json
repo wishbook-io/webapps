@@ -1,0 +1,61 @@
+[
+  {
+    "text": "Menu",
+    "heading": "true",
+    "translate": "sidebar.heading.HEADER"
+  },
+  {
+    "text": "Catalog",
+    "sref": "",
+    "icon": "icon-grid",
+    "label": "label label-info", 
+    "submenu": [
+      {"text": "My Catalogs",       "sref": "app.catalog"},
+      {"text": "My Products",       "sref": "app.product"}
+    ]
+  },
+  {
+    "text": "Buyers",
+    "sref": "",
+    "icon": "fa fa-users",
+    "label": "label label-info", 
+    "submenu": [
+      {"text": "List",       "sref": "app.buyers"},
+      {"text": "Groups",       "sref": "app.groups" }
+    ]
+  },
+  {
+    "text": "Supplier",
+    "sref": "app.suppliers",
+    "icon": "fa fa-users",
+    "label": "label label-success"
+    
+  },
+  {
+    "text": "Shares",
+    "sref": "app.shares",
+    "icon": "icon-share-alt",
+    "label": "label label-success"
+    
+  },
+  {
+    "text": "Sales Orders",
+    "sref": "app.salesorders",
+    "icon": "fa fa-list",
+    "label": "label label-success"
+  },
+  {
+    "text": "Salespersons",
+    "sref": "app.salespersons",
+    "icon": "icon-user",
+    "label": "label label-success"
+    
+  },
+  {
+    "text": "Administrator",
+    "sref": "app.administrators",
+    "icon": "icon-user",
+    "label": "label label-success"
+    
+  }
+]

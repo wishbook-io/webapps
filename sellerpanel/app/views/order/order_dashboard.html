@@ -1,0 +1,51 @@
+<h3>Order Dashboard</h3>
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+      <div ng-controller="OrderDashboardController as showCase">
+        
+        <toaster-container toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}"></toaster-container>  
+        
+        <!--table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+        </table-->
+        
+        <div class="row">
+          <div class="col-md-12"> 
+              <div class="panel panel-default">
+                 <div class="panel-body">
+                    <div class="table-responsive">
+                       <table class="table table-hover">
+                          <tbody>
+                             <tr>
+                                <td></td>
+                                <td><a href="#/app/order/?processing_status=Cart,Draft">Cart / Drafts</a></td>
+                                <td><a href="#/app/order/?order_type=Prepaid&order_status=Pending">Pending Payment</a></td>
+                                <td><a href="#/app/order/?order_type=Prepaid&order_status=Paid&processing_status=Pending">Pending Acceptance - Prepaid</a></td>
+                                <td><a href="#/app/order/?order_type=Credit&processing_status=Pending">Pending Acceptance - Credit</a></td>
+                                <td><a href="#/app/order/?processing_status=Accepted,In Progress">Pending Dispatch</a></td>
+                                <td>Pending Payout</td>
+                                <td><a href="#/app/order/?order_status=Paid&processing_status=Dispatched,Delivered,Closed">Pending Cashback</a></td>
+                             </tr>
+                             
+                             <tr ng-repeat="item in reports track by $index">
+                                <td>{{item.details}}</td>
+                                <td>{{item.cart_draft}}</td>
+                                <td>{{item.pending_payment}}</td>
+                                <td>{{item.pending_acceptance_prepaid}}</td>
+                                <td>{{item.pending_acceptance_credit}}</td>
+                                <td>{{item.pending_dispatch}}</td>
+                                <td>{{item.pending_payout}}</td>
+                                <td>{{item.pending_cashback}}</td>
+                             </tr>
+                              
+                             
+                          </tbody>
+                       </table>
+                    </div>
+                 </div>
+              </div>
+          </div>
+        </div>
+        
+      </div>
+   </div>
+</div>

@@ -1,0 +1,102 @@
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: left;
+}
+th, td {
+    padding: 5px;
+
+}
+</style>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Wishbook</title>
+  </head>
+  <body>
+	  <div class="maindiv" style="width:90%; margin:0 auto;" ng-controller="PrintManifestController as showCase">
+      <div>
+		  <div class="row">
+			  <div class="col-md-3"><img align="float:left" style="width: 125px;" src="app/img/wishbook.png"></div>
+			  <div class="col-md-6"><h4 align="center">Manifest</h4></div>
+			  <div class="col-md-3"></div>
+		  </div>
+      
+      <div class="row">
+			  <div class="col-md-6">
+          <span style="font-size: 25px;"> <strong>Provider: </strong> {{manifest_data.shipping_provider_name}}<br> </span>
+          <span style="font-size: 20px;"> <strong>Service: </strong> {{manifest_data.shipping_service_name}}<br> </span>
+          <span style="font-size: 20px;"><strong>Supplier Name: </strong> {{manifest_data.company_name}}<br> </span>
+          <span style="font-size: 20px;"><strong>Date: </strong> {{manifest_data.created_date}} <br> </span>
+        </div>
+      </div>      
+      <table style="width:100%; margin-top: 2%;">
+			  <tr>
+  				<th>Sr No</th>
+  				<th>Order No</th>
+  				<th>AWB</th>
+  				<th>SKU</th>
+          <th>Quantity</th>
+  				<th>Size</th>
+          <th>Signature</th>
+			  </tr>
+        
+			  <tr ng-repeat="item in manifest_data.items track by $index">
+    				<td>{{$index + 1}}</td>
+    				<td>{{item.order_number}}</td>
+    				<td>{{item.awb}}</td>
+    				<td>{{item.sku}}</td>
+            <td><strong>{{item.qty}}</strong></td>
+    				<td>{{item.size}}</td>
+    				<td>&nbsp;</td>
+			  </tr>
+        
+      </table>
+
+		  
+		  <!-- <span style="font-weight:bold;">Prepared By : Wishbook Infoservices Pvt Ltd </span> -->
+		  
+		</div>
+
+	  </div>
+
+		<style type="text/css" media="print">
+		@page{size:auto; margin:5mm;}
+		#printbutton{
+			display: none;
+		}
+		#mck-sidebox-launcher{
+			display: none;
+		}
+		.d_hotline_frame{
+			display: none;
+		}
+		.d_hotline_push_frame{
+			display: none;
+		}
+		.chat-content{
+			display: none;
+		}
+		.icon-ic_chat{
+			display: none;
+		}
+
+		</style>
+		<script>
+		function printOrder() {
+			/*var printButton = document.getElementById("printbutton");
+			printButton.style.visibility = 'hidden';*/
+			//$(".maindiv").width = 100%;
+			window.print()
+			//printButton.style.visibility = 'visible';
+		}
+		</script>
+		<div align="center"><button id="printbutton" onclick="printOrder()">Print</button></div>
+
+		</div>
+
+  </body>
+</html>

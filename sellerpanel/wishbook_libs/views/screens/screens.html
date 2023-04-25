@@ -1,0 +1,113 @@
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+<style>
+.cropArea {
+    background: #E4E4E4;
+    overflow: hidden;
+    height:350px;
+}
+form .progress {
+    line-height: 15px;
+}
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+}
+.slidelink {
+  height: 100px !important;
+}
+
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+
+
+.dataTables_scrollHeadInner
+{
+    padding-right: 0px !important;
+}
+
+
+.multiple3
+{
+    margin-bottom: 13px!important;
+}
+.multiple2
+{
+    border-right: 7px solid darkgray;
+    width: 72px !important;
+}
+
+.multiplemorethan3
+{
+    border-right: 14px double darkgray;
+    width: 72px !important;
+    box-shadow: 6px 0 0 0 silver;
+}
+
+</style>
+
+
+<!-- <h3>
+
+<span class="btn-label" style="margin-left: 2%; background-color: white;color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span>
+
+ Set Matchings
+
+</h3> -->
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+        <div ng-controller="ScreensController as showCase">
+     
+        <!--table datatable="" dt-options="cat.dtOptions" dt-columns="cat.dtColumns" class="row-border hover">table-striped table-bordered hover   </table-->
+    
+            <table id="catalogs-datatables" datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="row-border hover" width="100%">
+            </table>
+
+            
+            <div ng-include="'wishbook_libs/views/catalogaction/add_update.html'"></div>
+
+            <script type="text/ng-template" id="openenablemodal">
+                <div class="ngdialog-message">
+                    
+                <div class="panel-heading"></div>
+                    <div class="panel-body">
+                    <form name="showCase.enableCatalogForm" ng-submit="showCase.EnableCatalog()" class="form-validate modelform-enablecatalog">
+                        <legend>Catalog Enable Duration</legend>
+                        <div class="row" >
+                            <div class="col-md-6">
+                                <div class="form-group"> 
+                                    <label>Enter Duration (in Days)</label>
+                                    <div class="controls">
+                                    <input type="number" autocomplete="off" name="enable_duration" ng-model="showCase.enable_duration" data-parsley-group="step1" placeholder="Enter Duration"  class="form-control" min="10" max="90" required />
+                                    <span ng-show="showCase.enableCatalogForm.enable_duration.$error.min" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                                    <span ng-show="showCase.enableCatalogForm.enable_duration.$error.max" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="row" >
+                            <div class="col-md-6">
+                                <div class="form-group"> 
+                                    <button type="submit" class="btn btn-primary mt-lg">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </script>
+        
+        
+        </div>
+   </div>
+</div>

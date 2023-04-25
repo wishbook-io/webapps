@@ -1,0 +1,227 @@
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+<style>
+.cropArea {
+    background: #E4E4E4;
+    overflow: hidden;
+    height:350px;
+}
+form .progress {
+    line-height: 15px;
+}
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+}
+.slidelink {
+  height: 100px !important;
+}
+
+</style>
+
+
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+
+<h3>
+
+<span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span>
+Catalogs
+</h3>
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+    <div ng-controller="CatalogController as showCase">
+
+    <table id="catalogs-datatables" datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+    </table>
+
+    <!--script type="text/ng-template" id="openenablemodal">
+      <div class="ngdialog-message">
+
+        <div class="panel-heading"></div>
+          <div class="panel-body">
+            <form name="showCase.enableCatalogForm" ng-submit="" class="form-validate modelform-enablecatalog">
+                <legend>Catalog Enable Duration</legend>
+                <div class="row" >
+                   <div class="col-md-6">
+                      <div class="form-group">
+                         <label>Enter Duration (in Days)</label>
+                         <div class="controls">
+                            <input type="number" autocomplete="off" name="enable_duration" ng-model="showCase.enable_duration" data-parsley-group="step1" placeholder="Enter Duration"  class="form-control" min="10" required/>
+                            <span ng-show="showCase.enableCatalogForm.enable_duration.$error.min" class="text-danger">Duration should be minimum 10 Days</span>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+
+                <div class="row" >
+                   <div class="col-md-6">
+                      <div class="form-group">
+                         <button type="submit" ng-click="showCase.EnableCatalog()" class="btn btn-primary mt-lg">Submit</button>
+                      </div>
+                   </div>
+                </div>
+            </form>
+          </div>
+      </div>
+    </script-->
+
+
+    <script type="text/ng-template" id="openenablemodal">
+      <div class="ngdialog-message">
+        <div class="panel-heading"></div>
+          <div class="panel-body">
+            <form name="showCase.enableCatalogForm" ng-submit="showCase.EnableCatalog()" class="form-validate modelform-enablecatalog">
+                <legend>Enable Catalog</legend>
+                <table class="table table-hover">
+                  <thead>
+                        <th>Company</th>
+                        <th>Current Status</th>
+                        <th>Enter Duration</th>
+                        <th>Select</th>
+
+                  </thead>
+
+                  <tbody ng-repeat="sellerdata in to_enable">
+                    <tr>
+                        <td>{{sellerdata.company_name}}</td>
+                        <td>{{sellerdata.status}}</td>
+                        <td><input type="number" name="duration" ng-model="sellerdata.duration" placeholder="Enter Duration"  class="form-control"  min="10" max="90" required />
+                          <span ng-show="showCase.enableCatalogForm.duration.$error.min" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                          <span ng-show="showCase.enableCatalogForm.duration.$error.max" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                        </td>
+                        <td><input class="needsclick" type="checkbox" value="" ng-model="sellerdata.is_select"/><!--button ng-click="showCase.removeProduct($index)">Remove</button--></td>
+                    </tr>
+
+                  </tbody>
+                </table>
+
+                <div class="row" align="center">
+                 <div class="col-md-12">
+                    <div class="form-group">
+                       <button type="submit" class="btn btn-primary mt-lg">Submit</button>
+                    </div>
+                 </div>
+                </div>
+            </form>
+          </div>
+      </div>
+    </script>
+
+
+    <script type="text/ng-template" id="opendisablemodal">
+      <div class="ngdialog-message">
+        <div class="panel-heading"></div>
+          <div class="panel-body">
+            <form name="showCase.disableCatalogForm" ng-submit="" class="form-validate modelform-disablecatalog">
+                <legend>Disable Catalog</legend>
+                <table class="table table-hover">
+                  <thead>
+                        <th>Company</th>
+                        <th>Current Status</th>
+                        <th>Select</th>
+
+                  </thead>
+
+                  <tbody ng-repeat="sellerdata in to_disable">
+                    <tr>
+                        <td>{{sellerdata.company_name}}</td>
+                        <td>{{sellerdata.status}}</td>
+                        <td><input class="needsclick" type="checkbox" value="" ng-model="sellerdata.is_select"/><!--button ng-click="showCase.removeProduct($index)">Remove</button--></td>
+                    </tr>
+
+                  </tbody>
+                </table>
+
+                <div class="row" align="center">
+                 <div class="col-md-12">
+                    <div class="form-group">
+                       <button type="submit" ng-click="showCase.DisableCatalog()" class="btn btn-primary mt-lg">Submit</button>
+                    </div>
+                 </div>
+                </div>
+            </form>
+          </div>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="sort_order_dialog">
+      <div class="ngdialog-message">
+        <div class="panel-heading"></div>
+          <div class="panel-body">
+            <form name="showCase.SortOrderForm" ng-submit="showCase.submitSortOrder()" class="form-validate modelform-sortorder">
+                <legend>Change Catalog Sort Order</legend>
+                <div class="col-md-6">
+                    <div class="form-group">
+                       <label>Sort Order</label>
+                       <div class="controls">
+                          <input type="number" autocomplete="off" name="sort_order" ng-model="showCase.sort_order" placeholder="Enter price"  class="form-control" required/>
+                       </div>
+                    </div>
+                 </div>
+
+                <div class="row" align="center">
+                 <div class="col-md-12">
+                    <div class="form-group">
+                       <button type="submit" class="btn btn-primary mt-lg">Submit</button>
+                    </div>
+                 </div>
+                </div>
+            </form>
+          </div>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="catalogbulkuploadcsv">
+        <form role="form" ng-submit="showCase.UploadBulkCatalogCsv()" name="showCase.uploadcsv" novalidate="" class="form-validate mb-lg modelform3">
+
+        <legend>Upload Catalogs CSV</legend>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                    <input type="checkbox" ng-model="showCase.set_bulk" name="set_bulk"/>
+                    <span>Please do check if it's a set bulk upload</span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                   <label>Select CSV from your computer</label>
+                    <input type="file" ngf-select="uploadCSVFiles($files)" ng-model="showCase.file.catalog_csv" name="catalog_csv" required accept=".csv">
+                    <span ng-show="showCase.uploadcsv.catalog_csv.$dirty &amp;&amp; showCase.uploadcsv.catalog_csv.$error.required" class="text-danger">This field is required</span>
+                </div>
+             </div>
+            </div>
+            <div class="row">
+                <div style="float:right;" class="col-md-2">
+                  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+                <div style="float:right;" class="col-md-4">
+                  <a style="text-decoration: none;" ng-attr-href="{{showCase.set_bulk ? 'app/csv/SetBulkCSV.csv' : 'app/csv/Catalogbulk.csv' }}"><button type="button" class="btn btn-block btn-primary mt-lg">Download Sample</button></a>
+                </div>
+                <div style="float:right;" class="col-md-2">
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Upload</button>
+                </div>
+            </div>
+        </form>
+    </script>
+    <div ng-include="'wishbook_libs/views/catalogaction/add_update.html'"></div>
+    <div ng-include="'app/views/common/notification.html'"></div>
+    <div ng-include="'app/views/common/order_modal.html'"></div>
+    <div ng-include="'app/views/shares/share_form.html'"></div>
+    <div ng-include="'app/views/common/company_detail.html'"></div>
+    <div ng-include="'app/views/common/company_detail_edit.html'"></div>
+
+    </div>
+   </div>
+</div>

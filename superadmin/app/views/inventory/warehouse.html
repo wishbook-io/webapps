@@ -1,0 +1,86 @@
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Warehouse</h3>
+<div class="panel panel-default">
+   <div class="panel-body" >
+      <div ng-controller="warehouseController as showCase">
+		<table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover " width="100%">
+		</table>
+		
+		
+		<script type="text/ng-template" id="adddialogform">
+			  
+			  <form role="form" ng-submit="showCase.SubmitForm()" name="showCase.addForm" novalidate="" class="form-validate mb-lg modelform">
+		 
+			  <legend>Warehouse Details</legend>
+			  
+			  <div class="row">
+				<div class="col-md-12"> 
+				<div class="form-group has-feedback">
+				   <input type="text" name="name" placeholder="Enter Warehouse Name" autocomplete="off" ng-model="form.name" required="" class="form-control" />
+				   <span class="fa fa-user form-control-feedback text-muted"></span>
+				   <span ng-show="showCase.addForm.name.$dirty &amp;&amp; showCase.addForm.name.$error.required" class="text-danger">This field is required</span>
+				</div>
+				</div>
+			  </div>
+			  
+			  <div class="row">
+				<div class="col-md-12">
+				<div class="form-group has-feedback">
+				   <label>Supplier (You can select multiple)</label>
+				   <div class="controls">
+					  <ui-select multiple="" ng-model="form.supplier" theme="bootstrap" >
+					   <ui-select-match placeholder="Select Supplier">{{$item.company_name}} </ui-select-match>
+					   <ui-select-choices repeat="b.company_id as b in suppliers | propsFilter: {company_name: $select.search}">
+						  <div ng-bind-html="b.company_name | highlight: $select.search"></div>
+					   </ui-select-choices>
+					  </ui-select>
+				   </div>
+				</div>   
+				</div>
+			  </div>
+				
+			  
+			  <div class="row">
+				<div class="col-md-12">
+				<div class="form-group has-feedback">
+				   <label>Salesmen (You can select multiple)</label>
+				   <div class="controls">
+					  <ui-select multiple="" ng-model="form.salesmen" theme="bootstrap" >
+					   <ui-select-match placeholder="Select Salesmen">{{$item.username}} </ui-select-match>
+					   <ui-select-choices repeat="b.id as b in salespersons | propsFilter: {username: $select.search}">
+						  <div ng-bind-html="b.username | highlight: $select.search"></div>
+					   </ui-select-choices>
+					  </ui-select>
+				   </div>
+				</div>   
+				</div>
+			  </div>
+				
+			  <div class="row">
+				<div style="float:right;" class="col-md-2"> 
+				  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+				</div>
+
+				<div style="float:right;" class="col-md-2">
+				  <button type="submit" ng-show="!update_flag" class="btn btn-block btn-primary mt-lg">Add</button>
+				  <button type="submit" ng-show="update_flag" class="btn btn-block btn-primary mt-lg">Update</button>
+				</div>
+			  </div>
+			 </form>
+			  
+		</script>
+		
+		
+	  </div>
+   </div>
+</div>

@@ -1,0 +1,456 @@
+
+<!-- Start: Sales order Action    -->
+<script type="text/ng-template" id="cancelorder">
+  <div ng-controller="OrderStatusController">
+      <form role="form" ng-submit="CancelOrder()" name="cancelOrderForm" novalidate="" class="form-validate mb-lg modelform-cancel">
+
+      <legend>Cancel Order</legend>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group has-feedback">
+                <input type="hidden" name="id" ng-model="order.id" />
+                 <textarea name="supplier_cancel" placeholder="Enter cancel note" autocomplete="off" ng-model="order.supplier_cancel" required="" class="form-control" ></textarea>
+                 <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+                 <span ng-show="cancelOrderForm.supplier_cancel.$dirty &amp;&amp; cancelOrderForm.supplier_cancel.$error.required" class="text-danger">This field is required</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+              <div  class="col-md-4">
+                <button type="submit" class="btn btn-block btn-primary mt-lg">Yes</button>
+              </div>
+              <div class="col-md-4">
+                <button type="button" ng-click="CloseDialog()" class="btn btn-block btn-primary mt-lg">No</button>
+              </div>
+          </div>
+      </form>
+  </div>
+</script>
+
+<!-- for processing Note on order detail page -->
+<script type="text/ng-template" id="processingnote">
+  <div ng-controller="OrderStatusController">
+    <form role="form" ng-submit="processingNoteAdmin()" name="processingNoteForm" novalidate="" class="form-validate mb-lg modelform-cancel">
+
+    <legend>Add Note</legend>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group has-feedback">
+        <input type="hidden" name="id" ng-model="order.id" />
+         <textarea name="processing_note" placeholder="Enter note here" autocomplete="off" ng-model="order.processing_note" required="" class="form-control" ></textarea>
+         <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+         <span ng-show="processingNoteForm.processing_note.$dirty &amp;&amp; processingNoteForm.processing_note.$error.required" class="text-danger">This field is required</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+      <div  class="col-md-4">
+        <button type="submit" class="btn btn-block btn-primary mt-lg">Add Note</button>
+      </div>
+      <div class="col-md-4">
+        <button type="button" ng-click="CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+      </div>
+  </div>
+    </form>
+  </div>
+</script>
+
+<script type="text/ng-template" id="invoicedetails">
+<div ng-controller="OrderStatusController as showCase">
+    <div class="ngdialog-message">
+
+        <div class="panel-heading"></div>
+        <div class="panel-body">
+          <form name="showCase.invoiceForm" ng-submit="" form-wizard="" validate-steps="true" novalidate="" steps="2" class="form-validate modelform-invoice">
+	    <div class="form-wizard wizard-horizontal">
+                <!-- START wizard steps indicator-->
+                <ol class="row">
+                   <li ng-class="{'active':wizard.active(1)}" ng-click="wizard.go(1)" class="col-md-6">
+                      <h4>Items</h4>
+
+                   </li>
+                   <li ng-class="{'active':wizard.active(2)}" ng-click="wizard.go(2)" class="col-md-6">
+                      <h4>Invoice Details</h4>
+
+                   </li>
+                </ol>
+                <!-- END wizard steps indicator-->
+                <!-- START Wizard Step inputs -->
+                <div id="step1" ng-show="wizard.active(1)">
+        <fieldset>
+          <div class="col-md-12" style="font-weight: bold;">
+                      <div class="col-md-3">Catalog</div>
+                      <div class="col-md-3"></div>
+                      <div class="col-md-2">Brand</div>
+                      <div class="col-md-2"></div>
+                      <div class="col-md-2"></div>
+                  </div>
+
+                  <div class="col-md-12" ng-repeat="cat in orderedcatalogs">
+                      <div class="col-md-12" style="border: 1px solid gray; padding: 0.5%; margin-bottom: 2px;">
+                        <div class="col-md-3">{{cat.name}}</div>
+                        <div class="col-md-3"></div>
+                        <div class="col-md-2">{{cat.brand}}</div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-2"><input id="expbtn-{{cat.id}}" ng-click="showhide(cat.id)" type="button" name="Expand" value="Expand" /></div>
+                      </div>
+                      <div style="display: none;" id="catalog-{{cat.id}}" >
+                        <div class="col-md-12" style="font-weight: bold;">
+                            <div class="col-md-3">Image</div>
+                            <div class="col-md-3">SKU</div>
+                            <div class="col-md-2">Price</div>
+                            <div class="col-md-2">Qty</div>
+                            <div class="col-md-2">Select</div>
+                        </div>
+                        <div class="col-md-12"  ng-repeat="product in cat.products">
+
+                            <div class="col-md-3"><img class="loading" ng-src="{{product.image}}" style="width: 100px; height: 100px"></div>
+                            <div class="col-md-3">{{product.sku}}</div>
+                            <div class="col-md-2">
+                                {{product.price}}
+                            </div>
+
+                            <div class="col-md-2"><input type="number" name="{{product.quantity}}" ng-model="product.quantity" ng-blur="changeQty(product.quantity)"  placeholder="Enter quantity"  class="form-control" ng-max="product.max" ng-min="0" required/></div>
+
+                            <div class="col-md-2"><input class="needsclick" type="checkbox" value="" ng-model="product.is_select"/></div>
+                        </div>
+                      </div>
+                  </div>
+
+
+        </fieldset>
+		    <ul class="pager">
+			  <li class="next"><a ng-click="wizard.go(2)">Next <span>&rarr;</span></a>
+			  </li>
+		       </ul>
+		    </div>
+		    <!-- END Wizard Step inputs -->
+		    <!-- START Wizard Step inputs -->
+
+		    <div id="step2" ng-show="wizard.active(2)">
+		      <fieldset>
+        <legend>Invoice Details</legend>
+        <!-- START row -->
+        <div class="row">
+         <div class="col-md-12">
+            <div class="form-group">
+               <label>Warehouse *</label>
+               <div class="controls">
+                  <!--input type="text" autocomplete="off" name="brand" ng-model="entry.brand" data-parsley-group="step1" placeholder="Brand"  class="form-control" /-->
+                  <select name="warehouse" chosen="" ng-model="order.warehouse" ng-options="w.id as w.name for w in warehouses" width="'100%'" class="chosen-select input-md form-control" required>
+                     <option value="">Select Warehouse</option>
+                  </select>
+                  <span ng-show="showCase.saveDispatchForm.warehouse.$dirty &amp;&amp; showCase.saveDispatchForm.warehouse.$error.required" class="text-danger">This field is required</span>
+               </div>
+            </div>
+         </div>
+        </div>
+
+         <div class="row">
+            <div class="col-md-12">
+              <div class="form-group has-feedback">
+                <label>Invoice Number *</label>
+                <div class="controls">
+                <input type="text" name="invoice_number" placeholder="Invoice Number" autocomplete="off" ng-model="order.invoice_number" class="form-control" data-parsley-group="step2" required />
+                <!--span ng-show="showCase.invoiceForm.invoice_number.$dirty &amp;&amp; showCase.invoiceForm.invoice_number.$error.required" class="text-danger">This field is required</span-->
+                </div>
+              </div>
+            </div>
+         </div>
+
+         <div class="row">
+            <div class="col-md-12">
+            <div class="form-group has-feedback">
+               <label>Dispatch Date *</label>
+          <div class="controls">
+                 <p class="input-group">
+                 <input type="text" name="dispatch_date" uib-datepicker-popup="{{showCase.format}}" ng-model="order.dispatch_date" is-open="showCase.opened" uib-datepicker-options="showCase.dateOptions"
+                close-text="Close" class="form-control" data-parsley-group="step2" required/>
+                <span class="input-group-btn">
+                   <button type="button" ng-click="showCase.open($event)" class="btn btn-default">
+                    <em class="fa fa-calendar"></em>
+                   </button>
+                </span>
+                 </p>
+                 <!--span ng-show="showCase.invoiceForm.dispatch_date.$dirty &amp;&amp; showCase.invoiceForm.dispatch_date.$error.required" class="text-danger">This field is required</span-->
+               </div>
+            </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+            <div class="form-group has-feedback">
+               <label>Enter Tracking Details</label>
+          <div class="controls">
+                 <textarea name="tracking_details" placeholder="Enter Tracking Details" autocomplete="off" ng-model="order.tracking_details" class="form-control" ></textarea>
+                 <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+                 <span ng-show="showCase.invoiceForm.tracking_details.$dirty &amp;&amp; showCase.invoiceForm.tracking_details.$error.required" class="text-danger">This field is required</span>
+          </div>
+            </div>
+            </div>
+          </div>
+
+          <div class="row">
+        <div class="col-md-12">
+            <div class="form-group has-feedback">
+               <label>Mode</label>
+               <div class="controls">
+               <input type="text" name="mode" placeholder="Mode" autocomplete="off" ng-model="order.mode" class="form-control" data-parsley-group="step2"/>
+               <!--span class="fa fa-user form-control-feedback text-muted"></span-->
+               <span ng-show="showCase.invoiceForm.mode.$dirty &amp;&amp; showCase.invoiceForm.mode.$error.required" class="text-danger">This field is required</span>
+               </div>
+            </div>
+        </div>
+          </div>
+
+          <div class="row">
+        <div class="col-md-12">
+            <div class="form-group has-feedback">
+               <label>Tracking Number</label>
+               <div class="controls">
+               <input type="text" name="tracking_number" placeholder="Tracking Number" autocomplete="off" ng-model="order.tracking_number" class="form-control" data-parsley-group="step2"/>
+               <!--span class="fa fa-user form-control-feedback text-muted"></span-->
+               <span ng-show="showCase.invoiceForm.tracking_number.$dirty &amp;&amp; showCase.invoiceForm.tracking_number.$error.required" class="text-danger">This field is required</span>
+               </div>
+            </div>
+        </div>
+          </div>
+
+          <div class="row">
+        <div class="col-md-12">
+            <div class="form-group has-feedback">
+               <label>Transporter Courier</label>
+               <div class="controls">
+               <input type="text" name="transporter_courier" placeholder="Transporter Courier" autocomplete="off" ng-model="order.transporter_courier" class="form-control" data-parsley-group="step2"/>
+               <!--span class="fa fa-user form-control-feedback text-muted"></span-->
+               <span ng-show="showCase.invoiceForm.transporter_courier.$dirty &amp;&amp; showCase.invoiceForm.transporter_courier.$error.required" class="text-danger">This field is required</span>
+               </div>
+            </div>
+        </div>
+          </div>
+          <div class="row" align="center">
+             <div class="col-md-12">
+                <div class="form-group">
+                   <button type="submit" ng-click="CreateInvoice()" class="btn btn-primary mt-lg">Generate Invoice & Dispatch</button>
+                </div>
+             </div>
+          </div>
+        </fieldset>
+
+		    <ul class="pager">
+                      <li class="previous">
+                         <a ng-click="wizard.go(1)">
+                            <span>&larr; Previous</span>
+                         </a>
+                      </li>
+		    </ul>
+		  </div>
+                <!-- END Wizard Step inputs -->
+          </form>
+	</div>
+
+         </div><!-- END panel -->
+    </div> <!-- End ng dialog -->
+
+    </div>
+   </script>
+
+   <script type="text/ng-template" id="transfer-form">
+      <div ng-controller="OrderStatusController">
+        <form name="transferForm"  ng-submit="Transfer()"  class="form-validate mb-lg modelform-transfer" novalidate>
+
+        <legend>Transfer Sales Order</legend>
+
+            <div class="row">
+                <div class="col-md-12">
+                  <div ng-if="is_staff == false" class="form-group has-feedback">
+                      <label>Buyer</label>
+                        <select name="buyer" chosen="" ng-model="transfer.buyer" ng-options="s.company_id as s.company_name for s in buyers" width="'100%'" class="chosen-select input-md form-control" required>
+                           <option value="">Buyer</option>
+                        </select>
+                        <span ng-show="transferForm.buyer.$dirty &amp;&amp; transferForm.buyer.$error.required" class="text-danger">This field is required</span>
+                  </div>
+                  <div ng-if="is_staff == true" class="form-group has-feedback">
+                      <label>Company ID</label>
+                        <input type="number" name="buyer" ng-model="transfer.buyer" class="input-md form-control" required>
+                        <span ng-show="transferForm.buyer.$dirty &amp;&amp; transferForm.buyer.$error.required" class="text-danger">This field is required</span>
+                  </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div style="float:right;" class="col-md-2">
+                  <button type="button" ng-click="CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+
+                <div style="float:right;" class="col-md-2">
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Save</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    </script>
+    <!-- End: Sales order Action    -->
+
+
+    <!-- Start: Purchase order Action    -->
+    <script type="text/ng-template" id="cancelorder-purchase">
+      <div ng-controller="OrderStatusController">
+        <form role="form" ng-submit="CancelPurchaseOrder()" name="cancelPurchaseOrderForm" novalidate="" class="form-validate mb-lg modelform-cancel-purchase">
+
+        <legend>Cancel Order</legend>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group has-feedback">
+                  <input type="hidden" name="id" ng-model="order.id" />
+                   <textarea name="buyer_cancel" placeholder="Enter cancel note" autocomplete="off" ng-model="order.buyer_cancel" required="" class="form-control" ></textarea>
+                   <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+                   <span ng-show="cancelPurchaseOrderForm.buyer_cancel.$dirty &amp;&amp; cancelPurchaseOrderForm.buyer_cancel.$error.required" class="text-danger">This field is required</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+                <div  class="col-md-4">
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Yes</button>
+                </div>
+                <div class="col-md-4">
+                  <button type="button" ng-click="CloseDialog()" class="btn btn-block btn-primary mt-lg">No</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="pay">
+      <div ng-controller="OrderStatusController">
+        <form role="form" editable-form="" ng-submit="Pay()" name="paymentForm" novalidate="" class="form-validate mb-lg modelform-pay">
+
+        <legend>Payment: Rs. {{order.invoice_amount}}</legend>
+
+              <!--label class="col-md-3 control-label">Payment Date</label>
+              <div class="col-md-6">
+                 <p class="input-group">
+                    <input type="text" name="payment_date" required="" uib-datepicker-popup="{{format}}" ng-model="order.payment_date" is-open="opened" max-date="dt" uib-datepicker-options="dateOptions"
+                    close-text="Close" class="form-control" />
+                    <span class="input-group-btn">
+                       <button type="button" ng-click="open($event)" class="btn btn-default">
+                          <em class="fa fa-calendar"></em>
+                       </button>
+                    </span>
+                 </p>
+                 <span ng-show="paymentForm.payment_date.$dirty &amp;&amp; paymentForm.payment_date.$error.required" class="text-danger">This field is required</span>
+
+              </div-->
+
+
+	    <div class="row">
+	      <div class="col-md-12">
+		    <div class="form-group has-feedback">
+		       <label>Payment Date *</label>
+			<div class="controls">
+			       <p class="input-group">
+				    <input type="text" name="payment_date" required="" uib-datepicker-popup="{{format}}" ng-model="order.payment_date" is-open="opened" max-date="dt" uib-datepicker-options="dateOptions"
+				    close-text="Close" class="form-control" />
+				    <span class="input-group-btn">
+				       <button type="button" ng-click="open($event)" class="btn btn-default">
+					  <em class="fa fa-calendar"></em>
+				       </button>
+				    </span>
+			       </p>
+		       </div>
+		    </div>
+	      </div>
+	    </div>
+
+            <!--div class="row">
+              <div class="col-md-12">
+                <div class="form-group has-feedback">
+
+
+                   <textarea name="payment_details" placeholder="Enter Payment Details" autocomplete="off" ng-model="order.payment_details" required="" class="form-control" ></textarea>
+                   <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+                   <span ng-show="paymentForm.payment_details.$dirty &amp;&amp; paymentForm.payment_details.$error.required" class="text-danger">This field is required</span>
+                </div>
+              </div>
+            </div-->
+
+	    <div class="row">
+		<div class="col-md-12">
+		    <div class="form-group has-feedback">
+		       <label>Mode *</label>
+		       <div class="controls">
+			   <!--input type="text" name="mode" placeholder="Mode" autocomplete="off" ng-model="order.mode" class="form-control" data-parsley-group="step1"/>
+			   <span ng-show="paymentForm.mode.$dirty &amp;&amp; paymentForm.mode.$error.required" class="text-danger">This field is required</span-->
+
+			  <select name="mode" chosen="" ng-model="order.mode" ng-options="s as s for s in modes" width="'100%'" class="chosen-select input-md form-control" ng-change="modeChanged(order.mode)" required>
+			     <option value="">Select Mode</option>
+			  </select>
+			  <span ng-show="paymentForm.mode.$dirty &amp;&amp; paymentForm.mode.$error.required" class="text-danger">This field is required</span>
+
+		       </div>
+		    </div>
+		</div>
+	    </div>
+
+	    <div class="row">
+	      <div class="col-md-12">
+		    <div class="form-group has-feedback">
+		        <label>Enter Payment Details</label>
+			<div class="controls">
+			   <input type="hidden" name="orderid" ng-model="order.id" />
+			   <input type="hidden" name="invoiceid" ng-model="order.invoice_id" />
+			   <input type="hidden" name="invoiceamount" ng-model="order.invoice_amount" />
+
+			   <textarea name="payment_details" placeholder="Enter Payment Details" autocomplete="off" ng-model="order.payment_details" required="" class="form-control" ></textarea>
+			   <span class="fa fa-hashtag form-control-feedback text-muted"></span>
+			   <span ng-show="paymentForm.payment_details.$dirty &amp;&amp; paymentForm.payment_details.$error.required" class="text-danger">This field is required</span>
+			</div>
+		    </div>
+	      </div>
+	    </div>
+
+            <div class="row" ng-show="order.mode != 'Zaakpay'">
+                <div style="float:right;" class="col-md-2">
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Save</button>
+                </div>
+                <div style="float:right;" class="col-md-2">
+                  <button type="button" ng-click="CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+            </div>
+        </form>
+
+        <div ng-if="order.mode == 'Zaakpay'" class="row">
+          <div class="col-md-12">
+            <form action="http://zaakpaystaging.centralindia.cloudapp.azure.com:8080/api/paymentTransact/V7" method="post">
+            <!--form action="https://api.zaakpay.com/api/paymentTransact/V7" method="post"-->
+              <input type="hidden" name="orderId" ng-model="zaakpay.orderId" value="{{zaakpay.orderId}}" >
+              <input type="hidden" name="amount" ng-model="zaakpay.amount" value="{{zaakpay.amount}}" />
+              <input type="hidden" name="currency" ng-model="zaakpay.currency" value="INR" >
+              <input type="hidden" name="buyerEmail" ng-model="zaakpay.buyerEmail" value="{{zaakpay.buyerEmail}}" />
+              <input type="hidden" name="buyerPhoneNumber" ng-model="zaakpay.buyerPhoneNumber" value="{{zaakpay.buyerPhoneNumber}}" />
+              <input type="hidden" name="merchantIdentifier" ng-model="zaakpay.merchantIdentifier" value="{{zaakpay.merchantIdentifier}}" >
+              <input type="hidden" name="returnUrl" ng-model="zaakpay.returnUrl" value="{{zaakpay.returnUrl}}" >
+              <input type="hidden" name="checksum" ng-model="checksum" value="{{zaakpay.checksum_value}}" >
+
+              <div class="row">
+                <div style="float:right;" class="col-md-3">
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Proceed with Zaakpay</button>
+                </div>
+                <div style="float:right;" class="col-md-2">
+                  <button type="button" ng-click="CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <!-- End: Purchase order Action    -->

@@ -1,0 +1,47 @@
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> GST Details
+   <small></small>
+</h3>
+<!--div class="row">
+   <div class="col-lg-12" >
+      <p>Company details</p>
+   </div>
+</div-->
+
+<!-- START panel-->
+<div ng-controller="gstController"  class="panel panel-default">
+  
+   <div class="panel-heading"></div>
+   <div class="panel-body">
+        <form role="form" name="gstForm" ng-submit="submitGstDetails()" novalidate="" class="form-validate mb-lg modelform-gst">
+                    <div class="row">
+                           <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>Enter GSTIN </label>
+                              <input type="text" name="gstin" ng-model="gst.gstin" class="form-control" required />
+                              <!--ui-select multiple="" ng-model="gst.gstin" theme="bootstrap" name="gstin">
+                                   <ui-select-match placeholder="GSTIN">{{$item.name}} </ui-select-match>
+                                   <ui-select-choices repeat="b.id as b in gst.gstin | propsFilter: {name: $select.search}">
+                                      <div ng-bind-html="b.name | highlight: $select.search"></div>
+                                   </ui-select-choices>
+                              </ui-select-->
+                              
+                              <span ng-show="gstForm.gstin.$dirty &amp;&amp; gstForm.gstin.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                          </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group">
+                           <button type="submit" class="btn btn-primary mt-lg">Submit</button>
+                        </div>
+                     </div>
+                  </div> 
+        </form>
+   
+   </div>
+
+
+</div>
+
+
+<!-- END panel -->

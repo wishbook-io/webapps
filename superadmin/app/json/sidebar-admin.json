@@ -1,0 +1,121 @@
+[
+  {
+    "text": "Menu",
+    "heading": "true",
+    "translate": "sidebar.heading.HEADER"
+  },
+  {
+    "text": "Company",
+    "sref": "app.companies",
+    "icon": "fa fa-list",
+    "label": "label label-success"
+  },
+  {
+    "text": "Catalog Mirror",
+    "sref": "app.mirror",
+    "icon": "fa fa-list",
+    "label": "label label-success"
+  },
+  {
+    "text": "Brandwise Discount",
+    "sref": "app.brandwisediscount",
+    "icon": "fa fa-list",
+    "label": "label label-success"
+  },
+  {
+    "text": "Become a Seller",
+    "sref": "app.becomeseller",
+    "icon": "fa fa-list",
+    "label": "label label-success"
+  },
+  {
+    "text": "Catalog",
+    "sref": "",
+    "icon": "icon-tag",
+    "label": "label label-info", 
+    "submenu": [
+      {"text": "Catalogs/Noncatalogs",  "sref": "app.catalogadmin"},
+      {"text": "Screens",       "sref": "app.screens"}
+    ]
+  },
+  {
+    "text": "Sales Orders",
+    "sref": "",
+    "icon": "fa fa-shopping-cart",
+    "label": "label label-info", 
+    "submenu": [
+      {"text": "Carts",       "sref": "app.cart"},
+      {"text": "Sales Dashboard",       "sref": "app.orderdashboard"},
+      {"text": "Sales Orders",       "sref": "app.order"},
+      {"text": "RRC Requests",       "sref": "app.rrcrequests"},
+      {"text": "Refund Requests",       "sref": "app.refundrequests"},
+      {"text": "Invoices (Seller)",       "sref": "app.salesordersinvoice"},
+      {"text": "Incoming Shipments",       "sref": "app.purchaseordersinvoice"}
+      
+    ]
+  },
+  {
+    "text": "Purchase Orders",
+    "sref": "",
+    "icon": "fa fa-shopping-cart",
+    "label": "label label-info", 
+    "submenu": [
+      {
+        "text": "Purchase Orders",
+        "sref": "app.adminpurchaseorders"
+      },
+      {
+        "text": "Shipments & Invoices",
+        "sref": "app.shipment_Invoices"
+      }
+    ]
+  },
+  
+  {
+    "text": "Seller order-items",
+    "sref": "",
+    "icon": "fa fa-th-list",
+    "label": "label label-info",
+    "submenu": [
+      {
+        "text": "Item wise",
+        "sref": "app.pendingorderitems-itemwise"
+      },
+      {
+        "text": "Seller wise",
+        "sref": "app.pendingorderitems-sellerwise"
+      }
+     
+    ]
+  },
+  {
+    "text": "Accounts",
+    "sref": "app.accounts",
+    "icon": "fa fa-list",
+    "label": "label label-success"
+  },
+  {
+    "text": "Reseller Payouts",
+    "sref": "app.resellerpayouts",
+    "icon": "fa fa-list",
+    "label": "label label-success"
+  },
+  {
+    "text": "Deeplink",
+    "sref": "app.deeplink",
+    "icon": "fa fa-list",
+    "label": "label label-success"
+  },
+  {
+    "text": "Seller Statistics",
+    "sref": "app.seller_statistic",
+    "icon": "fa fa-list",
+    "label": "label label-success"
+  },
+  {
+    "text": "Marketing",
+    "sref": "app.marketing",
+    "icon": "fa fa-list",
+    "label": "label label-success"
+  }
+]

@@ -1,0 +1,589 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+td
+{
+    text-align: left!important;
+}
+th
+{
+    text-align: left;
+}
+</style>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;background-color: white" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span>
+<a ng-if="$stateParams.type == 'salesorders'" ui-sref="app.salesorders">Sales Orders</a>
+<a ng-if="$stateParams.type == 'purchaseorders'" ui-sref="app.purchaseorders">Purchase Orders</a> / Order Detail <span class="ptitle">: {{$stateParams.name}}</span> </h3>
+<div ng-controller="OrderDetailController as showCase">
+<div class="panel panel-default modelforoderdetail">
+	<div class="panel-body" >
+	   <div class="row">
+		<div class="col-md-12">
+		
+			<div class="table-responsive">
+			   <table class="table table-hover">
+			      <tbody>
+				 <tr>
+				    <td>Order No : {{$stateParams.name}}</td>
+				    <td>Date : {{formatDate(orderdetail.created_at)}}</td>
+
+				 </tr>
+				 <tr>
+				    <td>No. of Items : {{orderdetail.total_products}} </td>
+				    <td>Total (Rs.) : {{orderdetail.total_rate}}</td>
+				 </tr>
+			     <tr>
+				     <td>Payment Status : {{orderdetail.payment_status}}</td>
+				     <td>Processing Status : {{orderdetail.processing_status}}</td>
+			     </tr>
+			     <tr ng-if="orderdetail.note != null">
+				     <td colspan="2">Order Remark : {{orderdetail.note}}</td>
+			     </tr>
+			     <tr ng-if="orderdetail.processing_note != null && is_staff == 'true'">
+				     <td colspan="2">Processing Note : {{orderdetail.processing_note}}</td>
+				  </tr>
+					<tr ng-if="is_staff == 'true' || is_staff == true">
+						<td ng-if="$stateParams.type == 'purchaseorders'">Supplier :<a href="#/app/supplier-detail/?id={{orderdetail.seller_company}}&name={{orderdetail.seller_company_name}}">
+								{{orderdetail.seller_company_name}} </a> </td>
+						<td ng-if="$stateParams.type != 'purchaseorders'">Supplier : {{orderdetail.seller_company_name}} </td>
+					
+						<td ng-if="$stateParams.type == 'salesorders' && orderdetail.is_supplier_approved == true">
+							Buyer : <a href="#/app/buyer-detail/?id={{orderdetail.company}}&name={{orderdetail.company_name}}">{{orderdetail.company_name}}</a>
+							<span ng-if="is_staff">({{orderdetail.company_number}})</span>
+						</td>
+						<td ng-if="$stateParams.type == 'salesorders' && orderdetail.is_supplier_approved == false">
+							Buyer : {{orderdetail.company_name}} <span ng-if="is_staff">({{orderdetail.company_number}}) </span>
+						</td>
+						<td ng-if="$stateParams.type != 'salesorders'">Buyer : {{orderdetail.company_name}} <span ng-if="is_staff">({{orderdetail.company_number}}) </span> </td>
+					</tr>
+
+				   <tr>
+				     <td>
+
+					<div ng-if="$stateParams.type == 'purchaseorders'">
+
+					      <span ng-if="orderdetail.customer_status == 'Draft' && orderdetail.processing_status != 'Cancelled'  && orderdetail.customer_status != 'Cancelled'">
+						    <button type="button" ng-click="Finalize(orderdetail.id)" class="btn btn-primary mt-lg">Finalize</button>
+					      </span>
+
+					      <span ng-if="orderdetail.payment_status == 'Pending' || orderdetail.payment_status == 'Placed'  && orderdetail.processing_status != 'Cancelled'  && orderdetail.customer_status != 'Cancelled'">
+						    <!--button type="button" ng-click="OpenPay(orderdetail.id)" class="btn btn-primary mt-lg">Pay</button-->
+						    <button type="button" ng-click="OpenShipPay(orderdetail.id)" class="btn btn-primary mt-lg">Pay</button>
+					      </span>
+					      <span ng-if="(orderdetail.processing_status == 'Pending' || orderdetail.processing_status == 'Accepted'  &&  orderdetail.processing_status != 'Cancelled'  && orderdetail.customer_status != 'Cancelled') && orderdetail.payment_status.indexOf('Paid') == -1">
+						    <button type="button" ng-click="OpenCancelPurchaseOrder(orderdetail.id)" class="btn btn-danger mt-lg">Cancel</button>
+					      </span>
+					 </div>
+
+					 <div ng-if="$stateParams.type == 'salesorders'">
+
+					  		<!--<span ng-if="orderdetail.processing_status == 'Pending'  && orderdetail.processing_status.indexOf('Delivered') < 0 && orderdetail.processing_status.indexOf('Cancelled') < 0 && orderdetail.customer_status.indexOf('Cancelled') < 0">
+						    <button type="button" ng-click="Accept(orderdetail.id)" class="btn  btn-primary mt-lg">Accept</button>
+						    <button type="button" ng-click="OpenTransfer(orderdetail.id)" class="btn  btn-primary mt-lg">Transfer</button>
+					      </span>
+
+					      <span ng-if="(orderdetail.processing_status == 'Pending' || orderdetail.processing_status == 'Accepted' || orderdetail.processing_status == 'COD Verification Pending') && orderdetail.processing_status.indexOf('Delivered') < 0 && orderdetail.processing_status.indexOf('Cancelled') < 0 && orderdetail.customer_status.indexOf('Cancelled') < 0  && (orderdetail.payment_status.indexOf('Paid') == -1 || is_staff == 'true' )" >
+
+						    <button type="button" ng-click="OpenCancelOrder(orderdetail.id)" class="btn  btn-danger mt-lg">Cancel</button>
+					      </span> 
+
+					      <span ng-if="(orderdetail.processing_status == 'Accepted' || orderdetail.processing_status == 'In Progress') && orderdetail.total_pending_quantity > 0 && orderdetail.processing_status.indexOf('Delivered') < 0 && orderdetail.processing_status.indexOf('Cancelled') < 0 && orderdetail.customer_status.indexOf('Cancelled') < 0" >
+						    <button type="button" ng-click="GenerateInvoice(orderdetail.id)" class="btn btn-primary mt-lg orange-button">Dispatch</button>
+					      </span>
+
+					      <span ng-if="orderdetail.processing_status == 'In Progress' && orderdetail.processing_status.indexOf('Delivered') < 0 && orderdetail.processing_status.indexOf('Cancelled') < 0 && orderdetail.customer_status.indexOf('Cancelled') < 0" >
+						    <button type="button" ng-click="OpenCloseOrder(orderdetail.id)" class="btn  btn-danger mt-lg">Close</button>
+							</span>-->
+							
+
+							<!-- admin actions only-->
+							
+							<span ng-if="is_staff == 'true' && orderdetail.payment_status == 'Pending' || orderdetail.payment_status == 'Placed'  && orderdetail.processing_status != 'Cancelled'  && orderdetail.customer_status != 'Cancelled'">
+								<button type="button" ng-click="OpenShipPay(orderdetail.id)" class="btn btn-primary mt-lg">Mark as Paid</button>
+								<button ng-if="orderdetail.invoice[0].payments.length > 0"  type="button" ng-click="OpenShipPay2(orderdetail.id)" class="btn btn-primary mt-lg">Only Pay</button>
+							</span>
+
+							<span ng-if="is_staff == 'true' && orderdetail.processing_status == 'Dispatched'">
+									<button type="button" ng-click="MarkDelivered(orderdetail.id)" class="btn btn-primary mt-lg">Mark Delivered</button>
+							</span>
+							<span ng-if="is_staff == 'true'">
+								<button type="button" ng-click="showCase.addNewAddress()" class="btn btn-primary mt-lg" style="background-color: green;"> Update Address </button>
+								<button type="button" ng-click="processingNote(orderdetail.id)" class="btn btn-primary mt-lg" style="background-color: green;"> Processing Note</button>
+							</span>
+							<span ng-if="is_staff == 'true' && orderdetail.payment_status == 'Pending' && orderdetail.processing_status != 'Cart' && orderdetail.processing_status != 'Cancelled' && orderdetail.processing_status != 'Transferred' && orderdetail.processing_status != 'In Progress' && orderdetail.processing_status != 'Closed' && orderdetail.processing_status != 'Dispatched' && orderdetail.processing_status != 'Delivered' ">
+								<button type="button" ng-click="openAdditionalDiscount()" class="btn btn-primary mt-lg"> Add addtional Discount</button>
+							</span>
+
+						<div ng-if="addaddress == true && is_staff == 'true'" class="address_dialog">
+							<div class="row"> 
+                       <div class="col-md-6">
+                          <div class="form-group has-feedback">
+                             <label>Name</label>
+                             <div class="controls">
+                                <input type="text" autocomplete="off" name="name" ng-model="address.name" placeholder="Enter name" required="required" class="form-control" />
+                                <span ng-show="showCase.shippingAddressForm.name.$dirty &amp;&amp; showCase.shippingAddressForm.name.$error.required" class="text-danger">This field is required</span>
+                             </div>
+                          </div>
+                       </div>
+                       <div class="col-md-6">
+                          <div class="form-group has-feedback">
+                             <label>Phone number</label>
+                             <div class="controls">
+                                <input type="text" autocomplete="off" name="phone_number" ng-model="address.phone_number" placeholder="Phone 1234567890" required="required" class="form-control" ng-pattern="/^[0-9]{8,14}$/" />
+                                <span ng-show="showCase.shippingAddressForm.phone_number.$dirty &amp;&amp; showCase.shippingAddressForm.phone_number.$error.required" class="text-danger">This field is required</span>
+                                <span ng-show="showCase.shippingAddressForm.phone_number.$dirty &amp;&amp; showCase.shippingAddressForm.phone_number.$error.pattern" class="text-danger">Phone no. is not valid</span>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+                    <div class="row">
+                       <div class="col-md-12">
+                          <div class="form-group has-feedback">
+
+                             <label>Street Address</label>
+                             <div class="controls">
+                                <input type="text" autocomplete="off" name="street_address" ng-model="address.street_address" placeholder="Enter street address" required="required" class="form-control" />
+                                <span ng-show="showCase.shippingAddressForm.$dirty &amp;&amp; showCase.shippingAddressForm.$error.required" class="text-danger">This field is required</span>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                       <div class="col-md-4">
+                          <div class="form-group has-feedback">
+                             <label>State</label>
+                             <div class="controls">
+                              <select name="state" chosen="" ng-model="address.state" ng-options="st.id as st.state_name for st in showCase.states" width="'100%'" ng-change="showCase.GetCity(address.state)" class="chosen-select input-md form-control" required="">
+                                       <option value="">Select State</option>
+                             </select>
+                             <span ng-show="showCase.shippingAddressForm.state.$dirty &amp;&amp; showCase.shippingAddressForm.state.$error.required" class="text-danger">This field is required</span>
+                             </div>
+
+                             </div>
+                       </div>
+                       <div class="col-md-4">
+                          <div class="form-group has-feedback">
+                             <label>City</label>
+                             <div class="controls">
+                                <select name="city" chosen="" ng-model="address.city" ng-options="st.id as st.city_name for st in showCase.cities" width="'100%'" class="chosen-select input-md form-control" required="required" >
+                                       <option value="">Select City</option>
+                                </select>
+                                <span ng-show="showCase.shippingAddressForm.city.$dirty &amp;&amp; showCase.shippingAddressForm.city.$error.required" class="text-danger">This field is required</span>
+                             </div>
+                          </div>
+                       </div>
+                       <div class="col-md-4">
+                          <div class="form-group">
+                             <label>Pincode / Zipcode</label>
+                             <div class="controls">
+                                <input type="number" autocomplete="off" name="pincode" ng-model="address.pincode" placeholder="Pincode" class="form-control" />
+                             </div>
+                          </div>
+                       </div>
+						  </div>
+						  
+                    <div class="col-md-3" style="text-align: right;">
+                       <button type="button" ng-click="showCase.SubmitNewAddress()" class="btn btn-primary mt-lg" style="background-color: green;"> Submit Address </button>
+                    </div>
+                    <div class="col-md-3" style="text-align: right;">
+                       <button type="button" ng-click="showCase.CancelAddress()" class="btn btn-primary mt-lg"> Cancel </button>
+                    </div>
+
+                	</div>
+
+						<!--span ng-if="orderdetail.processing_status == 'Accepted' && orderdetail.processing_status.indexOf('Delivered') < 0 && orderdetail.processing_status.indexOf('Cancelled') < 0 && orderdetail.customer_status.indexOf('Cancelled') < 0">
+							<button type="button" ng-click="GenerateInvoice(orderdetail.id)" class="btn  btn-primary mt-lg">Invoice</button>
+							<button type="button" ng-click="OpenCancelOrder(orderdetail.id)" class="btn  btn-danger mt-lg">Cancel</button>
+						</span>
+
+						<span ng-if="orderdetail.processing_status == 'Pending' || orderdetail.processing_status == 'Accepted' && orderdetail.processing_status.indexOf('Delivered') < 0 && orderdetail.processing_status.indexOf('Cancelled') < 0 && orderdetail.customer_status.indexOf('Cancelled') < 0" >
+							<button type="button" ng-click="OpenTransfer(orderdetail.id)" class="btn  btn-primary mt-lg">Transfer</button>
+						</span>
+
+						<span ng-if="orderdetail.processing_status == 'Partially Dispatched' && orderdetail.processing_status.indexOf('Delivered') < 0 && orderdetail.processing_status.indexOf('Cancelled') < 0 && orderdetail.customer_status.indexOf('Cancelled') < 0">
+							<button type="button" ng-click="GenerateInvoice(orderdetail.id)" class="btn  btn-primary mt-lg">Invoice</button>
+						</span-->
+
+						<!-- verify payment button removed : WB-1032 -->
+						<!--span ng-if="orderdetail.customer_status.indexOf('Paid') > -1  && orderdetail.processing_status.indexOf('Delivered') < 0 && orderdetail.processing_status.indexOf('Cancelled') < 0 && orderdetail.customer_status.indexOf('Cancelled') < 0">
+							<button type="button" ng-click="VerifyPayment(orderdetail.id)" class="btn  btn-primary mt-lg">Verify Payment</button>
+						</span-->
+							
+					</div> <!-- end of sales order-->
+				</td>
+				<td>&nbsp;</td>
+				</tr>
+
+				</tbody>
+			</table>
+		</div>
+		  
+		</div>
+	</div>
+	</div>
+    </div>
+
+    <h3 style="color:#929292;">Order Items</h3>
+    <div class="panel panel-default modelform3">
+    <div class="panel-body" >
+
+			<table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class=" row-border hover " width="100%">
+			</table>
+		</div>
+    </div>
+
+   <div ng-repeat="invoice in orderdetail.invoice">
+
+		<h3 style="color:#929292;">Invoice #{{invoice.invoice_number}}</h3>
+		<div class="panel panel-default modelform3" >
+	   <div class="panel-body" >
+		<div class="row" >
+		   
+	 	 	<div class="col-md-4">
+				<div class="table-responsive">
+				   <table class="table table-hover">
+				      <tbody>
+						 <tr>
+						    <td>Date : </td>
+						    <td>{{formatDate(invoice.datetime)}}</td>
+						 </tr>
+						 <tr ng-if="is_staff == 'true'">
+						 	<td>Invoice Number : </td>
+						 	<td>{{invoice.invoice_number}}</td>
+						 </tr>
+						 <tr>
+						 	<td>Total Qty : </td>
+						    <td>{{invoice.total_qty}} </td>
+						 </tr>
+						 <tr ng-if="is_staff == 'true'">
+						    <td>Payment Status :</td>
+						    <td>{{invoice.payment_status}}</td>
+						 </tr>
+						 
+				      </tbody>
+				   </table>
+				</div>
+		   </div>
+		   <div class="col-md-4">
+				<div class="table-responsive">
+				   <table class="table table-hover">
+				      <tbody>
+						 <tr>
+						 	<td>Amount : </td>
+						    <td>{{invoice.amount}} </td>
+						 </tr>
+						 <tr>
+						 	<td>Taxes : </td>
+						    <td>{{invoice.taxes}}</td>
+						 </tr>
+						 <tr ng-if="is_staff == 'true'">
+						    <td>Shipping Charge : </td>
+						    <td>{{invoice.shipping_charges}}</td>
+						 </tr>
+						
+						 <tr ng-if="orderdetail.reseller_order == true && is_staff == 'true'" style="background: #bdbcbc38; font-weight: bold;">
+						 	<td>Margin: </td>
+						 	<td ng-if="invoice.payment_status != 'Paid' && invoice.display_amount - invoice.total_amount >= 0">{{invoice.display_amount - invoice.total_amount | number: 2}}</td>
+						 	<td ng-if="invoice.payment_status == 'Paid' || invoice.display_amount - invoice.total_amount < 0">0</td>
+						 </tr>
+						 <tr ng-if="orderdetail.reseller_order == false && is_staff == 'true'" style="background: #bdbcbc38; font-weight: bold;">
+						 	<td>Margin: </td>
+						 	<td>0</td>
+						 </tr>
+				      </tbody>
+				   </table>
+				</div>
+		   </div>
+		   <div class="col-md-4">
+				<div class="table-responsive">
+				   <table class="table table-hover">
+				      <tbody>
+							<tr>
+								<td>Status : </td>
+								<td>{{invoice.status}}</td>
+							</tr>
+							<tr style="background: #bdbcbc38; font-weight: bold;">
+								<td>Total Amount : </td>
+								<td>{{invoice.total_amount}}</td>
+							</tr>
+
+							<tr ng-if="invoice.wb_coupon_discount != null && is_staff == 'true'">
+								<td>Discount : </td>
+								<td>{{invoice.seller_discount + invoice.wb_coupon_discount}}</td>
+							</tr>
+							<tr ng-if="invoice.wb_coupon_discount == null && is_staff == 'true'">
+								<td>Discount : </td> 
+								<td>{{invoice.seller_discount}} </td>
+							</tr>
+							<tr ng-if="is_staff == 'true'">
+								<td>WB Rewards : </td>
+								<td>{{invoice.wbpoints_used}}</td>
+							</tr>
+							<tr ng-if="is_staff == 'true'">
+								<td>WB Money : </td>
+								<td>{{invoice.wbmoney_points_used}}</td>
+							</tr>
+							<tr ng-if="is_staff == 'true'">
+								<td>Paid Amount : </td>
+								<td>{{invoice.paid_amount}}</td>
+							</tr>
+							<tr ng-if="invoice.payment_status != 'Paid' && orderdetail.reseller_order != true && is_staff == 'true'" style="background: #bdbcbc38; font-weight: bold;">
+								<td ng-if="is_staff == 'true'">Collect Cash :  </td>
+								<td ng-if="is_staff != 'true'">Pending Amount :  </td>
+								<td>{{invoice.pending_amount}}</td>
+							</tr>
+							<tr ng-if="invoice.payment_status != 'Paid' && orderdetail.reseller_order == true && is_staff == 'true'" style="background: #bdbcbc38; font-weight: bold;">
+								<td ng-if="is_staff == 'true'">Collect Cash :  </td>
+								<td ng-if="is_staff != 'true'">Pending Amount :  </td>
+								<td>{{invoice.display_amount}}</td>
+							</tr>
+							<tr ng-if="invoice.payment_status == 'Paid' && is_staff == 'true'" style="background: #bdbcbc38; font-weight: bold;">
+								<td ng-if="is_staff == 'true'">Collect Cash :  </td>
+								<td ng-if="is_staff != 'true'">Pending Amount :  </td>
+								<td>0</td>
+							</tr>
+					  </tbody>
+				   </table>
+				</div>
+		   </div>
+		</div>
+	   </div>
+		</div>
+
+		<h3 style="color:#929292;" ng-show="invoice.shipments.length > 0">Shipment</h3>
+		<div ng-show="invoice.shipments.length > 0" ng-repeat="shipment in invoice.shipments">
+			<div class="panel panel-default modelform3">
+			<div class="panel-body" >
+				<div class="row" >
+				<div class="col-md-12">
+					<div class="table-responsive">
+						<table class="table table-hover">
+							<tbody>
+								<tr>
+								<td>Date : {{formatDate(shipment.datetime)}}</td>
+								<td>Mode : {{shipment.mode}}</td>
+								</tr>
+								<tr>
+								<td>Tracking Number : {{shipment.tracking_number}}
+									<button ng-if="shipment.tracking_number != null && shipment.tracking_number != '' && is_staff == 'true'" type="button" name="button" ng-click="getTrackingDeatails(orderdetail.id,shipment.tracking_number)" class="btn btn-primary mt-lg">Tracking Details</button>
+								</td>
+								<td>Transporter Courier : {{shipment.transporter_courier}}</td>
+								</tr>
+								<tr>
+								<td>Tracking Details : {{shipment.details}}</td>
+								<td>Logistics Partner: : {{shipment.logistics_provider}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+		</div>
+    <div  class="col-md-12"  ng-if="is_staff == 'true'">
+      <ul ng-class="timelineAlt ? 'timeline-alt' : 'timeline'" ng-init="timelineAlt=true" class="order-activity timeline-alt">
+        <div class="timeline-end pl-xl ng-binding ng-scope" ng-if="isTracking === 'false'" style="">
+          {{tracking}}
+        </div>
+        <div class="timeline-end pl-xl ng-binding ng-scope" ng-if="isTracking === 'true'" style="">
+          <li class="timeline-inverted ng-scope" ng-repeat="data in tracking track by $index">
+            <div ng-if="a[$index]!='0'" class="date-wrapper mb-lg ng-binding ng-scope" style="clear:both;background:blue;display: inline-block;color:white;">
+              {{ data.formattedDate }}
+            </div>
+            <div class="row mt pr">
+              <div class="tracking-icon mt"></div>
+              <div class="timeline-wrapper mb">
+                <div class="tracking-sms-wrapper tracking-arrowleft right">
+                  <div class="popover-content p">
+                    <h3 class="tracking-title clearfix mb-sm pb0">
+                      <span class="pull-left">
+                        <strong class="ng-binding label label-purple">{{data.formattedDate}}</strong>
+                      </span>
+                      <span class="pull-right ng-binding">
+                        {{data.time}}
+                      </span>
+                    </h3>
+                    <p class="ng-binding">{{data.location}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </div>
+      </ul>
+    </div>
+		</div>
+	    </div>
+	</div>
+
+	<h3 style="color:#929292;" ng-show="invoice.payments.length > 0">Payment</h3>
+	<div ng-show="invoice.payments.length > 0" ng-repeat="payment in invoice.payments">
+	    <div class="panel panel-default modelform3">
+		<div class="panel-body" >
+		    <div class="row" >
+			<div class="col-md-12">
+			    <div class="table-responsive">
+			       <table class="table table-hover">
+				  <tbody>
+				     <tr>
+					<td>Date : {{formatDate(payment.datetime)}}</td>
+					<td>Mode : {{payment.mode}}</td>
+				     </tr>
+				     <tr>
+					<td>Amount : {{payment.amount}}</td>
+					<td>Status : {{payment.status}}</td>
+				     </tr>
+				     <tr>
+					<td ng-if="payment.mode !='Cashfree' && payment.mode !='Zaakpay' && payment.mode !='COD'" >Details : {{payment.details}}</td>
+					<td>Transaction Reference : {{payment.transaction_reference}}</td>
+				     </tr>
+				  </tbody>
+			       </table>
+			    </div>
+			</div>
+		    </div>
+		</div>
+	    </div>
+	</div>
+    </div>
+
+    <h3 style="color:#929292;" ng-show="orderdetail.ship_to">Shipping Details</h3>
+	<div ng-show="orderdetail.ship_to">
+	    <div class="panel panel-default modelform3">
+		<div class="panel-body" >
+		    <div class="row" >
+			<div class="col-md-12">
+			    <div class="table-responsive">
+			      <table class="table table-hover">
+				  <tbody>
+				    <!--  <tr>
+						<td ng-if="orderdetail.preffered_shipping_provider == 'WB Provided'"><strong>Shipping Provider :</strong> Wishbook Provided</td>
+						<td ng-if="orderdetail.preffered_shipping_provider != 'WB Provided'"><strong>Shipping Provider :</strong> Buyer Suggested</td>
+				     </tr> -->
+				     <tr>
+				     	<td ng-if="orderdetail.ship_to_name"><strong>Name : </strong>{{orderdetail.ship_to_name}}</td>
+				     </tr>
+				     <tr ng-if="is_staff == 'true'">
+				     	<td ng-if="orderdetail.ship_to_phone_number"><strong>Phone number : </strong>{{orderdetail.ship_to_phone_number}}</td>
+				     </tr>
+				     <tr ng-if="is_staff == 'true'">
+				     	<td ng-if="orderdetail.shipping_method_name"><strong>Shipping Method : </strong>{{orderdetail.shipping_method_name}}</td>
+				     </tr>
+				     <tr ng-if="is_staff == 'true'">
+				     	<td ng-if="orderdetail.shipping_method_duration"><strong>Shipping Duration : </strong>  {{orderdetail.shipping_method_duration}}</td>
+				     </tr>
+				     <tr>
+				     	<!-- <td><strong>Address :</strong>
+				     	<span ng-if="orderdetail.ship_to.street_address">{{orderdetail.ship_to.street_address}},</span> <span ng-if="orderdetail.ship_to.city.city_name">{{orderdetail.ship_to.city.city_name}}, </span>
+				     	<span ng-if="orderdetail.ship_to.state.state_name">{{orderdetail.ship_to.state.state_name}}, </span>
+				     	<span ng-if="orderdetail.ship_to.country.name">{{orderdetail.ship_to.country.name}}, </span>
+				     	{{orderdetail.ship_to.pincode}}</td> -->
+						<td>
+							<strong>Address :</strong>
+							<!-- <div ng-if="facility_type == dropship_constant">
+								<span ng-if="orderdetail.ship_to.street_address">{{orderdetail.ship_to_street_address}},</span> <span ng-if="orderdetail.ship_to.city.city_name">{{orderdetail.ship_to_city_name}},
+								</span>
+								<span ng-if="orderdetail.ship_to.state.state_name">{{orderdetail.ship_to_state_name}}, </span>
+								{{orderdetail.ship_to_pincode}}
+							</div>
+							<div ng-if='facility_type != dropship_constant'>
+								Wishbook Info Services Pvt Ltd
+								604, 21st Century Building
+								Ring Road, Surat, Gujarat 395002
+							</div> -->
+              
+    					<div ng-if="is_staff == 'true' || orderdetail.facility_type == dropship_constant">
+    								<span ng-if="orderdetail.ship_to.street_address">{{orderdetail.ship_to_street_address}},</span> <span ng-if="orderdetail.ship_to.city.city_name">{{orderdetail.ship_to_city_name}},
+    								</span>
+    								<span ng-if="orderdetail.ship_to.state.state_name">{{orderdetail.ship_to_state_name}}, </span>
+    								{{orderdetail.ship_to_pincode}}
+    					</div>
+    					<div ng-if="is_staff != 'true' && orderdetail.facility_type != dropship_constant">
+    								Wishbook Info Services Pvt Ltd
+    								604, 21st Century Building
+    								Ring Road, Surat, Gujarat 395002
+    					</div>
+              
+						</td>
+				     </tr>
+				  </tbody>
+			      </table>
+			    </div>
+			</div>
+		    </div>
+		</div>
+	    </div>
+	</div>
+  <script type="text/ng-template" id="itemview">
+	<form role="form" ng-submit="SubmitUpdateItem(itemdetail.id)" name="showCase.updateItem" novalidate="" class="form-validate mb-lg modelform2">
+
+	<legend>Update</legend>
+	    <div class="row">
+			<div class="col-md-12">
+				<div class="form-group has-feedback">
+			  		<label>Quantity</label>
+					<input type="number" name="quantity" autocomplete="off" value="0" ng-model="itemdetail.quantity" required="" class="form-control" />
+					<span ng-show="showCase.updateItem.quantity.$dirty &amp;&amp; showCase.updateItem.quantity.$error.required" class="text-danger">This field is required</span>
+			   </div>
+			</div>
+	    </div>
+
+	    <div class="row">
+			<div style="float:right;" class="col-md-2">
+			  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-primary mt-lg">Cancel</button>
+			</div>
+
+			<div style="float:right;" class="col-md-2">
+				  <button type="submit" class="btn btn-primary mt-lg">Update</button>
+			</div>
+		</div>
+		</form>
+	</script>
+	<script type="text/ng-template" id="add-discount-form">
+		<form role="form" ng-submit="submitAdditionalDiscount()" name="showCase.addDiscount" novalidate="" class="form-validate mb-lg modelform2">
+
+		<legend>Insert the addtional discount</legend>
+		    <div class="row">
+				<div class="col-md-5" style="text-align: center;">
+					<div class="form-group has-feedback">
+					  	<label>Current</label> <br><br>
+						<span style="color: green; font-weight: bold;">{{discount}} % Discount</span>
+				   </div>
+				</div>
+				<div class="col-md-1" style="text-align: center;">
+					<span>+</span>
+				</div>
+				<div class="col-md-6" style="text-align: center;">
+					<div class="form-group has-feedback">
+					  	<label>Additional</label>
+						<input type="number" name="extra_discount" autocomplete="off" value="0" ng-model="orderdetail.seller_extra_discount_percentage" required="" class="form-control" />
+						<span ng-show="showCase.addDiscount.extra_discount.$dirty &amp;&amp; showCase.addDiscount.extra_discount.$error.required" class="text-danger">This field is required</span>
+				   </div>
+				</div>
+		    </div>
+
+		    <div class="row">
+			<div style="float:right;" class="col-md-2">
+			  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-primary mt-lg">Cancel</button>
+			</div>
+
+			<div style="float:right;" class="col-md-2">
+			  <button type="submit" class="btn btn-primary mt-lg">Submit</button>
+			</div>
+		    </div>
+		</form>
+	</script>
+	<script type="text/ng-template" id="zaakpay-success">
+		<legend>Payment Status</legend>
+		<h3 style="color: green;">Your order is successfully paid via Zaakpay.</h1>
+	</script>
+
+	<script type="text/ng-template" id="zaakpay-fail">
+		<legend>Payment Status</legend>
+		<h3 style="color: red;">Payment failed.</h1>
+	</script>
+
+	<div ng-include="'app/views/common/orderstatus.html'"></div>
+	<div ng-include="'wishbook_libs/views/shippingpayment/shipping_payment.html'"></div>
+</div>

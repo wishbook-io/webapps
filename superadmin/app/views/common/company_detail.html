@@ -1,0 +1,43 @@
+<script type="text/ng-template" id="companydetails">
+    <div ng-controller="CompanyDetailController as showCase">
+	<legend>Buyer Details</legend>
+	<div class="row">
+	  <div class="col-md-12"> 
+	      <div class="panel panel-default">
+		 <div class="panel-body">
+		    <div class="table-responsive">
+		       <table class="table table-hover">
+			  <tbody>
+			     <tr>
+				<td>Name:</td>
+				<td>{{company.name}}</td>
+			     </tr>
+			     <tr>
+				<td>Phone Number:</td>
+				<td>{{company.phone_number}}</td>
+			     </tr>
+			     <tr>
+				<td>State:</td>
+				<td>{{company.address.state.state_name}}</td>
+			     </tr>
+			     <tr>
+				<td>City:</td>
+				<td>{{company.address.city.city_name}}</td>
+			     </tr>
+			     <tr>
+				<td>Address:</td>
+				<td>{{company.address.street_address}}</td>
+			     </tr>
+			     <tr>
+				<td>Pincode:</td>
+				<td>{{company.address.pincode}}</td>
+			     </tr>
+			  </tbody>
+		       </table>
+		    </div>
+		 </div>
+	      </div>
+	  </div>
+	</div>
+    </div>
+</script>

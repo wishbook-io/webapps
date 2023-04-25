@@ -1,0 +1,196 @@
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Administrator</h3>
+<div class="panel panel-default">
+   <div class="panel-body">
+     <div ng-controller="AdministratorslistController as showCase">
+		<table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+		</table>
+
+		<script type="text/ng-template" id="addadmin">
+	        <form role="form" ng-submit="SubmitAdmin()" name="showCase.addAdminForm" novalidate="" class="form-validate mb-lg modelform">
+	 
+	          <legend>Admin Details</legend>
+	          <div class="row">
+	            <div class="col-md-12"> 
+		            <div class="form-group has-feedback">
+				<label>Username *</label>
+		               <input type="text" name="username" placeholder="Username" autocomplete="off" ng-model="showCase.admin.username" required="" class="form-control" />
+		               <span class="fa fa-user form-control-feedback text-muted"></span>
+		               <span ng-show="showCase.addAdminForm.username.$dirty &amp;&amp; showCase.addAdminForm.username.$error.required" class="text-danger">This field is required</span>
+		            </div>
+	          	</div>
+	          </div>
+
+	          <div class="row">
+	            <div class="col-md-12"> 
+		            <div class="form-group has-feedback">
+				<label>First Name *</label>
+		               <input type="text" name="first_name" placeholder="First Name" autocomplete="off" ng-model="showCase.admin.first_name" required=""  pattern="[a-zA-Z ]*$" class="form-control" />
+		               <span class="fa fa-user form-control-feedback text-muted"></span>
+		               <span ng-show="showCase.addAdminForm.first_name.$dirty &amp;&amp; showCase.addAdminForm.first_name.$error.required" class="text-danger">This field is required</span>
+		               <span ng-show="showCase.addAdminForm.first_name.$error.pattern" class="text-danger">This field accepts only alphabets and space.</span>
+		            </div>
+	          	</div>
+	          </div>
+
+	          <div class="row">
+	            <div class="col-md-12"> 
+		            <div class="form-group has-feedback">
+				<label>Last Name *</label>
+		               <input type="text" name="last_name" placeholder="Last Name" autocomplete="off" ng-model="showCase.admin.last_name" required=""  pattern="[a-zA-Z ]*$" class="form-control" />
+		               <span class="fa fa-user form-control-feedback text-muted"></span>
+		               <span ng-show="showCase.addAdminForm.last_name.$dirty &amp;&amp; showCase.addAdminForm.last_name.$error.required" class="text-danger">This field is required</span>
+		               <span ng-show="showCase.addAdminForm.last_name.$error.pattern" class="text-danger">This field accepts only alphabets and space.</span>
+		            </div>
+	          	</div>
+	          </div>
+
+	          <div class="row">
+	            <div class="col-md-12"> 
+		            <div class="form-group has-feedback">
+				<label>Email</label>
+		               <input type="email" name="email" placeholder="Email" autocomplete="off" ng-model="showCase.admin.email" class="form-control" />
+
+		               <span class="fa fa-envelope form-control-feedback text-muted"></span>
+		               <span ng-show="showCase.addAdminForm.email.$dirty &amp;&amp; showCase.addAdminForm.email.$error.required" class="text-danger">This field is required</span>
+		               <span ng-show="showCase.addAdminForm.email.$dirty &amp;&amp; showCase.addAdminForm.email.$error.email" class="text-danger">This field must be a valid email address</span>
+		            </div>
+	          	</div>
+	          </div>
+
+	          <!--div class="row">
+	            <div class="col-md-12"> 
+		            <div class="form-group has-feedback">
+		               <input type="text" name="phone_number" placeholder="Phone Number Eg. +911234567890" autocomplete="off" ng-model="showCase.admin.userprofile.phone_number" required="" class="form-control" />
+
+		               <span class="fa fa-phone form-control-feedback text-muted"></span>
+		               <span ng-show="showCase.addAdminForm.phone_number.$dirty &amp;&amp; showCase.addAdminForm.phone_number.$error.required" class="text-danger">This field is required</span>
+		            </div>
+	          	</div>
+	          </div-->
+	          <div class="row" ng-if="!update_flag">
+		     <div class="col-md-4">
+			<div class="form-group has-feedback">
+			   <label>Phone Number *</label>
+			   <div class="controls">
+			      <select name="country" chosen="" ng-model="showCase.admin.userprofile.country" ng-options="cd.id as cd.name for cd in countries"   width="'100%'" class="chosen-select input-md form-control" required="">
+				  <option value=""></option>
+			       </select>
+			      <span ng-show="showCase.addAdminForm.country.$dirty &amp;&amp; showCase.addAdminForm.country.$error.required" class="text-danger">This field is required</span>
+			   </div>
+			</div>
+		     </div>
+		     
+		     <div class="col-md-5">
+			<div class="form-group has-feedback">
+			 <label>&nbsp;</label>
+			   <div class="controls">
+			      <input type="text" autocomplete="off" name="phone_number" ng-model="showCase.admin.userprofile.phone_number" placeholder="Phone 1234567890" required="required" class="form-control" pattern="[0-9]{7,12}"/>
+			      <span ng-show="showCase.addAdminForm.phone_number.$dirty &amp;&amp; showCase.addAdminForm.phone_number.$error.required" class="text-danger">This field is required</span>
+			      <!--span ng-show="showCase.addAdminForm.phone_number.$dirty &amp;&amp; showCase.addAdminForm.phone_number.$error.pattern" class="text-danger">Phone no. is not valid</span-->
+			   </div>
+			</div>
+		     </div>
+          	 </div>
+
+	          <!--div class="row">
+	            <div class="col-md-12"> 
+		            <div class="form-group has-feedback">
+		               <input type="email" name="alternate_email" placeholder="Alternate Email" autocomplete="off" ng-model="showCase.admin.userprofile.alternate_email" class="form-control" />
+
+		               <span class="fa fa-envelope form-control-feedback text-muted"></span>
+		               <span ng-show="showCase.addAdminForm.alternate_email.$dirty &amp;&amp; showCase.addAdminForm.alternate_email.$error.email" class="text-danger">This field must be a valid email address</span>
+		            </div>
+	          	</div>
+	          </div-->
+
+	          <div class="row" ng-if="!update_flag">
+	            <div class="col-md-12"> 
+		            <div class="form-group has-feedback">
+				<label>Password *</label>
+		               <input type="password" name="password" placeholder="Password" autocomplete="off" ng-model="showCase.admin.password" required="" class="form-control" />
+
+		               <span class="fa fa-lock form-control-feedback text-muted"></span>
+		               <span ng-show="showCase.addAdminForm.password.$dirty &amp;&amp; showCase.addAdminForm.password.$error.required" class="text-danger">This field is required</span>
+		            </div>
+	          	</div>
+	          </div>
+	        
+
+	          <div class="row">
+	            <div style="float:right;" class="col-md-2"> 
+	              <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+	            </div>
+
+	            <div style="float:right;" class="col-md-2"> 
+			<button type="submit" ng-show="update_flag" class="btn btn-block btn-primary mt-lg">Update</button>
+			<button type="submit" ng-show="!update_flag" class="btn btn-block btn-primary mt-lg">Add</button>
+	            </div>
+	          </div>
+         </form>
+	</script>
+	
+	<!--script type="text/ng-template" id="updatestatus">
+	    <form role="form" ng-submit="UpdateStatus()" name="showCase.updateStatus" novalidate="" class="form-validate mb-lg modelform2">
+       
+	    <legend>Administrator Status</legend>
+		<div class="row">
+		  <div class="col-md-12">  
+		      
+		     <div class="form-group has-feedback">
+			<label class="radio-inline c-radio" style="color: green;">
+			  <input id="inlineradio1" type="radio" name="status" ng-model="userstatus.status" value="true" required="required" class="form-control"  />
+		       <span class="fa fa-circle"></span>Activate</label>
+
+		      <label class="radio-inline c-radio" style="color: red;">
+			 <input id="inlineradio2" type="radio" name="status" ng-model="userstatus.status" value="false" required="required" class="form-control" />
+			 <span class="fa fa-circle"></span>Deactivate</label>
+			
+		     </div>
+		  </div>
+		</div>
+		<div class="row">
+		    <div style="float:right;" class="col-md-2"> 
+		      <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+		    </div>
+
+		    <div style="float:right;" class="col-md-2"> 
+		      <button type="submit" class="btn btn-block btn-primary mt-lg">Update</button>
+		    </div>
+		</div>
+	    </form>
+	</script-->
+	
+	<script type="text/ng-template" id="updatestatus">
+	    <form role="form" ng-submit="UpdateStatus()" name="showCase.updateStatus" novalidate="" class="form-validate mb-lg modelform2">
+       
+	    <legend>Administrator Status</legend>
+		<div class="row">
+		  <div class="col-md-12">  
+		      
+		     <div class="form-group has-feedback">
+			<label class="radio-inline c-radio" style="color: green;">
+			  <input id="inlineradio1" type="radio" name="status" ng-model="userstatus.status" value="Approved" required="required" class="form-control"  />
+		       <span class="fa fa-circle"></span>Approved</label>
+
+		      <label class="radio-inline c-radio" style="color: red;">
+			 <input id="inlineradio2" type="radio" name="status" ng-model="userstatus.status" value="Pending" required="required" class="form-control" />
+			 <span class="fa fa-circle"></span>Pending</label>
+			
+		     </div>
+		  </div>
+		</div>
+		<div class="row">
+		    <div style="float:right;" class="col-md-2"> 
+		      <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+		    </div>
+
+		    <div style="float:right;" class="col-md-2"> 
+		      <button type="submit" class="btn btn-block btn-primary mt-lg">Update</button>
+		    </div>
+		</div>
+	    </form>
+	</script>
+	
+    </div>
+   </div>
+</div>

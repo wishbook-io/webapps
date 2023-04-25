@@ -1,0 +1,23 @@
+{
+  "name": "applozic-chat",
+  "version": "1.2.0",
+  "description": "Applozic Javascript Chat Plugin",
+  "main": "simple.js",
+  "directories": {
+    "doc": "doc",
+	"src": "src"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AppLozic/Applozic-Web-Plugin.git"
+  },
+  "author": "Applozic Inc<contact@applozic.com>(https://www.applozic.com)",
+  "license": "Apache License, Version 2.0",
+  "bugs": {
+    "url": "https://github.com/AppLozic/Applozic-Web-Plugin/issues"
+  },
+  "homepage": "https://github.com/AppLozic/Applozic-Web-Plugin#readme"
+}

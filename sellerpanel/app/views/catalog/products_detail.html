@@ -1,0 +1,88 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+
+<div style="line-height: 20px;padding-left: 10px">
+	<h4><!--span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span--> 
+	<a ng-if="$stateParams.type == 'receivedcatalog'" ui-sref="app.receivedcatalog">Received Catalogs </a> 
+	<a ng-if="$stateParams.type == 'publiccatalog'" ui-sref="app.publiccatalog">All Products</a> 
+	<a ng-if="$stateParams.type == 'myselection'" ui-sref="app.selections">My Selections </a> 
+	<a ng-if="$stateParams.type == 'receivedselection'" ui-sref="app.receivedselection">Received Selections </a> 
+	/ Products of <span class="ptitle"> : {{$stateParams.name}}</span>
+	</h4>
+</div>
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+	<div ng-controller="ProductsDetailController as showCase">
+	    <table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="row-border hover" width="100%">
+	    </table>
+	    
+	    <!--script type="text/ng-template" id="productimages">
+	      <uib-carousel interval="showCase.myInterval">
+		   <uib-slide ng-repeat="slide in showCase.slides" active="slide.active">
+		      <img class="loading" ng-src="{{slide.image}}" style="margin: auto; width: 50%; height: 50%;" alt="" />
+		      <div class="carousel-caption" style="color:black;">
+
+			 <p>SKU : {{slide.text}}</p>
+		      </div>
+		   </uib-slide>
+		</uib-carousel>
+	    
+	    </script-->
+	    
+	    <script type="text/ng-template" id="addenquiry">
+		  <form role="form" ng-submit="showCase.CreateEnquiry()" name="showCase.addEnquiryForm" novalidate="" class="form-validate mb-lg modelform">
+	 
+		  <legend>Enquiry Details</legend>
+		  <div class="row"> 
+		   <div class="col-md-12">
+		      <div class="form-group">
+			<label>Select Item Type *</label>
+			 <div class="controls">
+			    <label class="radio-inline c-radio">
+			       <input id="inlineradio1" type="radio" name="enquiry_item_type" ng-model="showCase.enquiry.enquiry_item_type" value="Sets"  class="form-control" required="required" />
+			       <span class="fa fa-circle"></span>Sets
+			    </label>
+			    <label class="radio-inline c-radio">
+			       <input id="inlineradio2" type="radio" name="enquiry_item_type" ng-model="showCase.enquiry.enquiry_item_type" value="Pieces"  class="form-control" required="required" />
+			       <span class="fa fa-circle"></span>Pieces
+			    </label>
+			    <span ng-show="showCase.addEnquiryForm.enquiry_item_type.$dirty &amp;&amp; showCase.addEnquiryForm.enquiry_item_type.$error.required" class="text-danger">This field is required</span>
+			 </div>
+		      </div>
+		   </div>
+		  </div>
+		  
+		  <div class="row">
+		     <div class="col-md-12">
+			<div class="form-group">
+			   <label>Enter Enquiry Quantity *</label>
+			   <div class="controls">
+			       <input type="number" autocomplete="off" autocomplete="off" name="enquiry_quantity" ng-model="showCase.enquiry.enquiry_quantity" placeholder="Enter Enquiry Quantity"  class="form-control" required="required" />
+			       <span ng-show="showCase.addEnquiryForm.enquiry_quantity.$dirty &amp;&amp; showCase.addEnquiryForm.enquiry_quantity.$error.required" class="text-danger">This field is required</span>
+			   </div>
+			</div>
+		     </div>
+		  </div>
+		    
+		    
+		  <div class="row">
+			<div style="float:right;" class="col-md-2"> 
+			  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+			</div>
+
+			<div style="float:right;" class="col-md-2">
+			  <button type="submit" class="btn btn-block btn-primary mt-lg">Send Enquiry</button>
+			</div>
+		  </div>
+		 </form>
+		      
+	    </script>
+	    <div ng-include="'app/views/common/purchase_order_modal.html'"></div>
+	    <div ng-include="'wishbook_libs/views/shippingpayment/shipping_payment.html'"></div>
+	</div>
+   </div>
+</div>

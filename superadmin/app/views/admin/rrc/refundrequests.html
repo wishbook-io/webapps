@@ -1,0 +1,206 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span>Refund Requests</h3>
+<div class="panel panel-default modelform6 datatable-loader">
+   <div class="panel-body" >
+      <div ng-controller="RefundRequestsController as showCase">
+
+	<!--table datatable="" dt-options="cat.dtOptions" dt-columns="cat.dtColumns" class="row-border hover"></table-->
+         <!--toaster-container toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}"></toaster-container-->
+        <table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover " width="100%">
+        </table>
+
+     <script type="text/ng-template" id="updatebankdetails">
+	     	<form role="form" name="bankForm" ng-submit="submitBankDetailsAndRefund()" class="form-validate mb-lg bank-dialog">
+	     	<legend>Update Bank Details and Refund</legend>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>Bank Name </label>
+                              <input type="text" name="bank_name" ng-model="bank_details.bank_name" class="form-control" autocomplete="off" placeholder="Enter bank name"  />
+                              <!-- <span ng-show="bankForm.bank_name.$dirty &amp;&amp; bankForm.bank_name.$error.required" class="text-danger">This field is required</span> -->
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>Account Number </label>
+                              <input type="text" name="account_number" ng-model="bank_details.account_number" class="form-control" autocomplete="off" placeholder="Enter A/C number" ng-pattern="/^([0-9]*)?$/" required />
+                              <span ng-show="bankForm.account_number.$dirty &amp;&amp; bankForm.account_number.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="bankForm.account_number.$error.pattern" class="text-danger">Invalid bank account number.</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>Account Holder Name </label>
+                              <input type="text" name="account_name" ng-model="bank_details.account_name" class="form-control" autocomplete="off" placeholder="Enter Account Holder Name" required />
+                              <span ng-show="bankForm.account_name.$dirty &amp;&amp; bankForm.account_name.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>IFSC code</label>
+                              <input type="text" name="ifsc_code" ng-model="bank_details.ifsc_code" class="form-control" autocomplete="off" placeholder="Enter IFSC code" required />
+                              <span ng-show="bankForm.ifsc_code.$dirty &amp;&amp; bankForm.ifsc_code.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group"> 
+                              <label>Account Type </label>
+                              <select name="account_type" ng-model="bank_details.account_type" class="form-control" >
+	                               <option value="Savings" >Savings</option>
+	                               <option value="Current" >Current</option>
+                             </select>
+                              <!-- <span ng-show="bankForm.account_type.$dirty &amp;&amp; bankForm.account_type.$error.required" class="text-danger">This field is required</span> -->
+                           </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group">
+                           		<label>Phone Number</label>
+                                 <input type="text" name="phone_no" ng-model="bank_details.phone_no" placeholder="Enter Phone number" ng-pattern="/^([0-9]){10}?$/" class="form-control"  autocomplete="off" required />   
+                                  <span ng-show="bankForm.phone_no.$dirty &amp;&amp; bankForm.phone_no.$error.required" class="text-danger">This field is required</span>
+                                  <span ng-show="bankForm.phone_no.$error.pattern" class="text-danger">Invalid phone number.</span>
+                            </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6"> 
+                        <div class="form-group has-feedback">
+                           <label>Email</label>
+                           <div class="controls">
+                              <input type="email" name="email" placeholder="Enter Email" autocomplete="off" ng-model="bank_details.email" required="" class="form-control" />
+                              
+                              <span ng-show="bankForm.email.$dirty &amp;&amp; bankForm.email.$error.required" class="text-danger">This field is required</span>
+                              <span ng-show="bankForm.email.$dirty &amp;&amp; bankForm.email.$error.email" class="text-danger">This field must be a valid email address</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row"> 
+                     <div class="col-md-8">
+                        <div class="form-group has-feedback">
+
+                           <label>Street Address</label>
+                           <div class="controls">
+                              <input type="text" autocomplete="off" name="street_address" ng-model="bank_details.street_address" placeholder="Enter street address" required="required" class="form-control" />
+                              <span ng-show="bankForm.street_address.$dirty &amp;&amp; bankForm.street_address.$error.required" class="text-danger">This field is required</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                 
+                  
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group">
+                           <button type="submit" class="btn btn-primary mt-lg">Submit</button>
+                        </div>
+                     </div>
+                  </div> 
+       		</form>
+	    </script>
+
+	    <script type="text/ng-template" id="confirmation-dialog-refund">
+	      <div class="ngdialog-message refund-dialog">
+	        <div class="panel-heading"></div>
+	          <div class="panel-body">          
+	                <legend>Confirm Refund</legend>
+	             	<div class="row" align="center">
+	                 <div class="col-md-12">
+	                    <div class="form-group">
+	                      	<label>Are you sure to Initiate Refund ?</label>
+	                    </div>
+	                 </div>
+	                </div>
+
+	                <div class="row" align="center">
+	                	 <div class="col-md-6">
+		                    <div class="form-group">
+		                       <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-primary mt-lg">No, Cancel It</button>
+		                    </div>
+		                 </div>
+		                 <div class="col-md-6">
+		                    <div class="form-group">
+		                       <button type="button" ng-click="SubmitRefund()" style="background: green;" class="btn btn-primary mt-lg">Yes, Do it!</button>
+		                    </div>
+		                 </div>
+	                </div>
+	          </div>
+	      </div>
+	    </script>
+	    <script type="text/ng-template" id="confirmation-dialog-refund-wbmoney">
+	      <div class="ngdialog-message refund-wbmoney-dialog">
+	        <div class="panel-heading"></div>
+	          <div class="panel-body">          
+	                <legend>Confirm Refund</legend>
+	             	<div class="row" align="center">
+	                 <div class="col-md-12">
+	                    <div class="form-group">
+	                      	<label>Are you sure to Initiate Refund all To WBmoney ?</label>
+	                    </div>
+	                 </div>
+	                </div>
+
+	                <div class="row" align="center">
+	                	 <div class="col-md-6">
+		                    <div class="form-group">
+		                       <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-primary mt-lg">No, Cancel It</button>
+		                    </div>
+		                 </div>
+		                 <div class="col-md-6">
+		                    <div class="form-group">
+		                       <button type="button" ng-click="SubmitRefundAllToWBmoney()" style="background: green;" class="btn btn-primary mt-lg">Yes, Do it!</button>
+		                    </div>
+		                 </div>
+	                </div>
+	          </div>
+	      </div>
+	    </script>
+	    <script type="text/ng-template" id="confirmation-dialog-reject">
+	      <div class="ngdialog-message reject-dialog">
+	        <div class="panel-heading"></div>
+	          <div class="panel-body">          
+	                <legend>Confirm Reject</legend>
+	             	<div class="row" align="center">
+	                 <div class="col-md-12">
+	                    <div class="form-group">
+	                      	<label>Are you sure to Reject Refund ?</label>
+	                    </div>
+	                 </div>
+	                </div>
+
+	                <div class="row" align="center">
+	               		 <div class="col-md-6">
+		                    <div class="form-group">
+		                       <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-primary mt-lg">No, Cancel It</button>
+		                    </div>
+		                 </div>
+		                 <div class="col-md-6">
+		                    <div class="form-group">
+		                       <button type="button" ng-click="SubmitReject()" style="background: green;" class="btn btn-primary mt-lg">Yes, Do it!</button>
+		                    </div>
+		                 </div>
+	                </div>
+	          </div>
+	      </div>
+	    </script>
+    </div>
+   </div>
+</div>

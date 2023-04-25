@@ -1,0 +1,147 @@
+<style>
+   .gray
+   {
+      color: gray;
+   }
+   .loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+
+.buttonselected{
+    background: #ccc !important;
+}
+
+ .griddesc{
+	display: none;
+}
+
+ .gridimage:hover  .griddesc{
+	display: block;
+   transition: 0.8s;
+}
+.photo
+{
+   border-radius: 5px !important;
+}
+.photo .photo-description
+{
+    padding: 7px 15px;
+}
+</style>
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;background: white;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> My Viewers</h3>
+
+<div ng-controller="MyViewerlistController as showCase" id="blabla">
+   <!--div class="panel panel-default modelform4">
+      <div class="panel-body">
+         
+      
+         <form class="form-inline" role="form">
+            <div style="text-align:center" >
+               <div class="form-group">
+                  <label class="sr-only" for="Viewer-Name">Viewer Name</label>
+                  <input class="form-control input-sm" id="Viewer-Name" type="text" ng-model="search_form.Viewer_Name" placeholder="Viewer Name" />
+               </div>
+               <div class="form-group">
+                  <label class="sr-only" for="Product-Name">Product Name</label>
+                  <input class="form-control input-sm" id="Product-Name" type="text" ng-model="search_form.Product_Name" placeholder="Product Name" />
+               </div>
+               <div class="form-group">
+                  <label class="sr-only" for="input-brand">State</label>
+                  <select name="brand" chosen="" ng-model="search_form.state" ng-options="s.id as s.state_name for s in states" width="'100%'"
+                     ng-change="getCity(search_form.state)" class="chosen-select input-sm form-control">
+                     <option value="">Select State</option>
+                  </select>
+               </div>
+               <div class="form-group">
+                  <label class="sr-only" for="input-brand">City</label>
+                  <select name="brand" chosen="" ng-model="search_form.city" ng-options="c.id as c.city_name for c in cityList" width="'100%'"
+                     class="chosen-select input-sm form-control">
+                    
+                     {{search_form.city}}
+                  </select>
+               </div>
+            
+               <div class="form-group">
+                  <button class="styledButtonblue" type="submit" ng-click="Search()">Search</button>
+               </div>
+            
+            </div>
+         </form>
+      </div>
+   </div-->
+
+
+
+
+
+
+   <div deckgrid class="deckgrid" source="viewerlist" >
+      <div class="photo gridimage">
+   
+         <div data-ng-click="card.showIndex = !card.showIndex" ng-show="card.company_name.length >1 && card.city_name.length > 1 && card.state_name.length >1">
+               <div class="photo-index" data-ng-if="card.showIndex">
+                  <p>The $index of the card is</p>
+                  <p class="balloon-wrapper">
+                     <span class="balloon">{{card.$index}}</span>
+                  </p>
+               </div>
+               <!--div class="photo-description">
+                     
+               </div-->
+               <div class="photo-wrapper" align="middle">
+                  <a href="" class="hvr-grow">
+                     <img class="img-responsive photoloaded" src="" data-ng-src="{{card.catalog_image}}" data-imageloaded="" data-loadedclass="photoloaded" style="width: 91%;margin-top: 6%;border-radius: 3px;margin-bottom: 7%;"/>
+                     <div class="photo-loader">
+                        <div class="sk-spinner sk-spinner-rotating-plane"></div>
+                     </div>
+                  </a>
+                  <a href="" target="_blank" style="text-decoration: none;">
+                     <span>{{card.company_name}}<span class="gray">&nbsp; viewed your &nbsp;</span> {{card.catalog_title}}</span>
+                  </a><br>
+               </div>
+            </a>
+            <div class="photo-description griddesc" align="center" >
+               <span class="gray" >{{card.created_at}}</span><br>
+               <span class="gray">City: {{card.city_name}}</span><br>
+               <span class="gray">State : {{card.state_name}}</span>
+            </div>
+         </div>
+   
+      </div>
+   
+   </div>
+   
+   <div>
+      <button type="button" ng-click="ShowMore()" class="btn btn-block btn-primary mt-lg" id="showmore" style="width:100%; visibility: hidden; display: none;">Show
+         More</button>
+   </div>
+     
+</div>
+
+<script>
+   function callAjax()
+   {
+      console.log("callAjax()");
+      $('#showmore').click();
+   }
+
+
+   $(window).scroll(function ()
+   {
+      /*console.log("===s=");
+      console.log($(window).scrollTop());
+      console.log($(document).height() - $(window).height());
+      console.log("===e=");*/
+
+      if (($(window).scrollTop()) >= ($(document).height() - $(window).height()))
+      {
+         /*console.log($(window).scrollTop());
+         console.log($(document).height() - $(window).height()); */
+         callAjax();
+      }
+   });
+
+</script>
+
+<!--{"text": "My Viewers", "sref": "app.myviewers"},-->

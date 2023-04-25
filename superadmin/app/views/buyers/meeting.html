@@ -1,0 +1,25 @@
+<!--h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Meeting : {{$stateParams.name}}</h3-->
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+		
+	<div ng-controller="MeetingDetailController as showCase">
+	    <!--div class="form-inline input-daterange">
+		<div class="form-group">
+		<input type="text" class="form-control" name="start" placeholder="Start Date">
+		</div>
+		<div class="form-group">
+		<input type="text" class="form-control" name="end" placeholder="End Date">
+		</div>
+	    </div-->
+	    
+	    
+	    
+	<div class="col-md-12">
+	    <table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="45%">
+	    </table>
+	    </div>
+	    
+	</div>
+			
+   </div>
+</div>

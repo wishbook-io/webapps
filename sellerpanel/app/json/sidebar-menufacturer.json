@@ -1,0 +1,74 @@
+[
+  {
+    "text": "Menu",
+    "heading": "true",
+    "translate": "sidebar.heading.HEADER"
+  },
+  {
+    "text": "Dashboard",
+    "sref": "app.dashboard",
+    "icon": "fa fa-th-large",
+    "label": "label label-success"
+  },
+  {
+    "text": "All Products",
+    "sref": "app.publiccatalog",
+    "icon": "fa fa-book",
+    "label": "label label-success"
+  },
+  {
+    "text": "My Products",
+    "sref": "",
+    "icon": "fa fa-list",
+    "label": "label label-info",
+    "submenu": [
+      {
+        "text": "Inventory",
+        "sref": "app.inventoryjobs"
+      },
+      {
+        "text": "Catalogs",
+        "sref": "app.catalog"
+      },
+      {
+        "text": "Non Catalogs",
+        "sref": "app.noncatalog"
+      },
+      {
+        "text": "Set Matchings",
+        "sref": "app.screens"
+      }
+    ]
+  },
+  {
+    "text": "Orders  & Leads",
+    "sref": "",
+    "icon": "fa fa-shopping-cart",
+    "label": "label label-info",
+    "submenu": [
+      {
+        "text": "Orders",
+        "sref": "app.salesorders"
+      },
+      {
+        "text": "Shipments",
+        "sref": "app.shipment_Invoices"
+      },
+      {
+        "text": "Manifests",
+        "sref": "app.manifests"
+      },
+      {
+        "text": "My Leads",
+        "sref": "app.myleads"
+      }
+     
+    ]
+  },
+  {
+    "text": "Brands",
+    "sref": "app.brands",
+    "icon": "fa fa-tags",
+    "label": "label label-success"
+  }
+]

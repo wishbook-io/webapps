@@ -1,0 +1,273 @@
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+<style>
+.cropArea {
+    background: #E4E4E4;
+    overflow: hidden;
+    height:350px;
+}
+form .progress {
+    line-height: 15px;
+}
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+}
+.slidelink {
+  height: 100px !important;
+}
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+
+/* New UI for Chekbox*/
+
+/* label
+{
+    margin-bottom: 13px!important;
+} */
+
+</style>
+
+
+<!--div class="container-fluid" ng-controller="CatalogController as showCase">
+  <uib-carousel interval="myInterval">
+               <uib-slide ng-repeat="slide in slides" active="slide.active" ng-click="window.open('{{slide.url}}')" >
+            
+                  <img class="loading" ng-src="{{slide.image}}" style="margin: auto; width: auto;"  alt=""  />
+             
+                <div class="carousel-caption" style="color:black;">     
+                </div>
+               </uib-slide>
+    </uib-carousel>
+</div-->
+
+<!-- <h3>
+  <span class="btn-label" style="margin-left: 2%; color: #51c6ea;background-color: white" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span>
+   Catalogs
+</h3> -->
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+      <div ng-controller="CatalogController as showCase">
+     
+        <!--table datatable="" dt-options="cat.dtOptions" dt-columns="cat.dtColumns" class="row-border hover"></table     class="table-striped table-bordered hover-->
+    
+      <table id="catalogs-datatables" datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class=" row-border hover" width="100%">
+      </table>
+
+      <!--script type="text/ng-template" id="productimages">
+        <uib-carousel interval="showCase.myInterval">
+                <uib-slide ng-repeat="slide in showCase.slides" active="slide.active">
+                    <img class="loading" ng-src="{{slide.image}}" style="margin: auto; width: 50%; height: 50%;" alt="" />
+                    <div class="carousel-caption" style="color:black;">
+                      
+                      <p>SKU : {{slide.text}}</p>
+                    </div>
+                </uib-slide>
+              </uib-carousel>
+          
+      </script>
+
+      <script type="text/ng-template" id="emptycatalog">
+          <div>
+            <legend>Empty Catalog</legend>
+            <h5>This Catalog has no Products.</h5>
+          </div>   
+      </script-->
+
+
+    
+    <!--script type="text/ng-template" id="salesorder">
+        <form role="form" ng-submit="showCase.CreateSalesOrder()" name="showCase.orderForm" novalidate="" class="form-validate mb-lg modelform">
+ 
+          <legend>Sales Order</legend>
+        
+        
+          <div class="row">
+            <div class="col-md-12"> 
+                <div class="form-group">
+                   <label>Catalog</label>
+                   <div class="controls">
+                    <lable>{{showCase.order_title}}</lable>
+                   </div>
+                </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-12"> 
+                <div class="form-group has-feedback">
+                   <label>Order Number</label>
+                   <div class="controls">
+                   <input type="text" name="order_number" placeholder="Order Number" autocomplete="off" ng-model="showCase.order.order_number" class="form-control" required="required" />
+                   <span class="fa fa-user form-control-feedback text-muted"></span>
+                   <span ng-show="showCase.orderForm.order_number.$dirty &amp;&amp; showCase.orderForm.order_number.$error.required" class="text-danger">This field is required</span>
+                   </div>
+                </div>
+            </div>
+          </div>
+
+          <div class="row">
+             <div class="col-md-12">
+                <div class="form-group">
+                   <label>Buyer</label>
+                   <div class="controls">
+                    <select chosen="" name="buyer" ng-model="showCase.order.buyer" ng-options="c.company_id as c.company_name for c in showCase.buyers" data-placeholder="" class="chosen-select form-control" required="required">
+                     <option value=""></option>
+                    </select>
+                  <span ng-show="showCase.orderForm.buyer.$dirty &amp;&amp; showCase.orderForm.buyer.$error.required" class="text-danger">This field is required</span>
+                   </div>
+                </div>
+             </div>
+          </div>
+        
+          <div class="row">
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Create Order</button>
+                </div>
+          </div>
+     </form>
+    </script-->
+    
+    <!--div ng-include="'app/views/common/imageslider.html'"></div-->
+
+    <script type="text/ng-template" id="openenablemodal">
+      <div class="ngdialog-message">
+            
+        <div class="panel-heading"></div>
+          <div class="panel-body">
+            <form name="showCase.enableCatalogForm" ng-submit="showCase.EnableCatalog()" class="form-validate modelform-enablecatalog">
+                <legend>Catalog Enable Duration</legend>
+                <div class="row" >
+                   <div class="col-md-6">
+                      <div class="form-group"> 
+                         <label>Enter Duration (in Days)</label>
+                         <div class="controls">
+                            <input type="number" autocomplete="off" name="enable_duration" ng-model="showCase.enable_duration" data-parsley-group="step1" placeholder="Enter Duration"  class="form-control" min="10" max="90" required />
+                          <span ng-show="showCase.enableCatalogForm.enable_duration.$error.min" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                          <span ng-show="showCase.enableCatalogForm.enable_duration.$error.max" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+
+                <div class="row" >
+                   <div class="col-md-6">
+                      <div class="form-group"> 
+                         <button type="submit" class="btn btn-primary mt-lg">Submit</button>
+                      </div>
+                   </div>
+                </div>
+            </form>
+          </div>
+      </div>
+    </script>
+    
+    <script type="text/ng-template" id="uploadcsv">
+        <form role="form" ng-submit="showCase.UploadCatalogCsv()" name="showCase.uploadcsv" novalidate="" class="form-validate mb-lg modelform3">
+   
+        <legend>Upload Catalogs CSV</legend>
+            <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                      <label>Select CSV from your computer</label>
+                      <input type="file" ngf-select="uploadCSVFiles($files)" ng-model="showCase.file.catalog_csv" name="catalog_csv" required accept=".csv">
+                      <span ng-show="showCase.uploadcsv.catalog_csv.$dirty &amp;&amp; showCase.uploadcsv.catalog_csv.$error.required" class="text-danger">This field is required</span>   
+                      
+                  </div>
+                </div>
+            </div>
+            <div class="row">
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+                <div style="float:right;" class="col-md-4"> 
+                  <a style="text-decoration: none;" href="app/csv/catalogs.csv"><button type="button" class="btn btn-block btn-primary mt-lg">Download Sample</button></a>
+                </div>
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Upload</button>
+                </div>
+            </div>
+        </form>
+    </script>
+
+    <script type="text/ng-template" id="Stop_completely">
+       <div class="ngdialog-message Stopcompletely">
+          <div class="row" align="center">
+             <div class="col-md-12">
+                <div class="form-group ">
+                   <label>Are you sure you want to stop selling all the selected Catalogs ?</label>
+                </div>
+             </div>
+          </div>
+          <div class="row" align="center">
+              <div class="col-md-12">
+                <div ng-show="show_progress_text" style="z-index: 2; color: gray;  border-radius: 5px;margin:20px;">
+                  <h3 >stopped selling {{counter}} out of {{selectedProducts.length}} Catalogs</h3>
+                </div>
+              </div>
+          </div>
+          <div class="row" align="center">
+             <div class="col-md-6">
+                <div class="form-group right">
+                   <button  type="button" ng-click="showCase.CloseDialog()" class="buttonSecondary" >Cancel</button>
+                </div>
+             </div>
+             <div class="col-md-6">
+                <div class="form-group left">
+                   <button type="button" ng-click="showCase.StopSellingCompletely()" class="buttonPrimary">Yes</button>
+                </div>
+             </div>
+          </div>
+       </div>
+    </script>
+
+   <script type="text/ng-template" id="sell_all_designs">
+      <div class="ngdialog-message sell_all_designs">
+         <div class="row" align="center">
+            <div class="col-md-12">
+               <div class="form-group ">
+                  <label>Are you sure you want to start selling all designs of the selected Catalogs ?</label>
+               </div>
+            </div>
+         </div>
+         <div class="row" align="center">
+            <div class="col-md-12">
+               <div ng-show="show_progress_text" style="z-index: 2; color: gray;  border-radius: 5px;margin:20px;">
+               <h3 >started selling {{counter}} out of {{selectedProducts.length}} Catalogs</h3>
+               </div>
+            </div>
+         </div>
+         <div class="row" align="center">
+            <div class="col-md-6">
+               <div class="form-group right">
+                  <button  type="button" ng-click="showCase.CloseDialog()" class="buttonSecondary" >Cancel</button>
+               </div>
+            </div>
+            <div class="col-md-6">
+               <div class="form-group left">
+                  <button type="button" ng-click="showCase.SellAllDesigns()" class="buttonPrimary">Yes</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </script>
+
+    <div ng-include="'app/views/common/order_modal.html'"></div>
+    <div ng-include="'app/views/shares/share_form.html'"></div>
+    <div ng-include="'wishbook_libs/views/catalogaction/add_update.html'"></div>
+
+    </div><!-- end of catalogController -->
+   </div>
+</div>

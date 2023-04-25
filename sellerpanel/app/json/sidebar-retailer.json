@@ -1,0 +1,68 @@
+[
+  {
+    "text": "Menu",
+    "heading": "true",
+    "translate": "sidebar.heading.HEADER"
+  },
+  {
+    "text": "Browse",
+    "sref": "app.browse",
+    "icon": "icon-grid",
+    "label": "label label-success"
+    
+  },
+  {
+    "text": "Catalog",
+    "sref": "",
+    "icon": "icon-tag",
+    "label": "label label-info", 
+    "submenu": [
+      {"text": "Public Catalogs",       "sref": "app.publiccatalog" }
+      
+    ]
+  },
+  {
+    "text": "Users",
+    "sref": "",
+    "icon": "icon-people",
+    "label": "label label-info", 
+    "submenu": [
+      {"text": "Suppliers",       "sref": "app.suppliers" },
+      {"text": "My Enquiries",       "sref": "app.myenquiry"},
+      {"text": "Administrator",       "sref": "app.administrators" }
+    ]
+  },
+  {
+    "text": "Orders",
+    "sref": "",
+    "icon": "fa fa-shopping-cart",
+    "label": "label label-info", 
+    "submenu": [
+    
+      {"text": "Purchase Orders",       "sref": "app.purchaseorders" },
+      {"text": "Incoming Shipments",       "sref": "app.purchaseordersinvoice"}
+    ]
+  },
+  {
+    "text": "Inventory",
+    "sref": "",
+    "icon": "fa fa-list",
+    "label": "label label-info", 
+    "submenu": [
+      {"text": "Stock",       "sref": "app.inventory"},
+      {"text": "Warehouse",       "sref": "app.warehouse"},
+      {"text": "Opening Stock",       "sref": "app.openingstock"},
+      {"text": "Adjustment",       "sref": "app.adjustment"}
+    ]
+  },
+  {
+    "text": "Integration",
+    "sref": "",
+    "icon": "fa fa-list",
+    "label": "label label-info", 
+    "submenu": [
+      {"text": "SKU Map",       "sref": "app.skumap"},
+      {"text": "Company Map",       "sref": "app.companyaccounts"}
+    ]
+  }
+]

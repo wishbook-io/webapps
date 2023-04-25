@@ -1,0 +1,4 @@
+order_number,buyer_name,buyer_number,catalog,sku,qty,rate,packing_type,item_remark,order_remark,broker_number,date,gst,pan,state,city
+1001,Buyer name,7100071000,Pubc M,,24,700,Box,note,your note,6152365852,1/5/2017,aaaawwwwss12345,wwwsss5236,Gujarat,Surat
+,,,Cataq 2017,,24,1230,Box,,,,1/5/2017,,,,
+1002,,9500095000,Cataq 2017,TSNFUS794,1,1230,Naked,note ,your note,,1/5/2017,aaaawwwwss12345,wwwsss5236,Maharashtra,Mumbai

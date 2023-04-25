@@ -1,0 +1,117 @@
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Shares</h3>
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+    <div ng-controller="ShareslistController as showCase">
+		<table id="shares-datatables" datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+		    <!--<tfoot>
+		    <tr>
+			<th>ID
+			</th><th>Catalog
+			</th><th>Selection
+		    </th></tr>
+		    </tfoot> -->
+		</table>
+		
+		
+		
+	    
+    <script type="text/ng-template" id="designview">
+	<legend>Design View</legend>
+        <div class="row">
+          <div class="col-md-12"> 
+              <div class="panel panel-default">
+                 <div class="panel-body">
+                    <div class="table-responsive table-bordered">
+                       <table class="table table-hover">
+                          <tbody>
+                             <tr>
+                                <td>Name:</td>
+                                <td>{{pushdetail.catalog_selection}}{{pushdetail.catalog_name}}</td>
+                             </tr>
+                             <tr>
+                                <td>Total Products Open:</td>
+                                <td>{{pushdetail.total_products_viewed}}</td>
+                             </tr>
+                          </tbody>
+                       </table>
+		    </div>
+		    <div class="table-responsive table-bordered">
+		       <table class="table table-hover">
+			  <tbody ng-repeat="product in pushdetail.products">
+			     <tr>
+				<td>Product SKU:</td>
+				<td>{{product.sku}}</td>
+			     </tr>
+			     <!--tr>
+				<td>Total Shares:</td>
+				<td>{{product.total_shares}}</td>
+			     </tr-->
+			     <tr>
+				<td>Opens:</td>
+				<td>{{product.total_buyers_viewed}}</td>
+			     </tr>
+			  </tbody>
+		       </table>
+                    </div>
+                 </div>
+              </div>
+          </div>
+        </div>
+    </script>
+    
+    <script type="text/ng-template" id="buyerview">
+	<legend>Buyer View</legend>
+        <div class="row">
+          <div class="col-md-12"> 
+              <div class="panel panel-default">
+                 <div class="panel-body">
+                    <div class="table-responsive table-bordered">
+                       <table class="table table-hover">
+                          <tbody>
+                             <tr>
+                                <td>Catalog/Selection Name:</td>
+                                <td>{{pushdetail.catalog_selection}}{{pushdetail.catalog_name}}</td>
+                             </tr>
+                             <tr>
+                                <td>Total Products Open:</td>
+                                <td>{{pushdetail.total_products_viewed}}</td>
+                             </tr>
+                          </tbody>
+                       </table>
+		    </div>
+		    <div class="table-responsive table-bordered">
+		       <table class="table table-hover">
+			  <tbody ng-repeat="buyer in pushdetail.buyers">
+			     <tr>
+				<td>Buyer:</td>
+				<td>{{buyer.buying_company_name}}</td>
+			     </tr>
+			     <tr>
+				<td>Product Opens:</td>
+				<td>{{buyer.total_products_viewed}}</td>
+			     </tr>
+			     <tr ng-if="buyer.push_downstream == 'yes'">
+				<td>Total Sub Buyers:</td>
+				<td>{{buyer.downstream_stats.total_buyers}}</td>
+			     </tr>
+			     <tr ng-if="buyer.push_downstream == 'yes'">
+				<td>Sub Buyers Catalog Opens:</td>
+				<td>{{buyer.downstream_stats.total_products_viewed}}</td>
+			     </tr>
+			     
+			     
+			  </tbody>
+		       </table>
+                    </div>
+                 </div>
+              </div>
+          </div>
+        </div>
+    </script>
+	
+	<div ng-include="'app/views/shares/share_form.html'"></div>
+	</div>
+
+   </div>
+</div>
+

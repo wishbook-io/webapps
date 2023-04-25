@@ -1,0 +1,48 @@
+
+<!-- <h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> GST Details
+</h3>
+ -->
+<!-- START panel-->
+<div ng-controller="gstController" >
+  
+   <fieldset>
+      <legend>GST Details</legend>
+      <form role="form" name="gstForm" ng-submit="submitGstDetails()" novalidate="" class="form-validate mb-lg modelform-gst">
+         <div class="row">
+      
+            <div class="col-md-2" style="width: 10% !important;">
+               <div class="form-group">
+                  <label>Enter GSTIN </label>
+               </div>
+            </div>
+      
+            <div class="col-md-3">
+               <div class="form-group">
+                  <input type="text" name="gstin" ng-model="gst.gstin" class="form-control" required ng-pattern="/^[\A-Za-z0-9]*$/"  ng-minlength="15" ng-maxlength="15" />
+                  <span ng-show="gstForm.gstin.$error.minlength || gstForm.gstin.$error.maxlength " class="text-danger" style="">GST number should be of 15 digits.</span>
+                  <span ng-show="gstForm.gstin.$error.pattern" class="text-danger">Invalid GSTIN. It should contain only alphanumeric characters.</span>
+                  <!--ui-select multiple="" ng-model="gst.gstin" theme="bootstrap" name="gstin">
+                              <ui-select-match placeholder="GSTIN">{{$item.name}} </ui-select-match>
+                              <ui-select-choices repeat="b.id as b in gst.gstin | propsFilter: {name: $select.search}">
+                                 <div ng-bind-html="b.name | highlight: $select.search"></div>
+                              </ui-select-choices>
+                        </ui-select-->
+      
+                  <span ng-show="gstForm.gstin.$dirty &amp;&amp; gstForm.gstin.$error.required" class="text-danger">This
+                     field is required</span>
+               </div>
+            </div>
+      
+            <div class="col-md-3">
+               <div class="form-group">
+                  <button type="submit" class="buttonPrimary">Submit</button>
+               </div>
+            </div>
+      
+         </div>
+      </form>
+      </fieldset>
+   
+
+
+</div>

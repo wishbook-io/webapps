@@ -1,0 +1,358 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+
+.ngdialog.ngdialog-theme-default .ngdialog-content
+{
+	width: 50% !important;
+}
+.linkButton
+{
+	line-height: 14px !important;
+	font-size: 12px!important;
+}
+</style>
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Shipments</h3>
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+      <div ng-controller="shipment_InvoicesController as showCase">
+		
+
+		<table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover " width="100%">
+		</table>
+    <script type="text/ng-template" id="printsellerinoice">
+			<form role="form" name="printsellerinoiceform" novalidate="" class="form-validate mb-lg modelform3">
+    			<legend>Print Seller Invoice</legend>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group has-feedback">
+              <label>Invoice Number</label>
+                  <div class="controls">
+                    <input type="text" autocomplete="off" name="invoicenumber" ng-model="invoice.number" placeholder="Enter invoice number" class="form-control" required />
+                    <span ng-show="printsellerinoiceform.invoicenumber.$dirty &amp;&amp; printsellerinoiceform.invoicenumber.$error.required" class="text-danger">This field is required</span>   
+                    <!-- <span ng-show="printsellerinoiceform.invoicenumber.$error.pattern" class="text-danger">Only Numeric characters allowed</span> -->
+                  </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+					     <div class="col-md-6">
+                  <div class="right">
+                     <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                  </div>
+               </div>
+               <div class="col-md-3">
+                  <div class="left">
+      							<button type="button" ng-disabled="printsellerinoiceform.invoicenumber.$error.required" ng-click="SubmitPrintSellerInoice()" class="btn btn-block btn-primary mt-lg">Print Seller Invoice</button>
+                  </div>
+					     </div>
+          </div>
+        </form>
+    </script>
+		<script type="text/ng-template" id="UploadAttachments">
+			<form role="form" name="showCase.UploadSellerInvoiceForm" novalidate="" class="form-validate mb-lg modelform3">
+	   
+			<legend>Upload {{filetype}}</legend>
+			    
+			   <div class="row form-group">
+               <div class="col-md-5">
+                  <div class="right">
+                     <label>Shipment</label>
+                  </div>
+               </div>
+               <div class="col-md-7">
+                  <div class="left">
+                     <span >{{shipment[0]}}</span>
+                  </div>
+               </div>
+				</div>
+				
+				<div class="row form-group">
+               <div class="col-md-5">
+                  <div class="right">
+                     <label>Order No.</label>
+                  </div>
+               </div>
+               <div class="col-md-7">
+                  <div class="left">
+                     <span >{{shipment[1].order_id}}</span>
+                  </div>
+               </div>
+				</div>
+				
+				<div class="row form-group" ng-if="filetype == 'Seller invoice'">
+               <div class="col-md-5">
+                  <div class="right">
+                     <label>Select seller Invoice</label>
+                  </div>
+               </div>
+               <div class="col-md-7">
+                  <div class="left">
+							<input type="file" ngf-select="loadAttachments($file)" ng-model="invoiceImagethumbnail" name="thumbnail" id="thumbnail"  ngf-accept="'image/*,application/pdf'"  >
+					    	<span ng-show="showCase.UploadSellerInvoice.thumbnail.$dirty &amp;&amp; showCase.UploadSellerInvoice.thumbnail.$error.required" class="text-danger">This field is required</span>
+                  </div>
+					</div>
+					
+				</div>
+
+        <div class="row form-group" ng-if="filetype == 'Manifest/Acknowledgement copy'">
+               <div class="col-md-5">
+                  <div class="right">
+                     <label>Select Manifest/Acknowledgement copy</label>
+                  </div>
+               </div>
+               <div class="col-md-7">
+                  <div class="left">
+							             <input type="file" ngf-select="loadAttachments($file)" ng-model="ackCopyImagethumbnail" name="thumbnail" id="thumbnail"  ngf-accept="'image/*,application/pdf'"  >
+					    	<span ng-show="showCase.UploadSellerInvoice.thumbnail.$dirty &amp;&amp; showCase.UploadSellerInvoice.thumbnail.$error.required" class="text-danger">This field is required</span>
+                  </div>
+					     </div>
+				</div>
+
+
+
+
+				<div ng-if="filetype == 'Shipping Label'">
+
+					<div class="row form-group" >
+						<div class="col-md-5">
+							<div class="right">
+								<label>Select shipping label</label>
+							</div>
+						</div>
+						<div class="col-md-7">
+							<div class="left">
+								<input type="file" ngf-select="loadAttachments($file)" ng-model="labelImagethumbnail" name="thumbnail" id="shippinglabel" ngf-accept="'image/*,application/pdf'"  >
+								<span ng-show="showCase.UploadSellerInvoice.thumbnail.$dirty &amp;&amp; showCase.UploadSellerInvoice.thumbnail.$error.required" class="text-danger">This field is required</span>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+
+				
+				
+				<div class="row">
+					<div class="col-md-6">
+                  <div class="right">
+                     <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                  </div>
+               </div>
+               <div class="col-md-3">
+                  <div class="left">
+							<button ng-show="filetype == 'Seller invoice'" type="button" ng-click="UploadAttachment()" class="btn btn-block btn-primary mt-lg">Upload</button>
+              <button ng-show="filetype == 'Manifest/Acknowledgement copy'" type="button" ng-click="UploadAttachment()" class="btn btn-block btn-primary mt-lg">Upload</button>
+							<button ng-show="filetype == 'Shipping Label'" type="button" ng-click="UpdateShippingLabel()"  class="btn btn-block btn-primary mt-lg">Save</button>
+                  </div>
+					</div>
+					<div class="col-md-3" ng-if="shipmentDetails.seller_invoice || shipmentDetails.shipment_lable">
+                  <div class="right">
+							<button ng-if="filetype == 'Seller invoice' && shipmentDetails.seller_invoice" ng-click="openInNewTab(shipmentDetails.seller_invoice)" class="btn btn-block btn-primary mt-lg" >View/print</button>
+              <button ng-if="filetype == 'Manifest/Acknowledgement copy' && shipmentDetails.acknowledgement_copy" ng-click="openInNewTab(shipmentDetails.acknowledgement_copy)" class="btn btn-block btn-primary mt-lg" >View/print</button>
+							<button ng-if="filetype == 'Shipping Label' && shipmentDetails.shipment_lable" ng-click="openInNewTab(shipmentDetails.shipment_lable)" class="btn btn-block btn-primary mt-lg" >View/print</button>
+                  </div>
+               </div>
+				</div>
+			   
+			</form>
+		</script>
+
+
+
+
+		<script type="text/ng-template" id="UpdateDimensions">
+			<form role="form" ng-submit="updateDimensions()" name="showCase.UpdateDimensions" novalidate="" class="form-validate mb-lg modelform3">
+		
+			<legend>Edit Dimensions</legend>
+					
+            <div class="row">
+					<div class="col-md-12">
+						<div class="form-group has-feedback">
+						<label>Weight(Kg)</label>
+						<div class="controls">
+							<input type="number" autocomplete="off" name="Weight" ng-model="dimensions.weight" data-parsley-group="step3" placeholder="Enter Weight in kg" min="0"  class="form-control" pattern="^[0-9]*$" required />
+							<span ng-show="UpdateDimensions.Weight.$dirty &amp;&amp; UpdateDimensions.Weight.$error.required" class="text-danger">This field is required</span>   
+							<span ng-show="UpdateDimensions.Weight.$error.pattern" class="text-danger">Only Numeric characters allowed</span>
+						</div>
+						</div>
+					</div>
+            </div> 
+                    
+            <div class="row">
+               <div class="col-md-4">
+						<div class="form-group has-feedback">
+							<label>Length(cm)</label>
+							<div class="controls">
+									<input type="number" autocomplete="off" name="Length" ng-model="dimensions.length" placeholder="Enter Length in cm" required="required" class="form-control"  min="10" />
+									<span ng-show="UpdateDimensions.Length.$dirty &amp;&amp; showCase.UpdateDimensions.Length.$error.required" class="text-danger">This field is required</span>
+									<span ng-show="UpdateDimensions.Length.$error.min" class="text-danger">Minimum length should be 10 cm</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group has-feedback">
+							<label>Breadth(cm)</label>
+							<div class="controls">
+									<input type="number" autocomplete="off" name="Breadth" ng-model="dimensions.width" placeholder="Enter Breadth in cm" required="required" class="form-control"  min="10" />
+									<span ng-show="UpdateDimensions.Breadth.$dirty &amp;&amp; showCase.UpdateDimensions.Breadth.$error.required" class="text-danger">This field is required</span>
+									<span ng-show="UpdateDimensions.Breadth.$error.min" class="text-danger">Minimum Breadth should be 10 cm</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group has-feedback">
+							<label>Height(cm)</label>
+							<div class="controls">
+									<input type="number" autocomplete="off" name="Height" ng-model="dimensions.height" placeholder="Enter Height in cm" required="required" class="form-control"  min="5" />
+									<span ng-show="UpdateDimensions.Height.$dirty &amp;&amp; showCase.UpdateDimensions.Height.$error.required" class="text-danger">This field is required</span>
+									<span ng-show="UpdateDimensions.Height.$error.min" class="text-danger">Minimum Height should be 5 cm</span>
+							</div>
+						</div>
+					</div>
+            </div>
+            <div class="row">
+					<div class="col-md-6">
+						<div class="right">
+							<button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="left">
+							<button type="submit" ng-disabled="showCase.UpdateDimensions.$invalid" class="btn btn-block btn-primary mt-lg">Update</button>
+						</div>
+					</div>	
+				</div>
+				
+			</form>
+		</script>
+
+
+		<script type="text/ng-template" id="updateAWBnumber">
+		
+			<form name="showCase.awbform" style="margin-top: 20px;" class=" modelform3">
+				<div class="row form-group">
+					<div class="col-md-4">
+						<div class="right">
+							<label style="padding: 7px 0;">Provider</label>
+						</div>
+					</div>
+					<div class="col-md-7">
+						<div class="left">
+							<select name="shippingProvider" chosen="" ng-model="shipmentDetails.shippingProvider" ng-options="p for p in shippingProviders" width="'100%'" class="chosen-select input-md form-control" required="required">
+								<option value="">Select Provider</option>
+							</select>
+							<span ng-show=" showCase.awbform.shippingProvider.$error.required" class="text-danger">This field is required</span>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="row form-group">
+					<div class="col-md-4">
+						<div class="right">
+							<label style="padding: 7px 0;">AWB Number</label>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="left">
+							<input type="text" autocomplete="off" name="AWBnumber" ng-model="shipmentDetails.AWBnumber" placeholder="Generate AWB number" required="required" class="form-control"  />
+							<span ng-show="showCase.awbform.AWBnumber.$dirty &amp;&amp; showCase.awbform.AWBnumber.$error.required" class="text-danger">This field is required</span>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="left">
+							<button type="submit" ng-click="generateAWBumber()" class="linkButton" style="margin-top: 6px !important;font-size: 15px !important;" ng-disabled="!shipmentDetails.shippingProvider">Generate AWB number</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="row" align="center">
+					<div class="col-md-6">
+					<div class="form-group">
+							<button type="submit" ng-disabled="!shipmentDetails.AWBnumber || showCase.awbform.$invalid" ng-click="UpdateProvider()" class="styledButtonblue" style="width: 40%;line-height: 20px;">Update</button>
+					</div>
+					</div>
+					<div class="col-md-6">
+					<div class="form-group">
+							<button  type="submit" ng-click="showCase.CloseDialog()" class="styledButtonblue" style="width: 40%;line-height: 20px;">Cancel</button>
+					</div>
+					</div>
+				</div>
+			</form>
+		
+		</script>
+
+
+
+		<script type="text/ng-template" id="DispatchShipment">
+		
+			<div class="row" align="center">
+				<div class="col-md-12">
+				<div class="form-group ">
+						<label>Are you sure you want to dispatch shipment {{shipment_id}}?</label>
+				</div>
+				</div>
+			</div> 
+			<div class="row" align="center">
+				<div class="col-md-6">
+				<div class="form-group">
+						<button type="submit" ng-click="DispatchShipment()" class="styledButtonblue" style="width: 40%;line-height: 20px;">Yes</button>
+				</div>
+				</div>
+				<div class="col-md-6">
+				<div class="form-group">
+						<button  type="submit" ng-click="showCase.CloseDialog()" class="styledButtonblue" style="width: 40%;line-height: 20px;">Cancel</button>
+				</div>
+				</div>
+			</div>
+		
+		</script>
+
+
+		<script type="text/ng-template" id="shiprocketcourierdetails">
+			<legend>Select Shipping Partner</legend>
+			<div class="row modelform3">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
+							<th></th>
+							<th>COURIER COMPANY</th>
+							<th>RATES</th>
+							<th>RATING</th>
+						</thead>
+						<tbody ng-repeat="detail in available_courier_companies">
+							<tr>
+							<td>
+								<label class="radio-inline c-radio">
+									<input type="radio" id="courier-{{detail.courier_company_id}}" ng-model="showCase.courierid" ng-value={{detail.courier_company_id}} name="courierid" value="{{detail.courier_company_id}}" ng-checked="detail.courier_company_id == shipmentDetails.data.recommended_courier_company_id" required="required">
+									<span class="fa fa-circle"></span></label>
+								</td>
+							<td>{{detail.courier_name}}</td>
+							<td>{{detail.rate}}</td>
+							<td>({{detail.rating}})</td>
+							</tr>
+						</tbody>
+					</table>
+					</div>
+				</div>
+				</div>
+			</div>
+			<div class="text-center">
+				<button type="button" ng-click="ShipAWB(showCase.courierid, shipmentDetails.ship_order_id)" class="styledButtonblue" style="width: 40%;margin: auto;">Ship</button>
+			</div>
+			</div>
+		</script>
+
+		
+	  </div>
+   </div>
+</div>

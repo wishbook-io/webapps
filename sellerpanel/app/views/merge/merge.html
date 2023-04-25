@@ -1,0 +1,143 @@
+<h3>Merge Company</h3>
+<div class="panel panel-default">
+   <div class="panel-body" >
+       <div ng-controller="MergeController as showCase">
+	    
+	   <form role="form" ng-submit="showCase.ProceedMerge()" name="showCase.mergeForm" novalidate="" class="form-validate mb-lg modelform">
+	    
+	   <div class="row">
+	    <div class="col-md-12">  
+	    <div class="form-group has-feedback">
+		<label>Merge From Company ID*</label>
+		    <div class="controls">
+			<!--select name="merge_from" chosen="" ng-model="merge.merge_from" ng-options="s.id as s.name + ' - '  + s.id for s in companies" width="'100%'" class="chosen-select input-md form-control" required="">
+			     <option value="">Merge From</option>
+			  </select-->
+			<input type="number" autocomplete="off" name="merge_from" ng-model="merge.merge_from" placeholder="Merge From Company ID"  class="form-control" min=0 required/>
+			<span ng-show="showCase.mergeForm.merge_from.$dirty &amp;&amp; showCase.mergeForm.merge_from.$error.required" class="text-danger">This field is required</span>
+		    </div>
+	       </div>
+	    </div>
+	   </div>
+	   
+	   <div class="row">
+	    <div class="col-md-12">  
+	    <div class="form-group has-feedback">
+		<label>Merge Into Company ID*</label>
+		    <div class="controls">
+			<!--select name="merge_into" chosen="" ng-model="merge.merge_into" ng-options="s.id as s.name + ' - '  + s.id for s in companies" width="'100%'" class="chosen-select input-md form-control" required="">
+			     <option value="">Merge Into</option>
+			  </select-->
+			<input type="number" autocomplete="off" name="merge_into" ng-model="merge.merge_into" placeholder="Merge Into Company ID"  class="form-control" min=0 required/>
+			<span ng-show="showCase.mergeForm.merge_into.$dirty &amp;&amp; showCase.mergeForm.merge_into.$error.required" class="text-danger">This field is required</span>
+		    </div>
+	       </div>
+	    </div>
+	   </div>
+		
+	   <div class="row">
+	    <div style="float:right;" class="col-md-2"> 
+	      <button type="submit" class="btn btn-block btn-primary mt-lg">Proceed</button>
+	    </div>
+	   </div>
+	   </form>
+	   
+	   
+	   <script type="text/ng-template" id="mergedetails">
+		<legend>Merge Details</legend>
+		<div class="row modelform3">
+		  <div class="col-md-12"> 
+		      <div class="panel panel-default">
+			 <div class="panel-body">
+			    <div class="table-responsive">
+			       <table class="table table-hover">
+				  <tbody>
+				     <tr>
+					<td></td>
+					<td><h4>{{merge_details.merge_from.name}}</h4>(Merge From)</td>
+					<td><h4>{{merge_details.merge_into.name}}</h4>(Merge Into)</td>
+					<td><h4>{{merge_details.merge_result.name}}</h4>(Merge Result)</td>
+				     </tr>
+				     <tr>
+					<td>Type:</td>
+					<td>{{merge_details.merge_from.company_type}}</td>
+					<td>{{merge_details.merge_into.company_type}}</td>
+					<td>{{merge_details.merge_result.company_type}}</td>
+				     </tr>
+				     <tr>
+					<td>Buyers:</td>
+					<td>{{merge_details.merge_from.buyers}}</td>
+					<td>{{merge_details.merge_into.buyers}}</td>
+					<td>{{merge_details.merge_result.buyers}}</td>
+				     </tr>
+				     <tr>
+					<td>Suppliers:</td>
+					<td>{{merge_details.merge_from.suppliers}}</td>
+					<td>{{merge_details.merge_into.suppliers}}</td>
+					<td>{{merge_details.merge_result.suppliers}}</td>
+				     </tr>
+				     <tr>
+					<td>Catalogs:</td>
+					<td>{{merge_details.merge_from.catalogs}}</td>
+					<td>{{merge_details.merge_into.catalogs}}</td>
+					<td>{{merge_details.merge_result.catalogs}}</td>
+				     </tr>
+				     <tr>
+					<td>Users:</td>
+					<td>{{merge_details.merge_from.users}}</td>
+					<td>{{merge_details.merge_into.users}}</td>
+					<td>{{merge_details.merge_result.users}}</td>
+				     </tr>
+				     <tr>
+					<td>Sales Orders:</td>
+					<td>{{merge_details.merge_from.sales_orders}}</td>
+					<td>{{merge_details.merge_into.sales_orders}}</td>
+					<td>{{merge_details.merge_result.sales_orders}}</td>
+				     </tr>
+				     <tr>
+					<td>Purchase Orders:</td>
+					<td>{{merge_details.merge_from.purchase_orders}}</td>
+					<td>{{merge_details.merge_into.purchase_orders}}</td>
+					<td>{{merge_details.merge_result.purchase_orders}}</td>
+				     </tr>
+				     <tr>
+					<td>Meetings:</td>
+					<td>{{merge_details.merge_from.meetings}}</td>
+					<td>{{merge_details.merge_into.meetings}}</td>
+					<td>{{merge_details.merge_result.meetings}}</td>
+				     </tr>
+				     <tr>
+					<td>Attendance:</td>
+					<td>{{merge_details.merge_from.attendance}}</td>
+					<td>{{merge_details.merge_into.attendance}}</td>
+					<td>{{merge_details.merge_result.attendance}}</td>
+				     </tr>
+				     <tr>
+					<td>Brand:</td>
+					<td>{{merge_details.merge_from.brand}}</td>
+					<td>{{merge_details.merge_into.brand}}</td>
+					<td>{{merge_details.merge_result.brand}}</td>
+				     </tr>
+				  </tbody>
+			       </table>
+			    </div>
+			 </div>
+		      </div>
+		  </div>
+		</div>
+		<form role="form" ng-submit="showCase.SubmitMerge()" novalidate="" class="form-validate mb-lg modelform">
+		 <div class="row">
+		    <div style="float:right;" class="col-md-2"> 
+		      <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+		    </div>
+
+		    <div style="float:right;" class="col-md-2">
+		      <button type="submit" class="btn btn-block btn-primary mt-lg">Merge</button>
+		    </div>
+		  </div>
+		</form>
+	    </script>
+     
+       </div>
+   </div>
+</div>

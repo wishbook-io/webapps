@@ -1,0 +1,119 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+</style>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> Buyer <span class="ptitle"> : {{$stateParams.name}}</span> </h3>
+
+<div ng-controller="BuyerDetailController as showCase">
+    
+    <div class="panel panel-default modelforoderdetail">
+	<div class="panel-body" >
+	    <div class="row">
+		<div class="col-md-12"> 
+		  <!--div class="panel panel-default">
+		     <div class="panel-body"-->
+			<div class="table-responsive">
+			   <table class="table table-hover">
+			      <tbody>
+				 <tr>
+				    <td>Buyer Name : {{buyer.buying_company_name}}</td>
+				    <td><span ng-if="is_staff">Buyer Number : {{buyer.buying_company_phone_number}}</span></td>
+				 </tr>
+				 <tr>
+				    <td>State : {{buyercompanydetail.state_name}}</td>
+				    <td>City : {{buyercompanydetail.city_name}}</td>
+				 </tr>
+				 <tr>
+				    <td>Address : {{buyercompanydetail.street_address}}</td>
+				    <td>Pin Code : {{buyercompanydetail.pincode}}</td>
+				 </tr>
+				 <tr>
+				    <td>Buyer Type : <select name="grouptype" ng-model="buyer.group_type" ng-options="s.id as s.name for s in groupType" width="'100%'" class="chosen-select input-md form-control" ng-change="buyerGroupTypeChanged(buyer.group_type)" required="">
+					 <option value="">Select Type</option>
+				      </select>
+				       <span ng-show="showCase.addbuyerForm.grouptype.$dirty &amp;&amp; showCase.addbuyerForm.grouptype.$error.required" class="text-danger">This field is required</span>
+				    </td>
+				    <td>Broker : <select name="broker_company" ng-model="buyer.broker_company" ng-options="s.company_id as s.company_name for s in brokers" width="'100%'" class="chosen-select input-md form-control" required="">
+					 <option value="">Select Broker</option>
+				      </select>
+				       <span ng-show="showCase.addbuyerForm.broker_company.$dirty &amp;&amp; showCase.addbuyerForm.broker_company.$error.required" class="text-danger">This field is required</span>
+				    </td>
+				 </tr>
+				 <tr>
+				    <!--td>Payment Duration : {{buyer.payment_duration}} </td>
+				    <td>Credit Limit : {{buyer.credit_limit}} </td-->
+				    <td>Payment Duration : <input type="number" oninput="this.value=this.value.replace(/[^0-9]/g,'');" min="0" name="payment_duration" placeholder="Payment Duration" autocomplete="off" ng-model="buyer.payment_duration" required="" class="form-control" /> </td>
+				    <td>Credit Limit : <input type="number" min="0" name="credit_limit" placeholder="Credit Limit" autocomplete="off" ng-model="buyer.credit_limit" required="" class="form-control" /></td>
+				 </tr>
+				 <tr>
+				    <!--td>Cash Discount : {{buyerdetail.cash_discount}} </td>
+				    <td>Credit Discount : {{buyerdetail.discount}}</td-->
+				    <td>Cash Discount : <input type="number" step="0.01" min="0" name="cash_discount" placeholder="Cash Discount" autocomplete="off" ng-model="buyer.cash_discount" required="" class="form-control" /> </td>
+				    <td>Credit Discount : <input type="number" step="0.01" min="0" name="discount" placeholder="Discount" autocomplete="off" ng-model="buyer.discount" required="" class="form-control" /></td>
+				 </tr>
+				 <tr>
+				    <td>Buying Company Name : <input type="text" name="buying_company_name" placeholder="Buying Company Name" autocomplete="off" ng-model="buyer.buying_company_name" required="" class="form-control" /> </td>
+				    <td>Buying Person Name : <input type="text" name="buying_person_name" placeholder="Buying Person Name" autocomplete="off" ng-model="buyer.buying_person_name" required="" class="form-control" /></td>
+				 </tr>
+				 <tr>
+				 	<td ng-if="buyer.group_type_name =='Broker'" >
+				    	Brokerage % : <input type="number" min="0" name="brokerage_fees" placeholder="Brokerage %" autocomplete="off" ng-model="buyer.brokerage_fees" required="" class="form-control" /> 
+				    </td>
+				    <td>
+					 Status :
+					 <div class="form-group has-feedback">
+					    <label class="radio-inline c-radio" style="color: green;">
+					      <input id="inlineradio1" type="radio" name="status" ng-model="buyer.status" value="approved" required="required" class="form-control"  />
+					   <span class="fa fa-circle"></span>Approve</label>
+
+					  <label class="radio-inline c-radio" style="color: red;">
+					     <input id="inlineradio2" type="radio" name="status" ng-model="buyer.status" value="rejected" required="required" class="form-control" />
+					     <span class="fa fa-circle"></span>Reject</label>
+					    
+					 </div>
+				    </td>
+				    <td>
+				    </td>
+				 </tr>
+				 
+				 <tr>
+				     <td>
+					<span>
+					    <button type="button" ng-click="Update()" class="btn btn-primary mt-lg orange-button">Update</button>
+					</span>
+					
+				     </td>
+				     <td>&nbsp;</td> 
+				 </tr>
+
+			      </tbody>
+			   </table>
+			</div>
+		     <!--/div>
+		  </div-->
+		</div>
+	    </div>
+	</div>
+    </div>
+
+    <form class="panel">
+     <uib-tabset justified="true" >
+
+        <uib-tab>
+          <uib-tab-heading>Meeting Details</uib-tab-heading> 
+            <div ng-include="'app/views/buyers/meeting.html'"></div>
+        </uib-tab>
+
+
+        <uib-tab select="salesordersDatatable()">
+            <uib-tab-heading>Sales Order Details</uib-tab-heading>
+              <div ng-include="templateURL"></div>
+        </uib-tab>
+     </uib-tabset>
+  	</form>
+    
+  	
+</div>

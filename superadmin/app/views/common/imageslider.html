@@ -1,0 +1,25 @@
+
+<!--script type="text/javascript" src="app/js/shares/share_form.js"></script-->
+
+
+	<script type="text/ng-template" id="productimages">
+	<div ng-controller="ImageSliderController">
+	        <div ng-if="emptycatalogflag==false">
+
+	          <uib-carousel interval="myInterval">
+               <uib-slide ng-repeat="slide in slides" active="slide.active">
+                  <img class="loading" ng-src="{{slide.image}}" style="margin: auto; width: 50%; height: 50%;" alt="" />
+                  <div class="carousel-caption" style="color:black;">
+                
+                     <p>SKU : {{slide.text}}</p>
+                  </div>
+               </uib-slide>
+            </uib-carousel>
+           </div> 
+           <div ng-if="emptycatalogflag==true">
+          		<legend>Empty Catalog</legend>
+          		<h5>This Catalog has no Products.</h5>
+        	</div>  
+    </div>
+
+	</script>

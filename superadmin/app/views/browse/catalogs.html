@@ -1,0 +1,233 @@
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+
+.buttonselected{
+    background: #ccc !important;
+}
+
+ .griddesc{
+	display: none;
+}
+
+ .gridimage:hover  .griddesc{
+	display: block;
+} 
+</style>
+<!--script type="text/javascript">
+	jQuery(".photo-wrapper").hover(
+	   function() {
+	      jQuery(this).find(".photo-description").css("display","block");
+	   },
+	   function() {
+	      jQuery(this).find(".photo-description").css("display","none");
+	   }
+	);
+</script-->
+
+<!--div class="container-fluid" ng-controller="BrowseController as showCase">
+	<uib-carousel interval="myInterval">
+               <uib-slide ng-repeat="slide in slides" active="slide.active">
+
+               	<div ng-if="slide.url != ''">
+                  <a href="{{slide.url}}"><img class="loading" ng-src="{{slide.image}}" style="margin: auto; width: auto;" alt="" /></a>
+                </div>
+
+                <div ng-if="slide.url == ''">
+                  <img class="loading" ng-src="{{slide.image}}" style="margin: auto; width: auto;" alt="" />
+                </div>
+
+	              <div class="carousel-caption" style="color:black;">     
+	              </div>
+               </uib-slide>
+    </uib-carousel>
+</div-->
+
+<h3><!--span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span--> Browse Catalogs</h3>
+
+<div class="container-fluid" ng-controller="BrowseController as showCase">
+
+	
+	<div class="panel panel-default modelform3">
+	   <div class="panel-body" >
+			<form class="form-inline" role="form">
+				  
+				<div style="text-align:left">
+				   <div class="col-lg-7" >
+					  <label class="radio-inline c-radio">
+						 <input id="inlineradio1" type="radio" name="catalog_type" ng-model="search_form.catalog_type" value="public" checked="checked" ng-change="changeCatalogType('public')"/>
+						 <span class="fa fa-circle"></span>Public</label>
+					  <!--label class="radio-inline c-radio">
+						 <input id="inlineradio2" type="radio" name="catalog_type" ng-model="search_form.catalog_type" value="myreceived" ng-change="changeCatalogType('myreceived')"/>
+						 <span class="fa fa-circle"></span>Received</label-->
+				   </div>
+				</div>
+
+				<!--div style="text-align:left" >
+				   <div class="col-lg-4" >
+				   <div id="ck-button" ng-show="showCase.list_view_type=='grid'">
+					   <label>
+					      <input type="checkbox" name="trusted_seller" ng-model="search_form.trusted_seller" ng-change="changeTrustedSellerFlag(search_form.trusted_seller)"><span>Trusted Seller</span>
+					   </label>
+					</div>
+				   </div>
+				</div-->
+				
+				<div style="text-align:right">
+				   <div class="col-lg-5">
+										
+					<button class="btn btn-default view_type_grid" type="button" ng-click="viewType('grid')" title="Grid View">
+					   <span class=""><i class="icon-grid"></i>
+					   </span>
+					</button>
+					<button class="btn btn-default view_type_list" type="button" ng-click="viewType('list')" title="List View">
+					   <span class=""><i class="icon-menu"></i>
+					   </span>
+					</button>
+					
+				   </div>
+				</div>
+				
+				<br>
+				<br>
+				
+				<div style="text-align:center" ng-show="showCase.list_view_type=='grid'">
+				 <div class="form-group">
+					<label class="sr-only" for="input-name">Name</label>
+					<input class="form-control input-sm" id="input-name" type="text" ng-model="search_form.name" placeholder="Name"/>
+				 </div>
+				 <div class="form-group">
+					<label class="sr-only" for="input-brand">Brand</label>
+					<select name="brand" chosen="" ng-model="search_form.brand" ng-options="b.id as b.name for b in brands" width="'100%'" data-parsley-group="step1" class="chosen-select input-sm form-control">
+					 <option value="">Select Brand</option>
+					</select>
+				 </div>
+				 <div class="form-group">
+					<label class="sr-only" for="input-min-price">Min Price</label>
+					<input class="form-control input-sm" id="input-min-price" type="number" ng-model="search_form.min_price" placeholder="Min Price" min="0"/>
+				 </div>
+				 <div class="form-group">
+					<label class="sr-only" for="input-max-price">Max Price</label>
+					<input class="form-control input-sm" id="input-max-price" type="number" ng-model="search_form.max_price" placeholder="Max Price" min="0"/>
+				 </div>
+				 <div class="form-group">
+					<label class="sr-only" for="input-work">Work</label>
+					<input class="form-control input-sm" id="input-work" type="text" ng-model="search_form.work" placeholder="Work" />
+				 </div>
+				 <div class="form-group">
+					<label class="sr-only" for="input-fabric">Fabric</label>
+					<input class="form-control input-sm" id="input-fabric" type="text" ng-model="search_form.fabric" placeholder="Fabric" />
+				 </div>
+				 
+				 <button class="btn btn-default" type="submit" ng-click="Search()">Search</button>
+				 
+				</div>
+				
+			</form>
+			
+			<div ng-show="showCase.list_view_type=='list'">
+				<table datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table-striped table-bordered hover" width="100%">
+				</table>
+			</div>
+			
+	   </div>
+	</div>
+	
+
+	
+	<div deckgrid class="deckgrid" source="showCase.photos" ng-show="showCase.list_view_type=='grid'">
+		<div class="photo gridimage">
+			
+		   <div data-ng-click="card.showIndex = !card.showIndex">
+			  	<a href="{{card.redirect_url}}" target="_blank">
+				  <div class="photo-index" data-ng-if="card.showIndex">
+					 <p>The $index of the card is</p>
+					 <p class="balloon-wrapper">
+						<span class="balloon">{{card.$index}}</span>
+					 </p>
+				  </div>
+				  <!--div class="photo-description">
+					 
+				  </div-->
+				  <div class="photo-wrapper" align="middle">
+				  	 <!--div ng-show="card.is_trusted_seller == true" >
+				  	 	<img src="app/img/trustedseller.png" style="opacity: 1; position: relative; float: right; width: 80px;" />
+				  	 </div-->
+					 <img class="img-responsive" src="" data-ng-src="{{card.src}}" data-imageloaded="" data-loadedclass="photoloaded"/>
+					 <div class="photo-loader">
+						<div class="sk-spinner sk-spinner-rotating-plane"></div>
+					 </div>
+					 <a href="{{card.redirect_url}}" target="_blank" ><span>{{card.name}}</span></a><br>
+				  </div>
+				</a>
+				  <div class="photo-description griddesc" align="center">
+					 
+					 <span>Designs: {{card.total_products}}</span><br>
+					 <span>Price Range: &#8377; {{card.price_range}}</span><br>
+					 <span>Brand: {{card.brand_name}}</span><br>
+					 <!--span>Sold by: {{card.supplier_name}}</span><br-->
+				  </div>
+		   </div>
+		   
+		</div>
+		
+	</div>
+	
+	<div ng-show="showCase.list_view_type=='grid'">
+		<button type="button" ng-click="ShowMore()" class="btn btn-block btn-primary mt-lg" id="showmore" style="width:100%; visibility: hidden; display: none;">Show More</button>
+	</div>
+    <!--div ng-include="'app/views/common/imageslider.html'"></div-->
+</div>
+
+
+<script>
+function callAjax(){
+	console.log("callAjax()");
+	//$('#showmore').trigger('click');
+	//visibility: hidden; display: none;
+	$('#showmore').click();
+}
+/*$('#showmore').click(function(){
+    var button = $(this);
+    button.attr('disabled', 'disabled');
+    setTimeout(function() {
+         button.removeAttr('disabled');
+    },10000);
+});*/
+
+/*
+$(document).scroll(function(e){
+	
+    // grab the scroll amount and the window height
+    var scrollAmount = $(window).scrollTop();
+    var documentHeight = $(document).height();
+
+    // calculate the percentage the user has scrolled down the page
+    var scrollPercent = (scrollAmount / documentHeight) * 100;
+	
+	//console.log("scroll fun()");
+	//console.log(scrollPercent);
+	
+    if(scrollPercent > 50) {
+        // run a function called doSomething
+       callAjax();
+    }
+});*/
+
+
+$(window).scroll(function(){
+	/*console.log("===s=");
+	console.log($(window).scrollTop());
+	console.log($(document).height() - $(window).height());
+	console.log("===e=");*/
+	
+	if (($(window).scrollTop()) >= ($(document).height() - $(window).height())){
+		/*console.log($(window).scrollTop());
+		console.log($(document).height() - $(window).height()); */       
+		callAjax();
+	}
+});
+
+</script>

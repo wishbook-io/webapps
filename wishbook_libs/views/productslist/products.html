@@ -1,0 +1,383 @@
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+
+<style>
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+td
+{
+   text-align: center !important;
+}
+th
+{
+   text-align: center !important;
+}
+form .progress {
+    line-height: 15px;
+}
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+}
+</style>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;background-color: white" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span> My Products <span class="ptitle"> : {{$stateParams.name}}</span></h3>
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+      <div ng-controller="productController as showCase">
+        <!--table datatable="" dt-options="cat.dtOptions" dt-columns="cat.dtColumns" class="row-border hover"></table-->
+    <table id="products-datatables" datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="row-border hover" width="100%">
+    </table>
+
+
+   <script type="text/ng-template" id="addproduct">
+      <div class="ngdialog-message">
+            
+        <div class="panel-heading"></div>
+        <div class="panel-body modelform">
+          <form name="showCase.addproductform" ng-submit="SubmitProduct()" form-wizard="" validate-steps="true" validate-form="" steps="2" enctype="multipart/form-data" class="form-validate">
+             <div class="form-wizard wizard-horizontal">
+                <!-- START wizard steps indicator-->
+                <ol class="row">
+                   <li ng-class="{'active':wizard.active(1)}" ng-click="wizard.go(1)" class="col-md-6">
+                      <h4>Product Details</h4>
+                    
+                   </li>
+                   <li ng-class="{'active':wizard.active(2)}" ng-click="wizard.go(2)" class="col-md-6">
+                      <h4>Upload Image</h4>
+                   </li>
+                </ol>
+                <!-- END wizard steps indicator-->
+                <!-- START Wizard Step inputs -->
+                <div id="step1" ng-show="wizard.active(1)">
+                   <fieldset>
+                      <!--legend>Product Details</legend-->
+                      <!-- START row -->
+                      <!--div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group"> 
+                               <label>Title *</label>
+                               <div class="controls">
+                                  <input type="text" autocomplete="off" name="title" ng-model="product.title" data-parsley-group="step1" placeholder="Enter Title"  class="form-control" required/>
+
+                               </div>
+                            </div>
+                         </div>
+                      </div-->
+
+                      <div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group"> 
+                               <label>SKU *</label>
+                               <div class="controls">
+                                  <input type="text" autocomplete="off" name="sku" ng-model="product.sku" data-parsley-group="step1" placeholder="Enter SKU" class="form-control" pattern=".{0,30}" required />
+                                  <span ng-show="showCase.addproductform.sku.$error.pattern" class="text-danger">This field has character limit of 30</span>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                      
+                      <!--div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group"> 
+                               <label>Fabric</label>
+                               <div class="controls">
+                                  <input type="text" autocomplete="off" name="fabric" ng-model="product.fabric" data-parsley-group="step1" placeholder="Enter Fabric"  class="form-control" pattern=".{0,50}" />
+                                  <span ng-show="showCase.addproductform.fabric.$error.pattern" class="text-danger">This field has character limit of 50</span>
+                               </div>
+                            </div>
+                         </div>
+                      </div-->
+                      <!--div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Fabric</label>
+                               <div class="controls">
+                                  <ui-select multiple="" ng-model="product.fabric" theme="bootstrap">
+                                   <ui-select-match placeholder="Select Fabric">{{$item.value}} </ui-select-match>
+                                   <ui-select-choices repeat="b.value as b in fabrics | propsFilter: {value: $select.search}">
+                                      <div ng-bind-html="b.value | highlight: $select.search"></div>
+                                   </ui-select-choices>
+                                  </ui-select>
+                               </div>
+                            </div>
+                         </div>
+                      </div-->
+
+                      <!--div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group"> 
+                               <label>Work</label>
+                               <div class="controls">
+                                  <input type="text" autocomplete="off" name="work" ng-model="product.work" data-parsley-group="step1" placeholder="Enter Work"  class="form-control" pattern=".{0,50}" />
+                                  <span ng-show="showCase.addproductform.work.$error.pattern" class="text-danger">This field has character limit of 50</span>
+                               </div>
+                            </div>
+                         </div>
+                      </div-->
+                     <!--div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Work</label>
+                               <div class="controls">
+                                  <ui-select multiple="" ng-model="product.work" theme="bootstrap">
+                                   <ui-select-match placeholder="Select Work">{{$item.value}} </ui-select-match>
+                                   <ui-select-choices repeat="b.value as b in works | propsFilter: {value: $select.search}">
+                                      <div ng-bind-html="b.value | highlight: $select.search"></div>
+                                   </ui-select-choices>
+                                  </ui-select>
+                               </div>
+                            </div>
+                         </div>
+                      </div-->
+                      
+                     <!--  <div class="row" ng-if="catalogs && catalogs.length > 0">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Catalog *</label>
+                               <div class="controls">
+                                 
+                                  <select  name="catalog" chosen="" ng-model="product.catalog" ng-options="c.id as c.title for c in catalogs" width="'100%'" data-parsley-group="step1" class="chosen-select input-md form-control" required="required" ng-change="ChangeViewPermission(product.catalog)" >
+                                     <option value="">Select Catalog</option>
+                                  </select>
+                               </div>
+                            </div>
+                         </div>
+                      </div> -->
+
+                      <div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group"> 
+                              <label>Price *</label>
+                              <div class="controls" ng-if="product_type == 'catalog'">
+                                 <input type="number" autocomplete="off" name="price" ng-model="product.price" data-parsley-group="step1" placeholder="Enter price"  class="form-control" min="101" ng-disabled="action != 'addproduct'" required/>
+                                 <span ng-show="showCase.addproductform.price.$error.min" class="text-danger">Price should be minimum 101</span>
+                              </div>
+                              <div class="controls" ng-if="product_type != 'catalog'">
+                                 <input type="number" autocomplete="off"  name="price" ng-model="product.price" data-parsley-group="step1" placeholder="Enter price"  class="form-control" min="71" ng-disabled="action != 'addproduct'" required/>
+                                 <span ng-show="showCase.addproductform.price.$error.min" class="text-danger">Price should be minimum 71</span>
+                              </div>
+                            </div>
+                         </div>
+                      </div>
+
+                  <!--<div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group"> 
+                               <label>Single piece price *</label>
+                               <div class="controls">
+                                  <input type="number" autocomplete="off" name="single_piece_price" ng-model="product.single_piece_price" data-parsley-group="step1" placeholder="Enter single piece price"  class="form-control" ng-min="product.price" required/>
+                                  <span ng-show="showCase.addproductform.single_piece_price.$error.min" class="text-danger">Single piece price should not less than Price.</span>
+                               </div>
+                            </div>
+                         </div>
+                      </div> -->
+                      
+                      <!--div class="row" ng-if="view_permission=='public'">
+                         <div class="col-md-12">
+                            <div class="form-group"> 
+                               <label>Public Price *</label>
+                               <div class="controls">
+                                  <input type="number" autocomplete="off" name="public_price" ng-model="product.public_price" data-parsley-group="step1" placeholder="Enter Public Price"  class="form-control" min=101 required=""/>
+                                  <span ng-show="showCase.addproductform.public_price.$error.min" class="text-danger">Public Price should be minimum 101</span>
+                               </div>
+                            </div>
+                         </div>
+                      </div -->
+
+                    
+                  <!-- END row -->
+
+
+                   </fieldset>
+                   <ul class="pager">
+                      <li class="next"><a ng-click="wizard.go(2)">Next <span>&rarr;</span></a>
+                      </li>
+                   </ul>
+                </div>
+                <!-- END Wizard Step inputs -->
+                <!-- START Wizard Step inputs -->
+                <div id="step2" ng-show="wizard.active(2)">
+                   <fieldset>
+                      <!--legend>Upload Image</legend-->
+                      <!-- START row -->
+                      <!--div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group"> 
+                                <div class="checkbox c-checkbox needsclick">
+                                     <label class="needsclick">
+                                     <input class="needsclick" type="checkbox" value="" ng-model="product.dont_allow_crop" ng-change="allowCrop(product.dont_allow_crop)"/>
+                                     <span class="fa fa-check"></span>Keep Original Images (Do Not Crop)</label>
+                                </div>
+                            </div>
+                         </div>
+                      </div-->
+                      
+                      <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                               <label>Select Photo from your computer *</label>
+                            </div>
+                         </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group" style="text-align: center;">
+                               <!--label>Select Photo from you computer *</label-->
+                               <div ng-if="!update_flag">
+                                    <input type="file" ngf-select="uploadProductImage($file)" ng-model="product.image" name="image" ngf-accept="'image/*'" id="image" required>
+                                    <div ngf-drop style="height: 300px;" ng-model="product.image" ngf-pattern="image/*" class="cropArea">
+                                        <!--img-crop ng-show="product.cropallow" image="product.image  | ngfDataUrl" result-image="product.croppedImage" ng-init="product.croppedImage=''" area-type="rectangle" aspect-ratio="0.714" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                        </img-crop-->
+                                        <ui-cropper ng-show="product.cropallow" image="product.image  | ngfDataUrl" result-image="product.croppedImage" ng-init="product.croppedImage=''" area-type="rectangle" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                        </ui-cropper>
+                                        
+                                        <img ng-hide= "product.cropallow"  ng-src ="{{product.uncropped}}" style="max-width: 100%; max-height: 100%;"/> 
+                                    </div>
+                               </div>
+                               <div ng-if="update_flag">
+                                    <input type="file" ngf-select="uploadProductImage($file)" ng-model="product.image" name="image" ngf-accept="'image/*'" id="image">
+                                    <div class="col-md-12" ng-if="!product.image" class="text-align: center;">
+                                      <img ng-src="{{productImage}}" style="width: 213px;" />
+                                    </div>
+                                    <div class="col-md-12" ng-if="product.image" class="text-align: center;">
+                                      <div ngf-drop style="height: 300px;" ng-model="product.image" ngf-pattern="image/*" class="cropArea">
+                                          <!--img-crop ng-show="product.cropallow" image="product.image  | ngfDataUrl" result-image="product.croppedImage" ng-init="product.croppedImage=''" area-type="rectangle" aspect-ratio="0.714" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                          </img-crop-->
+                                          <ui-cropper ng-show="product.cropallow" image="product.image  | ngfDataUrl" result-image="product.croppedImage" ng-init="product.croppedImage=''" area-type="rectangle" result-image-size="{w:1000,h:1400}" init-max-area="true" chargement="'Loading'" result-image-format="image/jpeg" result-image-quality="1.0">
+                                          </ui-cropper>
+                                          
+                                          <img ng-hide= "product.cropallow"  ng-src ="{{product.uncropped}}" style="max-width: 100%; max-height: 100%;"/> 
+                                      </div>
+                                     </div>
+                               </div>
+                            </div>
+                         </div>
+                         <!--div class="col-md-6">
+                            <div class="form-group">
+                               <img ngf-src="product.image" style="height: 50px;" class="thumb">
+                            </div>
+                         </div-->
+                      </div>
+                      <div class="row">
+                         <div class="col-md-12" align="center">
+                            <div class="form-group">
+                               <button type="submit" ng-show="update_flag" class="btn btn-primary mt-lg">Update</button>
+                               <button type="submit" ng-show="!update_flag" class="btn btn-primary mt-lg">Add</button>
+                            </div>
+                         </div>
+                      </div>
+                  
+                      <!-- END row -->
+                   </fieldset>
+                   <ul class="pager">
+                      <li class="previous">
+                         <a ng-click="wizard.go(1)">
+                            <span>&larr; Previous</span>
+                         </a>
+                      </li>
+                    </ul>
+                </div>
+                <!-- END Wizard Step inputs -->
+              
+             </div> <!-- END form-wizard wizard-horizontal -->
+
+          </form>
+         </div><!-- END panel -->
+    </div> <!-- End ng dialog -->
+   </script>
+   
+    <script type="text/ng-template" id="uploadcsv">
+        <form role="form" ng-submit="showCase.UploadProductCsv()" name="showCase.uploadcsv" novalidate="" class="form-validate mb-lg modelform3">
+   
+        <legend>Upload Products CSV</legend>
+            <div class="row">
+               <div class="col-md-6">
+                  <div class="form-group">
+                     <label>Select CSV from your computer</label>
+                     <input type="file" ngf-select="uploadCSVFiles($files)" ng-model="showCase.file.product_csv" name="product_csv" required accept=".csv">
+                     <span ng-show="showCase.uploadcsv.product_csv.$dirty &amp;&amp; showCase.uploadcsv.product_csv.$error.required" class="text-danger">This field is required</span>   
+                     
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>
+                <div style="float:right;" class="col-md-4"> 
+                  <a style="text-decoration: none;" href="app/csv/products.csv"><button type="button" class="btn btn-block btn-primary mt-lg">Download Sample</button></a>
+                </div>
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Upload</button>
+                </div>
+            </div>
+        </form>
+    </script>
+    <script type="text/ng-template" id="addmoreimages">
+        <form role="form" ng-submit="showCase.submitAddMoreImages()" name="showCase.addimages" novalidate="" class="form-validate mb-lg modelform3">
+   
+        <legend>Add more images for same design</legend>
+            <div class="row">
+               <div class="col-md-8">
+                  <div class="form-group">
+                     <label>Upload Images (Max. 4)</label>
+                      <input type="file" ngf-select="uploadProductPhotos($files,$index)" multiple ng-model="productimages" name="productimages"  ngf-accept="'image/*'" required="required" >
+                      <!-- <span ng-show="max_limit_error" class="text-danger">You can upload {{allow_max_images}} image(s) as you already uploaded {{product_images.length}} image(s).</span> -->
+                      <span ng-show="max_limit_error" class="text-danger">You can upload max 4 images.</span>
+                  </div>
+               </div>           
+            </div>
+            <div class="row" style="padding-top:10px;">
+                  <div class="col-md-12">
+                     <div class="form-group"> 
+                       <div class="col-md-3">
+                          <br>
+                          <img ng-src="{{product_main_image}}" style="max-width: 100%; max-height: 100%;"/>
+                       </div>
+                        <div class="col-md-3" ng-repeat="pimage in product_images | filter: { set_default : false } track by $index" style="text-align:center;">
+                           <a ng-click="DeleteProductImage(pimage.id,$index)">Delete</a>
+                           <img ng-src="{{pimage.image.thumbnail_small || pimage.image.thumbnail_medium}}" style="max-width: 100%; max-height: 100%;"/>
+                        </div>
+                     </div>
+                  </div>
+            </div>
+            <div class="row">
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="button" ng-click="showCase.CloseDialog()" class="btn btn-block btn-primary mt-lg">Cancel</button>
+                </div>  
+                <div style="float:right;" class="col-md-2"> 
+                  <button type="submit" ng-disabled="max_limit_error || !productimages" class="btn btn-block btn-primary mt-lg">Upload</button>
+                </div>
+            </div>
+        </form>
+    </script>
+
+   
+    
+        <!--script type="text/ng-template" id="qualityimages" >
+        <div class="modelform-slider">
+          <uib-carousel interval="myInterval">
+               <uib-slide ng-repeat="slide in slides" active="slide.active">
+                  <img class="loading" ng-src="{{slide.image}}" style="margin: auto; width: 50%; height: 50%;" alt="" />
+                  <div class="carousel-caption" style="color:black;">
+          
+                     <p>SKU : {{slide.text}}</p>
+                  </div>
+               </uib-slide>
+            </uib-carousel>
+        </div>
+        </script-->
+    
+    </div>
+   </div>
+</div>

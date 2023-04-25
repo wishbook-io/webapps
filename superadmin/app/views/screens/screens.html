@@ -1,0 +1,179 @@
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+<style>
+.cropArea {
+    background: #E4E4E4;
+    overflow: hidden;
+    height:350px;
+}
+form .progress {
+    line-height: 15px;
+}
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+}
+.slidelink {
+  height: 100px !important;
+}
+
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+
+
+.dataTables_scrollHeadInner
+{
+    padding-right: 0px !important;
+}
+
+/* New UI for Chekbox*
+
+label
+{
+    margin-bottom: 13px!important;
+}
+
+.loading {
+  background: transparent url('/media/logo-single.png') center no-repeat;
+  background-size: 100px 100px;
+}
+
+
+[type="checkbox"]:not(:checked),
+[type="checkbox"]:checked {
+  position: absolute;
+  left: -9999px;
+}
+[type="checkbox"]:not(:checked) + label,
+[type="checkbox"]:checked + label {
+  position: relative;
+  padding-left: 1.95em;
+  cursor: pointer;
+}
+
+[type="checkbox"]:not(:checked) + label:before,
+[type="checkbox"]:checked + label:before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 1.25em; height: 1.25em;
+  border: 2px solid #ccc;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.1);
+}
+
+[type="checkbox"]:not(:checked) + label:after,
+[type="checkbox"]:checked + label:after {
+  content: '\2713\0020';
+  position: absolute;
+  top: .15em; left: .1em;
+  font-size: 1.3em;
+  line-height: 0.8;
+  color: #09ad7e;
+  transition: all .2s;
+  font-family: 'Lucida Sans Unicode', 'Arial Unicode MS', Arial;
+}
+
+[type="checkbox"]:not(:checked) + label:after {
+  opacity: 0;
+  transform: scale(0);
+}
+[type="checkbox"]:checked + label:after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+[type="checkbox"]:disabled:not(:checked) + label:before,
+[type="checkbox"]:disabled:checked + label:before {
+  box-shadow: none;
+  border-color: #bbb;
+  background-color: #ddd;
+}
+[type="checkbox"]:disabled:checked + label:after {
+  color: #999;
+}
+[type="checkbox"]:disabled + label {
+  color: #aaa;
+}
+
+
+label:hover:before {
+  border: 2px solid #4778d9!important;
+}
+*/
+
+</style>
+
+
+<h3>
+
+<span class="btn-label" style="margin-left: 2%; background-color: white;color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span>
+
+<!--button onclick="goBack()" class="btn btn-info">Go Back</button--> Set Matchings
+
+<!--div >
+<a class="btn btn-default" href="#/app/catalog/grid" align="right">
+   <span class=""><i class="icon-grid"></i>
+   </span>
+</a>
+</div-->
+</h3>
+<div class="panel panel-default modelform3">
+   <div class="panel-body" >
+        <div ng-controller="ScreensController as showCase">
+     
+        <!--table datatable="" dt-options="cat.dtOptions" dt-columns="cat.dtColumns" class="row-border hover">table-striped table-bordered hover   </table-->
+    
+            <table id="catalogs-datatables" datatable="" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="row-border hover" width="100%">
+            </table>
+
+            
+            <div ng-include="'wishbook_libs/views/catalogaction/add_update.html'"></div>
+            <div ng-include="'app/views/common/company_detail_edit.html'"></div>
+            <div ng-include="'app/views/common/notification.html'"></div>
+            <script type="text/ng-template" id="openenablemodal">
+                <div class="ngdialog-message">
+                    
+                <div class="panel-heading"></div>
+                    <div class="panel-body">
+                    <form name="showCase.enableCatalogForm" ng-submit="showCase.EnableCatalog()" class="form-validate modelform-enablecatalog">
+                        <legend>Catalog Enable Duration</legend>
+                        <div class="row" >
+                            <div class="col-md-6">
+                                <div class="form-group"> 
+                                    <label>Enter Duration (in Days)</label>
+                                    <div class="controls">
+                                    <input type="number" autocomplete="off" name="enable_duration" ng-model="showCase.enable_duration" data-parsley-group="step1" placeholder="Enter Duration"  class="form-control" min="10" max="90" required />
+                                    <span ng-show="showCase.enableCatalogForm.enable_duration.$error.min" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                                    <span ng-show="showCase.enableCatalogForm.enable_duration.$error.max" class="text-danger">Enable Duration should be minimum 10 days and maximux 90 days.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="row" >
+                            <div class="col-md-6">
+                                <div class="form-group"> 
+                                    <button type="submit" class="btn btn-primary mt-lg">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </script>
+        
+        
+        </div>
+   </div>
+</div>

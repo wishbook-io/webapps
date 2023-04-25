@@ -1,0 +1,140 @@
+<script type="text/javascript">
+  fbq('track', 'ViewContent');
+</script>
+
+<h3><span class="btn-label" style="margin-left: 2%; color: #51c6ea;" onclick="goBack()" title="Go Back"><i class="fa fa-arrow-left"></i></span>Finance Exports</h3>
+<div class="panel panel-default">
+   <div class="panel-body" style="padding: 2% !important;">
+      <div ng-controller="FinanceExportsController as showCase">
+        <form role="form" name="exportForm" form-wizard="" validate-steps="true" novalidate="" class="form-validate mb-lg modelform" ng-submit="" >
+    	     <div class="row">
+               <div class="col-md-4">
+                  <div class="form-group"> 
+                     <label>From Date</label>
+                     <div class="controls">
+                        <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd"  data-date-autoclose="true">
+                            <input type="text" class="form-control" autocomplete="off" ng-model="export.from_date" name="from_date" required="required" />
+                            <div class="input-group-addon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                        </div>
+                      </div>
+                  </div>
+               </div>
+               <div class="col-md-4">
+                  <div class="form-group"> 
+                     <label>To Date</label>
+                     <div class="controls">
+                        <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd"  data-date-autoclose="true">
+                            <input type="text" class="form-control" autocomplete="off" ng-model="export.to_date" name="to_date" required="required" />
+                            <div class="input-group-addon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                        </div>
+                      </div>
+                  </div>
+               </div>
+            </div> 
+    		    <div class="row" >
+                <!-- <div class="col-md-6">
+                   <div class="form-group">
+                      <button type="submit" ng-click="doExport('item_master')" class="btn btn-primary mt-lg">Export Items</button>
+                   </div>
+                </div> --> 
+                <div class="col-md-2">
+                   <div class="form-group">
+                      <button type="submit" ng-click="doExport('salesitem_master')" class="btn btn-primary mt-lg">Export Sales Items Master</button>
+                   </div>
+                </div>
+                <div class="col-md-2">
+                   <div class="form-group">
+                      <button type="submit" ng-click="doExport('purchaseitem_master')" class="btn btn-primary mt-lg">Export Purchase Items Master</button>
+                   </div>
+                </div>
+            </div>
+            <div class="row" >
+                <div class="col-md-2">
+                   <div class="form-group">
+                      <button type="submit" ng-click="doExport('buyer_master')" class="btn btn-primary mt-lg">Export Buyer Masters</button>
+                   </div>
+                </div>
+                <div class="col-md-2">
+                   <div class="form-group">
+                      <button type="submit" ng-click="doExport('sales_ledger')" class="btn btn-primary mt-lg">Export Sales Ledgers</button>
+                   </div>
+                </div>
+              <!--   <div class="col-md-2">
+                   <div class="form-group">
+                      <button type="submit" ng-click="doExport('sales_ledger')" class="btn btn-primary mt-lg">Export Sales Return Ledgers</button>
+                   </div>
+                </div> -->
+            </div>
+            <div class="row" >
+                <div class="col-md-2">
+                   <div class="form-group">
+                      <button type="submit" ng-click="doExport('sales_master')" class="btn btn-primary mt-lg">Export Seller Masters</button>
+                   </div>
+                </div>
+                <div class="col-md-2">
+                   <div class="form-group">
+                      <button type="submit" ng-click="doExport('purchase_master')" class="btn btn-primary mt-lg">Export Purchase Ledgers</button>
+                   </div>
+                </div>
+                <!-- <div class="col-md-2">
+                   <div class="form-group">
+                      <button type="submit" ng-click="doExport('purchase_ledger')" class="btn btn-primary mt-lg">Export Purchase Return Ledgers</button>
+                   </div>
+                </div> -->
+            </div>
+            <div class="row" >
+                <div class="col-md-12">
+                   <div class="form-group">
+                      <button type="submit" ng-click="doExport('cart')" class="btn btn-primary mt-lg">Export Buyer Payment Receipts</button>
+                   </div>
+                </div>
+            </div>
+         </form>
+         <hr>
+         <form role="form" name="showCase.importSellerPaymentForm" form-wizard="" validate-steps="true" novalidate="" class="form-validate mb-lg modelform2" ng-submit="showCase.UploadSellerPaymentCsv()" >
+         <legend>Import Seller Payment Details</legend>
+            <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                       <label>Select CSV from your computer</label>
+                        <input type="file" ngf-select="uploadSellerPaymentFiles($files)" ng-model="showCase.file.seller_payment_csv" name="seller_payment_csv" required accept=".csv">
+                        <span ng-show="showCase.importSellerPaymentForm.seller_payment_csv.$dirty &amp;&amp; showCase.importSellerPaymentForm.seller_payment_csv.$error.required" class="text-danger">This field is required</span>   
+                        
+                    </div>
+                 </div>
+            </div>
+            <div class="row">
+              
+                <div class="col-md-2"> 
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Upload</button>
+                </div>
+            </div>
+         </form>
+
+         <form role="form" name="showCase.importPaidInvoicesForm" form-wizard="" validate-steps="true" novalidate="" class="form-validate mb-lg modelform3" ng-submit="showCase.UploadPaidInvoicesCsv()" >
+         <legend>Upload Paid Invoices</legend>
+            <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                       <label>Select CSV from your computer</label>
+                        <input type="file" ngf-select="uploadPaidInvoicesFiles($files)" ng-model="showCase.file.paid_invoices_csv" name="paid_invoices_csv" required accept=".csv">
+                        <span ng-show="showCase.importPaidInvoicesForm.paid_invoices_csv.$dirty &amp;&amp; showCase.importPaidInvoicesForm.paid_invoices_csv.$error.required" class="text-danger">This field is required</span>   
+                        
+                    </div>
+                 </div>
+            </div>
+            <div class="row">
+               
+                <div class="col-md-2"> 
+                  <button type="submit" class="btn btn-block btn-primary mt-lg">Upload</button>
+                </div>
+            </div>
+         </form>
+         
+	  </div>
+   </div>
+</div>
